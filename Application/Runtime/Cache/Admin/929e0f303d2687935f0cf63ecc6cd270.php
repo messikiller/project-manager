@@ -49,26 +49,20 @@ a:focus{
             <form class="form-horizontal" method="post" action="<?php echo U('admin/login/loginHandle');?>" id="login-form">
                 <div class="form-group">
                     <label for="inputusername" class="col-sm-3 control-label"><i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;用户名：</label>
-                    <div class="col-sm-8">
+                    <div class="col-sm-9">
                         <input class="form-control input-sm" name="username" id="inputusername" placeholder="请输入有效用户名" autocomplete="off">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputpassword" class="col-sm-3 control-label"><i class="fa fa-lock fa-lg"></i>&nbsp;&nbsp;密&emsp;码：</label>
-                    <div class="col-sm-8">
+                    <div class="col-sm-9">
                         <input type="password" class="form-control input-sm" name="password" id="inputpassword" placeholder="请输入有效密码" autocomplete="off">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-sm-12">
-                        <button type="submit" class="btn btn-primary btn-block">登陆</button>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-sm-12">
-                        <a href="<?php echo U('admin/login/register');?>" class="btn btn-success btn-block">注册</a>
+                        <button type="submit" class="btn btn-success btn-block">登陆</button>
                     </div>
                 </div>
 

@@ -4,8 +4,8 @@ return array(
 	'DB_HOST' => 'localhost',
 	'DB_USER' => 'root',
 	'DB_PWD'  => '33068080',
-	'DB_NAME' => 'hospital',
-	'DB_PREFIX' => 'hos_',
+	'DB_NAME' => 'project_manager',
+	'DB_PREFIX' => 'pm_',
 
 	// for nginx
 	'URL_MODEL' => 0,

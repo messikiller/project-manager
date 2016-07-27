@@ -11,7 +11,6 @@ class IndexController extends CommonController
 
 	public function index()
 	{
-        echo 'here is admin/index';
-        // $this->display();
+        $this->display();
     }
 }
