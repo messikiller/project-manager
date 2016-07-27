@@ -1,0 +1,57 @@
+body {
+	overflow-y: hidden;
+}
+#header{
+	height: 50px;
+	background-color: #101010;
+	color: white;
+}
+
+#header span,
+#header a{
+	color: white;
+	display: inline-block;
+	line-height: 50px;
+	padding: 0px 15px; 
+	text-decoration: none;
+}
+
+#header a:hover{
+	background-color: #0070cc;
+}
+
+#header .header-btn{
+	background-color: #3399FF;
+}
+
+#header .logo{
+	font-size: 20px;
+	padding: 0px 30px;
+}
+
+#header .header-left{
+	float: left;
+}
+
+#header .header-right{
+	float:right;
+}
+
+#wrap{
+
+}
+
+#wrap .main{
+	padding-left: 200px;
+}
+
+#wrap .content-frame{
+	width: 100%;
+	min-height: 500px;
+}
+
+#wrap .lefter{
+	float: left;
+	width: 200px;
+	background-color: black;
+}

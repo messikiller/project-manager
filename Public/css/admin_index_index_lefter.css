@@ -1,0 +1,35 @@
+.lefter dd,
+.lefter dt,
+.lefter dd a,
+.lefter dt a {
+	display: block;
+	color: white;
+}
+
+.lefter dl{
+	margin-bottom: 0px;
+}
+
+.lefter dt{
+	padding: 10px 15px 10px 20px;
+	background-color: #1a1a1a;
+	font-size: 15px;
+}
+
+.lefter dd a{
+	padding: 8px 15px 8px 20px;
+	font-size: 14px;
+	text-decoration: none;
+	color: #9E9E9E;
+}
+
+.lefter dd a:hover{
+	/*background-color: #3399FF;*/
+	background-color: #0070cc;
+	color: white;
+}
+
+.lefter dd a.active{
+	background-color: #0070cc;
+	color: white;
+}
