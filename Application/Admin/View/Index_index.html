@@ -12,7 +12,7 @@
 <body>
 
 <div id="header">
-	<span class="header-left logo">hospital</span>
+	<span class="header-left logo">工程项目管理系统</span>
 	<a href="javascript:void(0);" class="header-right header-btn" id="logout-btn">退出</a>
 	<span class="header-right">欢迎登录：{:session('username')}</span>
 </div>
@@ -20,21 +20,23 @@
 <div id="wrap">
 	<div class="lefter">
 		<dl>
-			<dt>选课</dt>
-			<dd><a href="{:U('admin/course/select')}" target="content">我要选课</a></dd>
-			<dd><a href="{:U('admin/course/view')}" target="content">查看已选</a></dd>
+			<dt>工作</dt>
+			<dd><a href="javascript:void(0);" target="content">今日工作</a></dd>
+			<dd><a href="javascript:void(0);" target="content">我的打分</a></dd>
+			<dd><a href="javascript:void(0);" target="content">我的考勤</a></dd>
 
-			<dt>评教</dt>
-			<dd><a href="{:U('admin/comment/add')}" target="content">我要评教</a></dd>
-			<dd><a href="{:U('admin/comment/view')}" target="content">查看已评</a></dd>
+			<dt>项目</dt>
+			<dd><a href="javascript:void(0);" target="content">我的项目</a></dd>
+			<dd><a href="javascript:void(0);" target="content">进行中的项目</a></dd>
+			<dd><a href="javascript:void(0);" target="content">项目打分</a></dd>
 		</dl>
 
-<if condition="session('is_admin') eq true">
+<if condition="session('user_level') eq 0">
 		<dl>
 			<dt><i class="fa fa-gear"></i>&nbsp管理</dt>
-			<dd><a href="{:U('admin/course/add')}" target="content">添加课程</a></dd>
-			<dd><a href="{:U('admin/course/detail')}" target="content">课程统计</a></dd>
-			<dd><a href="{:U('admin/comment/detail')}" target="content">评教统计</a></dd>
+			<dd><a href="javascript:void(0);" target="content">人员管理</a></dd>
+			<dd><a href="javascript:void(0);" target="content">项目管理</a></dd>
+			<dd><a href="javascript:void(0);" target="content">考勤管理</a></dd>
 		</dl>
 </if>
 
