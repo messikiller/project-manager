@@ -8,7 +8,7 @@ return array(
 	'DB_PREFIX' => 'pm_',
 
 	// for nginx
-	'URL_MODEL' => 0,
+	'URL_MODEL' => 1,
 
 	'DEFAULT_MODULE' => 'Admin',
 	'TMPL_FILE_DEPR' => '_',
