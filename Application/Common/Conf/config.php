@@ -7,7 +7,9 @@ return array(
 	'DB_NAME' => 'hospital',
 	'DB_PREFIX' => 'hos_',
 
+	// for nginx
 	'URL_MODEL' => 0,
+
 	'DEFAULT_MODULE' => 'Admin',
 	'TMPL_FILE_DEPR' => '_',
 );
