@@ -1,0 +1,39 @@
+<extend name="Content/layout" />
+<block name="module-name">管理</block>
+<block name="page-name">添加工作地点</block>
+
+<block name="content">
+<div style="width:600px;">
+    <form class="form-horizontal" method="post" action="{:U('admin/workplace/addHandle')}" id="form-id">
+
+      <div class="form-group">
+        <label for="inputPassword3" class="col-sm-2 control-label">工作地点名称</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" autocomplete="off" name="work_place" id="work_place-id">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <a href="javascript:void(0);" class="btn btn-primary" id="submit-btn"><i class="fa fa-floppy-o"></i>&nbsp;提交</a>
+          <a href="{:U('admin/workplace/index')}" class="btn btn-success"><i class="fa fa-reply"></i>&nbsp;返回列表</a>
+        </div>
+      </div>
+
+    </form>
+</div>
+</block>
+
+<block name="own-js">
+<script type="text/javascript">
+$('#submit-btn').click(function(){
+    var work_place = $.trim($('#work_place-id').val());
+    if (work_place == '') {
+        alert('工作地点名称不能为空！');
+        return false;
+    }
+
+    $('#form-id').submit();
+});
+</script>
+</block>
