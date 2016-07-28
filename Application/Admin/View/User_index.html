@@ -1,0 +1,67 @@
+<extend name="Content/layout" />
+<block name="module-name">管理</block>
+<block name="page-name">用户管理</block>
+
+<block name="content">
+
+<a href="{:U('admin/user/add')}" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;新建账户</a>
+
+<div style="height:20px;"></div>
+
+<table class="table table-bordered">
+    <tr>
+        <th>序号</th>
+        <th>账户</th>
+        <th>姓名</th>
+        <th>电话</th>
+        <th>职务</th>
+        <th>岗位</th>
+        <th>工作地点</th>
+        <th>权限</th>
+        <th>操作</th>
+    </tr>
+
+    <volist name="data" id="user">
+        <tr>
+            <td>{$index++}</td>
+            <td>{$user.username}</td>
+            <td>{$user.truename}</td>
+            <td>{$user.phone}</td>
+            <td>{$user.position}</td>
+            <td>{$user.station}</td>
+            <td>{$user.work_place}</td>
+            <td>
+                <switch name="user.level">
+                    <case value="1">组长权限</case>
+                    <case value="2">普通用户权限</case>
+                </switch>
+            </td>
+            <td>
+                <a href="{:U('admin/user/resetPassword', array('id' => $user['id']))}" class="btn btn-success btn-sm"><i class="fa fa-refresh"></i>&nbsp;密码重置</a>
+                <a href="{:U('admin/user/edit', array('id' => $user['id']))}" class="btn btn-primary btn-sm edit-btn"><i class="fa fa-pencil"></i>&nbsp;编辑信息</a>
+                <a ref="javascript:void(0);" data-url="{:U('admin/user/delete', array('id' => $user['id']))}" data-username="{$user.username}" class="btn btn-danger btn-sm delete-btn"><i class="fa fa-times"></i>&nbsp;删除用户</a>
+            </td>
+        </tr>
+    </volist>
+
+</table>
+
+<if condition="$pagenum gt 1">
+<div id="page">
+    {$show}
+</div>
+</if>
+
+</block>
+
+<block name="own-js">
+<script type="text/javascript">
+$('.delete-btn').click(function(){
+    var username = $(this).attr('data-username');
+    var url = $(this).attr('data-url');
+    if(confirm('确定要删除账号:' + username + '？')) {
+        window.location.href = url;
+    }
+});
+</script>
+</block>

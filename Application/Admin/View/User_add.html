@@ -1,0 +1,131 @@
+<extend name="Content/layout" />
+<block name="module-name">管理</block>
+<block name="page-name">添加新用户</block>
+
+<block name="content">
+
+<div style="width:500px;">
+
+    <form class="form-horizontal" method="post" action="{:U('admin/user/addHandle')}" id="form-id">
+
+      <div class="form-group">
+        <label for="inputEmail3" class="col-sm-2 control-label">账户名称</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" autocomplete="off" name="username" id="username-id">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="inputPassword3" class="col-sm-2 control-label">密码</label>
+        <div class="col-sm-10">
+          <input type="password" class="form-control" autocomplete="off" name="password" id="password-id">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="inputEmail3" class="col-sm-2 control-label">权限</label>
+        <div class="col-sm-10">
+            <select class="form-control" name="level" id="level-id">
+                <option value="2">普通用户</option>
+                <option value="1">组长权限</option>
+            </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="inputEmail3" class="col-sm-2 control-label">姓名</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" autocomplete="off" name="truename" id="truename-id">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="inputEmail3" class="col-sm-2 control-label">电话</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" autocomplete="off" name="phone" id="phone-id">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="inputEmail3" class="col-sm-2 control-label">职务</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" autocomplete="off" name="position" id="position-id">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="inputEmail3" class="col-sm-2 control-label">岗位</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" autocomplete="off" name="station" id="station-id">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="inputEmail3" class="col-sm-2 control-label">工作地点</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" autocomplete="off" name="work_place" id="work_place-id">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <a href="javascript:void(0);" class="btn btn-primary" id="submit-btn"><i class="fa fa-floppy-o"></i>&nbsp;提交</a>
+          <a href="{:U('admin/user/index')}" class="btn btn-success"><i class="fa fa-reply"></i>&nbsp;返回列表</a>
+        </div>
+      </div>
+
+    </form>
+
+</div>
+
+</block>
+
+<block name="own-js">
+<script type="text/javascript">
+$('#submit-btn').click(function(){
+    var username = $.trim($('#username-id').val());
+    if (username == '') {
+        alert('用户名不能为空！');
+        return false;
+    }
+
+    var password = $.trim($('#password-id').val());
+    if (password == '') {
+        alert('密码不能为空！');
+        return false;
+    }
+
+    var truename = $.trim($('#truename-id').val());
+    if (truename == '') {
+        alert('姓名不能为空！');
+        return false;
+    }
+
+    var phone = $.trim($('#phone-id').val());
+    if (phone == '') {
+        alert('电话不能为空！');
+        return false;
+    }
+
+    var position = $.trim($('#position-id').val());
+    if (position == '') {
+        alert('职位不能为空！');
+        return false;
+    }
+
+    var station = $.trim($('#station-id').val());
+    if (station == '') {
+        alert('岗位不能为空！');
+        return false;
+    }
+
+    var work_place = $.trim($('#work_place-id').val());
+    if (work_place == '') {
+        alert('工作地点不能为空！');
+        return false;
+    }
+
+    $('#form-id').submit();
+});
+</script>
+</block>
