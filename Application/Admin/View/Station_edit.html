@@ -1,0 +1,44 @@
+<extend name="Content/layout" />
+<block name="module-name">管理</block>
+<block name="page-name">岗位编辑</block>
+
+<block name="content">
+
+<div style="width:500px;">
+
+    <form class="form-horizontal" method="post" action="{:U('admin/station/editHandle')}" id="form-id">
+        <input type="hidden" name="id" value="{$data.id}">
+
+      <div class="form-group">
+        <label for="inputEmail3" class="col-sm-2 control-label">岗位名称</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" autocomplete="off" name="station" id="station-id" value="{$data.station}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <a href="javascript:void(0);" class="btn btn-primary" id="submit-btn"><i class="fa fa-floppy-o"></i>&nbsp;提交</a>
+          <a href="{:U('admin/station/index')}" class="btn btn-success"><i class="fa fa-reply"></i>&nbsp;返回列表</a>
+        </div>
+      </div>
+
+    </form>
+
+</div>
+
+</block>
+
+<block name="own-js">
+<script type="text/javascript">
+$('#submit-btn').click(function(){
+    var station = $.trim($('#station-id').val());
+    if (station == '') {
+        alert('岗位名称不能为空！');
+        return false;
+    }
+
+    $('#form-id').submit();
+});
+</script>
+</block>

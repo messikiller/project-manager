@@ -16,14 +16,28 @@ class UserController extends CommonController
 	public function index()
 	{
         $userModel = M('user');
+        $authModel = M('auth');
+
+        $positionModel   = M('position');
+        $stationModel    = M('station');
+        $work_placeModel = M('work_place');
+
+        $positionArr   = $positionModel->order('id asc')->select();
+        $stationArr    = $stationModel->order('id asc')->select();
+        $work_placeArr = $work_placeModel->order('id asc')->select();
+
+        $positionIdsList   = makeIndex($positionArr, 'id');
+        $stationIdsList    = makeIndex($stationArr, 'id');
+        $work_placeIdsList = makeIndex($work_placeArr, 'id');
 
 		$where    = "username <> 'admin'";
 		$pageno   = I('get.p', 1, 'intval');
-		$pagesize = 20;
+		$pagesize = C('pagesize');
 
 		$limit = $pageno . ',' . $pagesize;
 
-        $userArr = $userModel->field('id, username, truename, phone, position, station, work_place')
+        $userArr = $userModel
+            ->field('id, username, truename, phone, position_id, station_id, work_place_id')
             ->where($where)
 			->order('id asc')
 			->page($limit)
@@ -36,29 +50,42 @@ class UserController extends CommonController
 		$show  = $Page->show();
 
         $userArr = empty($userArr) ? array() : $userArr;
-
-        $data = array();
-
 		$userIdsList = makeImplode($userArr, 'id');
 
-		$authModel = M('auth');
 		$authArr   = $authModel->field('user_id, level')
 			->where(array('user_id' => array('in', $userIdsList)))
 			->select();
 
 		$authIdsArr = makeIndex($authArr, 'user_id');
 
+        $data = array();
         foreach ($userArr as $user) {
 			$user_id = $user['id'];
-			if (! isset($authIdsArr[$user_id])) {
-				continue;
-			}
-            $arr = $user;
-            $arr['level'] = $authIdsArr[$user_id]['level'];
+            
+            $position_id   = $user['position_id'];
+            $station_id    = $user['station_id'];
+            $work_place_id = $user['work_place_id'];
+			
+            $arr = array();
+            
+            $arr['id'] = $user['id'];
+            $arr['username'] = $user['username'];
+            $arr['truename'] = $user['truename'];
+            $arr['phone']    = $user['phone'];
+
+            $arr['position'] = isset($positionIdsList[$position_id])
+                ? $positionIdsList[$position_id]['position'] : NULL;
+            $arr['station']  = isset($stationIdsList[$station_id])
+                ? $stationIdsList[$station_id]['station'] : NULL;
+            $arr['work_place'] = isset($work_placeIdsList[$work_place_id])
+                ? $work_placeIdsList[$work_place_id]['work_place'] : NULL;
+
+            $arr['level'] = isset($authIdsArr[$user_id])
+                ? $authIdsArr[$user_id]['level'] : NULL;
 
             $data[] = $arr;
         }
-
+        
         $this->assign('data',  $data);
 		$this->assign('show',  $show);
 		$this->assign('pagenum', $Page->totalPages);
@@ -68,6 +95,18 @@ class UserController extends CommonController
 
     public function add()
     {
+        $positionModel   = M('position');
+        $stationModel    = M('station');
+        $work_placeModel = M('work_place');
+
+        $positionArr   = $positionModel->order('id asc')->select();
+        $stationArr    = $stationModel->order('id asc')->select();
+        $work_placeArr = $work_placeModel->order('id asc')->select();
+
+        $this->assign('position_list',   $positionArr);
+        $this->assign('station_list',    $stationArr);
+        $this->assign('work_place_list', $work_placeArr);
+        
         $this->display();
     }
 
@@ -158,17 +197,28 @@ class UserController extends CommonController
         $data = array();
 
         $data = array(
-            'id'         => $userArr['id'],
-            'username'   => $userArr['username'],
-            'truename'   => $userArr['truename'],
-            'phone'      => $userArr['phone'],
-            'position'   => $userArr['position'],
-            'station'    => $userArr['station'],
-            'work_place' => $userArr['work_place'],
-            'level'      => $authArr['level']
+            'id'            => $userArr['id'],
+            'username'      => $userArr['username'],
+            'truename'      => $userArr['truename'],
+            'phone'         => $userArr['phone'],
+            'position_id'   => $userArr['position'],
+            'station_id'    => $userArr['station'],
+            'work_place_id' => $userArr['work_place'],
+            'level'         => $authArr['level']
         );
 
-        $this->data = $data;
+        $positionModel   = M('position');
+        $stationModel    = M('station');
+        $work_placeModel = M('work_place');
+
+        $positionArr   = $positionModel->order('id asc')->select();
+        $stationArr    = $stationModel->order('id asc')->select();
+        $work_placeArr = $work_placeModel->order('id asc')->select();
+
+        $this->assign('position_list',   $positionArr);
+        $this->assign('station_list',    $stationArr);
+        $this->assign('work_place_list', $work_placeArr);
+        $this->assign('data', $data);
         $this->display();
     }
 
@@ -207,9 +257,9 @@ class UserController extends CommonController
             'username'   => $username,
             'truename'   => $truename,
             'phone'      => $phone,
-            'position'   => $position,
-			'station'    => $station,
-			'work_place' => $work_place
+            'position_id'   => $position,
+			'station_id'    => $station,
+			'work_place_id' => $work_place
         );
 
 		$user_res = $userModel->where(array('id' => $id))->save($user_data);

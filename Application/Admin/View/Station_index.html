@@ -1,0 +1,49 @@
+<extend name="Content/layout" />
+<block name="module-name">管理</block>
+<block name="page-name">岗位管理</block>
+
+<block name="content">
+
+<a href="{:U('admin/station/add')}" class="btn btn-success"><i class="fa fa-user-plus"></i>&nbsp;新建岗位</a>
+
+<div style="height:20px;"></div>
+
+<table class="table table-bordered">
+    <tr>
+        <th>序号</th>
+        <th>岗位名称</th>
+        <th>操作</th>
+    </tr>
+
+    <volist name="data" id="station">
+        <tr>
+            <td>{$index++}</td>
+            <td>{$station.station}</td>
+            <td>
+                <a href="{:U('admin/station/edit', array('id' => $station['id']))}" class="btn btn-primary btn-sm edit-btn"><i class="fa fa-pencil"></i>&nbsp;编辑信息</a>
+                <a ref="javascript:void(0);" data-url="{:U('admin/station/delete', array('id' => $station['id']))}" data-station="{$station.station}" class="btn btn-danger btn-sm delete-btn"><i class="fa fa-times"></i>&nbsp;删除</a>
+            </td>
+        </tr>
+    </volist>
+
+</table>
+
+<if condition="$pagenum gt 1">
+<div id="page">
+    {$show}
+</div>
+</if>
+
+</block>
+
+<block name="own-js">
+<script type="text/javascript">
+$('.delete-btn').click(function(){
+    var station = $(this).attr('data-station');
+    var url = $(this).attr('data-url');
+    if(confirm('确定要删除岗位类型:' + station + '？')) {
+        window.location.href = url;
+    }
+});
+</script>
+</block>
