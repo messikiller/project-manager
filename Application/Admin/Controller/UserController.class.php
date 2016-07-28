@@ -284,6 +284,21 @@ class UserController extends CommonController
 
 	public function delete()
 	{
-		// code
+		$id = I('get.id', NULL, 'intval');
+        if ($id === NULL) {
+            $alert_back('参数错误！');
+        }
+
+        $userModel = M('user');
+        $authModel = M('auth');
+
+        $user_res = $userModel->where(array('id' => $id))->delete();
+        $auth_res = $authModel->where(array('user_id' => $id))->delete();
+
+        if ($user_res === false || $auth_res === false) {
+            alert_back('删除账号失败！');
+        }
+
+        alert_go('删除账号信息成功！', 'admin/user/index');
 	}
 }
