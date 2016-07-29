@@ -5,8 +5,19 @@
 <block name="content">
 
 <a href="{:U('admin/station/add')}" class="btn btn-success"><i class="fa fa-user-plus"></i>&nbsp;新建岗位</a>
+<a href="{:U('admin/user/index')}" class="btn btn-primary"><i class="fa fa-reply"></i>&nbsp;返回用户列表</a>
 
 <div style="height:20px;"></div>
+
+<div style="width:800px;">
+    <div class="alert alert-warning" role="alert">
+      <i class="iconfont icon-warning alert-icon"></i>
+      <div class="alert-content">
+        <h4>注意</h4>
+        <p>编辑或者删除已有的岗位，有可能会影响已经拥有相应岗位属性的用户信息，请慎重操作！</p>
+      </div>
+    </div>
+</div>
 
 <table class="table table-bordered">
     <tr>

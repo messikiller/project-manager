@@ -12,7 +12,7 @@
 <body>
 
 <div id="header">
-	<span class="header-left logo">工程项目管理系统</span>
+	<span class="header-left logo">admin</span>
 	<a href="javascript:void(0);" class="header-right header-btn" id="logout-btn">退出</a>
 	<span class="header-right">欢迎登录：{:session('username')}</span>
 </div>
@@ -23,7 +23,7 @@
 			<dt>工作</dt>
 			<dd><a href="javascript:void(0);" target="content">今日工作</a></dd>
 			<dd><a href="javascript:void(0);" target="content">我的打分</a></dd>
-			<dd><a href="javascript:void(0);" target="content">我的考勤</a></dd>
+			<dd><a href="{:U('admin/home/sign')}" target="content">我的考勤</a></dd>
 
 			<dt>项目</dt>
 			<dd><a href="javascript:void(0);" target="content">我的项目</a></dd>
@@ -36,7 +36,7 @@
 			<dt><i class="fa fa-gear"></i>&nbsp管理</dt>
 			<dd><a href="{:U('admin/user/index')}" target="content">人员管理</a></dd>
 			<dd><a href="javascript:void(0);" target="content">项目管理</a></dd>
-			<dd><a href="javascript:void(0);" target="content">考勤管理</a></dd>
+			<dd><a href="{:U('admin/sign/index')}" target="content">考勤管理</a></dd>
 		</dl>
 </if>
 

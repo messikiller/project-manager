@@ -42,7 +42,7 @@ function makeImplode(&$array, $key, $glue=',')
 
 	$value	= array();
 	$idx	= array();
-	
+
 	foreach ( $array as $val ) {
 		$v	= $val["{$key}"];
 		if (! isset($idx["{$v}"])) {
@@ -55,4 +55,25 @@ function makeImplode(&$array, $key, $glue=',')
 	unset($idx);
 
 	return implode($glue, $value);
+}
+
+function get_ip_address($convert=false)
+{
+	$ip = "";
+	foreach ( array('HTTP_CLIENT_IP',
+		'HTTP_X_FORWARDED_FOR',
+		'HTTP_X_FORWARDED',
+		'HTTP_FORWARDED_FOR',
+		'HTTP_FORWARDED',
+		'REMOTE_ADDR') as $e ) {
+		if ( getenv($e) ) {
+			$ip = getenv($e);
+			break;
+		}
+	}
+
+	if ( ($comma=strpos($ip, ',')) !== false ) $ip = substr($ip, 0, $comma);
+	if ($convert ) $ip = sprintf("%u", ip2long($ip));
+
+	return $ip;
 }

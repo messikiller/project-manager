@@ -61,13 +61,13 @@ class UserController extends CommonController
         $data = array();
         foreach ($userArr as $user) {
 			$user_id = $user['id'];
-            
+
             $position_id   = $user['position_id'];
             $station_id    = $user['station_id'];
             $work_place_id = $user['work_place_id'];
-			
+
             $arr = array();
-            
+
             $arr['id'] = $user['id'];
             $arr['username'] = $user['username'];
             $arr['truename'] = $user['truename'];
@@ -85,7 +85,7 @@ class UserController extends CommonController
 
             $data[] = $arr;
         }
-        
+
         $this->assign('data',  $data);
 		$this->assign('show',  $show);
 		$this->assign('pagenum', $Page->totalPages);
@@ -106,7 +106,7 @@ class UserController extends CommonController
         $this->assign('position_list',   $positionArr);
         $this->assign('station_list',    $stationArr);
         $this->assign('work_place_list', $work_placeArr);
-        
+
         $this->display();
     }
 
@@ -148,12 +148,12 @@ class UserController extends CommonController
         }
 
         $user_data = array(
-            'username'   => $username,
-            'truename'   => $truename,
-            'phone'      => $phone,
-            'position'   => $position,
-            'station'    => $station,
-            'work_place' => $work_place
+            'username'      => $username,
+            'truename'      => $truename,
+            'phone'         => $phone,
+            'position_id'   => $position,
+            'station_id'    => $station,
+            'work_place_id' => $work_place
         );
 
         $user_id = $userModel->add($user_data);

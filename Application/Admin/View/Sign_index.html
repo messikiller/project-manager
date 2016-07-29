@@ -1,0 +1,75 @@
+<extend name="Content/layout" />
+<block name="module-name">管理</block>
+<block name="page-name">考勤管理</block>
+
+<block name="content">
+<div>
+    <form action="{:U('admin/sign/search')}" method="post" id="search-form">
+        姓名：
+        <input type="text" autocomplete="off" name="search-truename" value="{$searched_truename}" />
+        &nbsp;&nbsp;&nbsp;
+        IP地址：
+        <input type="text" autocomplete="off" name="search-ip" value="{$searched_ip}" />
+        &nbsp;&nbsp;&nbsp;
+        时间范围：
+        <span class="input-daterange" data-toggle="datepicker">
+            <input type="text" class="input-date" placeholder="开始日期" name="search-s-time" value="{$searched_s_time|date='Y-m-d',###}" />
+            &nbsp;至&nbsp;
+            <input type="text" class="input-date" placeholder="结束日期" name="search-e-time" value="{$searched_e_time|date='Y-m-d',###}" />
+        </span>
+        &nbsp;&nbsp;&nbsp;
+        <button type="submit" class="btn btn-primary" id="search-btn"><i class="fa fa-search"></i>&nbsp;筛选</button>
+        <a href="{:U('admin/sign/index')}" class="btn btn-success">查看全部</a>
+    </form>
+</div>
+
+<div style="height:20px;"></div>
+
+<present name="is_searched">
+    <h3>检索结果：</h3>
+</present>
+
+<table class="table table-bordered">
+    <tr>
+        <th>序号</th>
+        <th>账号</th>
+        <th>姓名</th>
+        <th>IP</th>
+        <th>打卡时间</th>
+        <th>操作</th>
+    </tr>
+
+    <volist name="data" id="sign">
+        <tr>
+            <td>{$index++}</td>
+            <td>{$sign.username}</td>
+            <td>{$sign.truename}</td>
+            <td>{$sign.ip|long2ip}</td>
+            <td>{$sign.c_time|date="Y-m-d H:i:s",###}</td>
+            <td>
+                <a ref="javascript:void(0);" data-url="{:U('admin/sign/delete', array('id' => $sign['id']))}" class="btn btn-danger btn-sm delete-btn"><i class="fa fa-times"></i>&nbsp;删除</a>
+            </td>
+        </tr>
+    </volist>
+
+</table>
+
+<if condition="$pagenum gt 1">
+<div id="page">
+    {$show}
+</div>
+</if>
+
+</block>
+
+<block name="own-js">
+<script type="text/javascript">
+$('.delete-btn').click(function(){
+    var url = $(this).attr('data-url');
+    if(confirm('确定要删除这条打卡记录？')) {
+        window.location.href = url;
+    }
+});
+
+</script>
+</block>
