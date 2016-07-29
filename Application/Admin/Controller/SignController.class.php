@@ -43,13 +43,13 @@ class SignController extends CommonController
         $s_time = I('get.s_time', false, 'intval');
         if ($s_time !== false) {
             $where['c_time'] = array('EGT', $s_time);
-            $this->assign('searched_s_time', $s_time);
+            $this->assign('searched_s_time', date('Y-m-d', $s_time));
             $this->assign('is_searched', true);
         }
 
         $e_time = I('get.e_time', false, 'intval');
         if ($e_time !== false) {
-            $this->assign('searched_e_time', $e_time);
+            $this->assign('searched_e_time', date('Y-m-d', $e_time));
             $this->assign('is_searched', true);
             $where['c_time'] = array('ELT', $e_time);
         }
@@ -130,7 +130,7 @@ class SignController extends CommonController
             $param['s_time'] = strtotime(trim($s_time));
         }
 
-        if (! empty($s_time)) {
+        if (! empty($e_time)) {
             $param['e_time'] = strtotime(trim($e_time));
         }
 
