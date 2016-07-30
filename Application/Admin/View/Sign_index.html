@@ -13,9 +13,9 @@
         &nbsp;&nbsp;&nbsp;
         时间范围：
         <span class="input-daterange" data-toggle="datepicker">
-            <input type="text" class="input-date" placeholder="开始日期" name="search-s-time" value="{$searched_s_time}" />
+            <input type="text" class="input-date" placeholder="开始日期" autocomplete="off" readonly="true" name="search-s-time" value="{$searched_s_time}" />
             &nbsp;至&nbsp;
-            <input type="text" class="input-date" placeholder="结束日期" name="search-e-time" value="{$searched_e_time}" />
+            <input type="text" class="input-date" placeholder="结束日期" autocomplete="off" readonly="true" name="search-e-time" value="{$searched_e_time}" />
         </span>
         &nbsp;&nbsp;&nbsp;
         <button type="submit" class="btn btn-primary" id="search-btn"><i class="fa fa-search"></i>&nbsp;筛选</button>
@@ -29,8 +29,8 @@
     <h3>检索结果：</h3>
 </present>
 
-<table class="table table-bordered">
-    <tr>
+<table class="table table-bordered table-hover">
+    <tr class="active">
         <th>序号</th>
         <th>账号</th>
         <th>姓名</th>

@@ -1,0 +1,144 @@
+<extend name="Content/layout" />
+<block name="module-name">管理</block>
+<block name="page-name">项目管理</block>
+
+<block name="content">
+
+<div style="margin-bottom:15px;">
+    <form action="{:U('admin/project/search')}" method="post" id="search-form">
+        项目名称：
+        <input type="text" autocomplete="off" name="search-project_name" value="{$searched_project_name}" />
+        &nbsp;&nbsp;&nbsp;
+        组长：
+        <select name="search-leader_uid" id="search-leader_uid-id" class="form-control" style="width:120px;display:inline-block;">
+            <option value="" selected="">请选择</option>
+            <volist name="leader_list" id="leader">
+                <option value="{$leader.id}" {$searched_leader_uid==$leader['id']?'selected=\"selected\"':''}>{$leader.truename}</option>
+            </volist>
+        </select>
+        &nbsp;&nbsp;&nbsp;
+        创建时间范围：
+        <span class="input-daterange" data-toggle="datepicker">
+            <input type="text" class="input-date" placeholder="开始日期" autocomplete="off" readonly="true" name="search-s_time" value="{$searched_s_time}" />
+            &nbsp;至&nbsp;
+            <input type="text" class="input-date" placeholder="结束日期" autocomplete="off" readonly="true" name="search-e_time" value="{$searched_e_time}" />
+        </span>
+        &nbsp;&nbsp;&nbsp;
+        状态：
+        <select name="search-status" id="search-status-id" class="form-control" style="width:120px;display:inline-block;">
+            <option value="999" selected="">请选择</option>
+            <option value="0" {$searched_status===0?'selected=\"selected\"':''}>未启动</option>
+            <option value="1" {$searched_status===1?'selected=\"selected\"':''}>进行中</option>
+            <option value="2" {$searched_status===2?'selected=\"selected\"':''}>已结束</option>
+            <option value="3" {$searched_status===3?'selected=\"selected\"':''}>禁用</option>
+        </select>
+        &nbsp;&nbsp;&nbsp;
+        <button type="submit" class="btn btn-primary" id="search-btn"><i class="fa fa-search"></i>&nbsp;筛选</button>
+    </form>
+</div>
+
+<div style="margin-bottom:15px;">
+    <a href="{:U('admin/project/add')}" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;发布新项目</a> 
+    <a href="{:U('admin/project/index')}" class="btn btn-info"><i class="fa fa-reply"></i>&nbsp;查看全部</a>
+</div>
+
+<present name="is_searched">
+    <h3>检索结果：</h3>
+</present>
+
+<table class="table table-bordered table-hover">
+	<tr class="active">
+        <th>序号</th>
+        <th>项目名称</th>
+        <th>项目组长</th>
+        <th>创建时间</th>
+        <th>计划开始时间</th>
+        <th>计划完成时间</th>
+        <th>实际完成时间</th>
+        <th>当前状态</th>
+        <th>操作</th>
+    </tr>
+
+    <volist name="data" id="project">
+        <tr>
+            <td>{$index++}</td>
+            <td>{$project.project_name}</td>
+            <td>{$project.leader_truename}</td>
+            <td>
+            	<if condition="$project['c_time'] eq 0">
+					-
+            	<else />
+            		{$project.c_time|date="Y-m-d",###}
+            	</if>
+            </td>
+            <td>
+            	<if condition="$project['s_time'] eq 0">
+					-
+            	<else />
+            		{$project.s_time|date="Y-m-d",###}
+            	</if>
+            </td>
+            <td>
+            	<if condition="$project['e_time'] eq 0">
+					-
+            	<else />
+            		{$project.e_time|date="Y-m-d",###}
+            	</if>
+            </td>
+            <td>
+            	<if condition="$project['f_time'] eq 0">
+					-
+            	<else />
+            		{$project.f_time|date="Y-m-d",###}
+            	</if>
+            </td>
+            <td>
+            	<switch name="project.status">
+			        <case value="0">
+			        	<label class="label label-warning">未启动</label>
+			        </case>
+			        <case value="1">
+			        	<label class="label label-primary">进行中</label>
+			        </case>
+			        <case value="2">
+			        	<label class="label label-success">已结束</label>
+			        </case>
+			        <case value="3">
+			        	<label class="label label-danger">禁用</label>
+			        </case>
+			        <default />
+			        	-
+			    </switch>
+            </td>
+            <td>
+            	<a href="{:U('admin/project/edit', array('id' => $project['id']))}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
+
+            	<if condition="$project.status eq 0">
+		        	<a href="javascript:void(0);" data-url="{:U('admin/project/status', array('id' => $project['id'], 'act' => 'off'))}" class="btn btn-danger btn-sm status-btn"><i class="fa fa-power-off"></i>&nbsp;禁用</a>
+		        <else />
+			         <a href="javascript:void(0);" data-url="{:U('admin/project/status', array('id' => $project['id'], 'act' => 'on'))}" class="btn btn-success btn-sm status-btn"><i class="fa fa-check-square"></i>&nbsp;激活</a>
+                </if>
+            </td>
+        </tr>
+    </volist>
+
+</table>
+
+<if condition="$pagenum gt 1">
+	<div id="page">
+	    {$show}
+	</div>
+</if>
+
+</block>
+
+<block name="own-js">
+<script type="text/javascript">
+$('.status-btn').click(function(){
+    var url = $(this).attr('data-url');
+    if(confirm('禁用或启用可能会导致正在进行中的项目失效，确定要执行吗？')) {
+        window.location.href = url;
+    }
+});
+</script>
+</block>

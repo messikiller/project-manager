@@ -20,22 +20,20 @@
 <div id="wrap">
 	<div class="lefter">
 		<dl>
-			<dt>工作</dt>
+			<dt><i class="fa fa-tachometer"></i>&nbsp;工作</dt>
 			<dd><a href="javascript:void(0);" target="content">今日工作</a></dd>
 			<dd><a href="javascript:void(0);" target="content">我的打分</a></dd>
 			<dd><a href="{:U('admin/home/sign')}" target="content">我的考勤</a></dd>
 
-			<dt>项目</dt>
-			<dd><a href="javascript:void(0);" target="content">我的项目</a></dd>
-			<dd><a href="javascript:void(0);" target="content">进行中的项目</a></dd>
-			<dd><a href="javascript:void(0);" target="content">项目打分</a></dd>
+			<dt><i class="fa fa-list-alt"></i>&nbsp;项目</dt>
+			<dd><a href="{:U('admin/project/active')}" target="content">项目任务</a></dd>
 		</dl>
 
 <if condition="session('user_level') eq 0">
 		<dl>
-			<dt><i class="fa fa-gear"></i>&nbsp管理</dt>
+			<dt><i class="fa fa-gears"></i>&nbsp;管理</dt>
 			<dd><a href="{:U('admin/user/index')}" target="content">人员管理</a></dd>
-			<dd><a href="javascript:void(0);" target="content">项目管理</a></dd>
+			<dd><a href="{:U('admin/project/index')}" target="content">项目管理</a></dd>
 			<dd><a href="{:U('admin/sign/index')}" target="content">考勤管理</a></dd>
 		</dl>
 </if>
