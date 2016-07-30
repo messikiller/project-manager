@@ -9,7 +9,7 @@ class SignController extends CommonController
 		parent::_initialize();
 
         if (! $this->is_admin) {
-            $this->redirect('admin//error/deny');
+            $this->redirect('admin/error/deny');
         }
     }
 
@@ -152,6 +152,6 @@ class SignController extends CommonController
             }
         }
 
-        alert_go('删除记录成功！', 'admin/sign/index');
+        alert_back('删除记录成功！');
     }
 }
