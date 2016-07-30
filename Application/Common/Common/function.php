@@ -19,7 +19,7 @@ function alert_go($info, $url)
 function alert_back($info)
 {
 	header("Content-type: text/html; charset=utf-8");
-	echo '<script>window.alert("'.$info.'");window.history.go(-1);</script>';
+	echo '<script>window.alert("'.$info.'");window.location=document.referrer;</script>';
 	exit();
 }
 

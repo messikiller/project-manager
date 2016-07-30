@@ -9,7 +9,7 @@ class SignController extends CommonController
 		parent::_initialize();
 
         if (! $this->is_admin) {
-            $this->redirect('admin/index/index');
+            $this->redirect('admin//error/deny');
         }
     }
 

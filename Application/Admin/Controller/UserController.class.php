@@ -9,7 +9,7 @@ class UserController extends CommonController
 		parent::_initialize();
 
         if (! $this->is_admin) {
-            $this->redirect('admin/index/index');
+            $this->redirect('admin/error/deny');
         }
     }
 
@@ -349,6 +349,6 @@ class UserController extends CommonController
             alert_back('删除账号失败！');
         }
 
-        alert_go('删除账号信息成功！', 'admin/user/index');
+        alert_back('删除账号信息成功！');
 	}
 }
