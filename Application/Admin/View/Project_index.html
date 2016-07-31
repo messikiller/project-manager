@@ -111,12 +111,29 @@
 			    </switch>
             </td>
             <td>
-            	<a href="{:U('admin/project/edit', array('id' => $project['id']))}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
+            <a href="{:U('admin/project/view', array('id' => $project['id']))}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i>&nbsp;详情</a>
+                <switch name="project.status">
+                    <case value="0">
+                        <a href="{:U('admin/project/edit', array('id' => $project['id']))}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
+                        <a href="javascript:void(0);" data-url="{:U('admin/project/status', array('id' => $project['id'], 'act' => 'off'))}" class="btn btn-danger btn-sm status-btn"><i class="fa fa-power-off"></i>&nbsp;禁用</a>
+                    </case>
+                    <case value="1">
+                        <a href="{:U('admin/project/edit', array('id' => $project['id']))}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
+                        <a href="javascript:void(0);" data-url="{:U('admin/project/status', array('id' => $project['id'], 'act' => 'off'))}" class="btn btn-danger btn-sm status-btn"><i class="fa fa-power-off"></i>&nbsp;禁用</a>
+                    </case>
+                    <case value="2"></case>
+                    <case value="3">
+                        <a href="{:U('admin/project/edit', array('id' => $project['id']))}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
+                        <a href="javascript:void(0);" data-url="{:U('admin/project/status', array('id' => $project['id'], 'act' => 'on'))}" class="btn btn-success btn-sm status-btn"><i class="fa fa-check-square"></i>&nbsp;激活</a>
+                    </case>
+                    <default />
+                        -
+                </switch>
 
-            	<if condition="$project.status eq 0">
-		        	<a href="javascript:void(0);" data-url="{:U('admin/project/status', array('id' => $project['id'], 'act' => 'off'))}" class="btn btn-danger btn-sm status-btn"><i class="fa fa-power-off"></i>&nbsp;禁用</a>
+            	<if condition="project.status eq 0">
+		        	
 		        <else />
-			         <a href="javascript:void(0);" data-url="{:U('admin/project/status', array('id' => $project['id'], 'act' => 'on'))}" class="btn btn-success btn-sm status-btn"><i class="fa fa-check-square"></i>&nbsp;激活</a>
+			         
                 </if>
             </td>
         </tr>

@@ -77,3 +77,72 @@ function get_ip_address($convert=false)
 
 	return $ip;
 }
+
+/**
+ * get specific level users ids list
+ * 
+ * @param  array $field
+ * @param  int   $level
+ * 
+ * @return array
+ */
+function get_level_uids_list($field, $level)
+{
+	if (! is_array($field)) {
+		return array();
+	}
+
+	if (! in_array('id', $field)) {
+		array_push($field, 'id');
+	}
+
+	$fields = implode(',', $field);
+
+	$userModel = M('user');
+	$authModel = M('auth');
+
+	$authArr = $authModel->where(array('level' => $level))->select();
+	$uids_str = makeImplode($authArr, 'user_id');
+
+	$userArr = $userModel
+		->field($fields)
+		->where(array('id' => array('IN', "$uids_str")))
+		->select();
+
+	if ($userArr === false) {
+		return array();
+	}
+
+	$userlist = makeIndex($userArr, 'id');
+	return $userlist;
+}
+
+function get_startable_projects_num($uid)
+{
+	$projectModel = M('project');
+	$count = $projectModel
+		->where(array(
+			array('leader_uid' => array('EQ', $uid)),
+			array('status' => array('EQ', 0))
+		))->count();
+
+	if ($count === false) {
+		return 0;
+	}
+	return $count;
+}
+
+function get_markable_projects_num($uid)
+{
+	$projectModel = M('project');
+	$count = $projectModel
+		->where(array(
+			array('leader_uid' => array('EQ', $uid)),
+			array('status' => array('EQ', 2))
+		))->count();
+
+	if ($count === false) {
+		return 0;
+	}
+	return $count;
+}

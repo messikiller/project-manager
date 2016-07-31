@@ -1,0 +1,116 @@
+<extend name="Content/layout" />
+<block name="module-name">管理</block>
+<block name="page-name">启动项目</block>
+
+<block name="content">
+
+<div>
+	<form class="form-horizontal" method="post" action="{:U('admin/project/startHandle')}" id="form-id">
+
+		<input type="hidden" name='id' value="{$data.id}">
+
+		<div class="form-group" style="width:400px;">
+			<label for="inputEmail3" class="col-sm-3 control-label">项目名称</label>
+			<div class="col-sm-8">
+				<span>
+					{$data.project_name}
+				</span>
+			</div>
+		</div>
+		<div class="form-group" style="width:400px;">
+			<label for="inputEmail3" class="col-sm-3 control-label">项目时间</label>
+			<div class="col-sm-8">
+				{$data.s_time|date="Y-m-d",###}
+				&nbsp;~&nbsp;
+				{$data.e_time|date="Y-m-d",###}
+			</div>
+		</div>
+
+		<div id="work-container">
+
+			<div class="form-group work-sample">
+				<label for="inputEmail3" class="control-label" style="width:100px;padding-right:15px;">工作划分</label>
+				<div style="width:800px;display:inline-block;padding-left:10px;">
+					<select name="work[0][member_uid]" class="form-control work-member" style="width:120px;display:inline-block;">
+						<option value="0" selected="">请选择人员</option>
+						<volist name="member_list" id="member">
+							<option value="{$member.id}">{$member.truename}</option>
+						</volist>
+					</select>
+					&nbsp;
+					<input type="text" autocomplete="off" placeholder="工作名称" name="work[0][work_name]" class="work-name">
+					&nbsp;
+					<input type="text" autocomplete="off" placeholder="工作说明" name="work[0][remark]" class="work-remark" >
+					&nbsp;
+					<span class="input-daterange" data-toggle="datepicker" data-date-start-date='{$data.s_time|date="Y-m-d",###}' data-date-end-date='{$data.e_time|date="Y-m-d",###}'>
+						<input type="text" class="input-date work-s_time" placeholder="工作开始日期" autocomplete="off" readonly="true" name="work[0][s_time]" value="{$data.s_time|date="Y-m-d",###}" />
+						~
+						<input type="text" class="input-date work-e_time" placeholder="工作结束日期" autocomplete="off" readonly="true" name="work[0][e_time]" value="{$data.e_time|date="Y-m-d",###}" />
+					</span>
+					&nbsp;
+					<a href="javascript:void(0);" class="btn btn-info" id="add-work-btn"><i class="fa fa-plus"></i></a>
+					<a href="javascript:void(0);" class="btn btn-danger" id="delete-work-btn"><i class="fa fa-minus"></i></a>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="form-group" style="width:400px;">
+			<div class="col-sm-offset-3 col-sm-8">
+				<button type="submit" class="btn btn-primary" id="submit-btn"><i class="fa fa-floppy-o"></i>&nbsp;提交</button>
+				<a href="{:U('admin/project/schedule')}" class="btn btn-success"><i class="fa fa-reply"></i>&nbsp;返回列表</a>
+			</div>
+		</div>
+
+	</form>
+</div>
+
+<div class="form-group work-sample" id="init-work" style="display:none">
+	<label for="inputEmail3" class="control-label" style="width:100px;padding-right:15px;"></label>
+	<div style="width:800px;display:inline-block;padding-left:10px;">
+		<select class="form-control work-member" style="width:120px;display:inline-block;">
+			<option value="0" selected="">请选择人员</option>
+			<volist name="member_list" id="member">
+				<option value="{$member.id}">{$member.truename}</option>
+			</volist>
+		</select>
+		&nbsp;
+		<input type="text" autocomplete="off" placeholder="工作名称" class="work-name">
+		&nbsp;
+		<input type="text" autocomplete="off" placeholder="工作说明" class="work-remark" >
+		&nbsp;
+		<span class="input-daterange" data-toggle="datepicker" data-date-start-date='{$data.s_time|date="Y-m-d",###}' data-date-end-date='{$data.e_time|date="Y-m-d",###}'>
+			<input type="text" class="input-date work-s_time" placeholder="工作开始日期" autocomplete="off" readonly="true" value="{$data.s_time|date="Y-m-d",###}" />
+			~
+			<input type="text" class="input-date work-e_time" placeholder="工作结束日期" autocomplete="off" readonly="true" value="{$data.e_time|date="Y-m-d",###}" />
+		</span>
+	</div>
+</div>
+
+</block>
+
+<block name="own-js">
+<script type="text/javascript">
+var index = 0;
+$('#add-work-btn').click(function(){
+	index++;
+	var obj = $('#init-work').clone(true);
+	obj.attr('id', '').show();
+	obj.find('select.work-member').attr('name', 'work['+index+'][member_uid]');
+	obj.find('input.work-name').attr('name', 'work['+index+'][work_name]');
+	obj.find('input.work-remark').attr('name', 'work['+index+'][remark]');
+	obj.find('input.work-s_time').attr('name', 'work['+index+'][s_time]');
+	obj.find('input.work-e_time').attr('name', 'work['+index+'][e_time]');
+	$('#work-container').append(obj);
+});
+$('#delete-work-btn').click(function(){
+	if (index === 0) {
+		return false;
+	}
+	var obj = $('#work-container').find('.work-sample').last();
+	console.log(obj);
+	obj.remove();
+	index--;
+});
+</script>
+</block>

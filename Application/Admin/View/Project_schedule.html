@@ -1,0 +1,94 @@
+<extend name="Content/layout" />
+<block name="module-name">项目</block>
+<block name="page-name">项目管理</block>
+
+<block name="content">
+
+<if condition="$startable_num gt 0">
+	<div class="alert alert-info alert-dismissible" role="alert">
+	  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+	  <i class="iconfont icon-warning"></i>
+	  有新的项目任务可以启动，注意检查！
+	</div>
+</if>
+
+<if condition="$finished_num gt 0">
+	<div class="alert alert-warning alert-dismissible" role="alert">
+	  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+	  <i class="iconfont icon-success"></i>
+	  有新的项目可以打分，注意检查！
+	</div>
+</if>
+
+<table class="table table-bordered table-hover">
+	<tr class="active">
+		<th>序号</th>
+		<th>项目名称</th>
+		<th>备注说明</th>
+		<th>项目组长</th>
+		<th>计划开始时间</th>
+		<th>计划完成时间</th>
+		<th>当前状态</th>
+		<th>操作</th>
+	</tr>
+
+	<volist name="data" id="project">
+
+		<tr {$project['status']==0?'class=\"info\"':''}>
+			<td>{$index++}</td>
+			<td>{$project.project_name}</td>
+			<td>{$project.remark}</td>
+			<td>
+				<if condition="$project.leader_uid eq session('user_id')">
+					{:session('username')}
+				<else />
+					-
+				</if>
+			</td>
+			<td>{$project.s_time|date="Y-m-d",###}</td>
+			<td>{$project.e_time|date="Y-m-d",###}</td>
+			<td>
+				<switch name="project.status">
+			        <case value="0">
+			        	<label class="label label-warning">未启动</label>
+			        </case>
+			        <case value="1">
+			        	<label class="label label-primary">进行中</label>
+			        </case>
+			        <case value="2">
+			        	<label class="label label-success">已结束</label>
+			        </case>
+			        <case value="3">
+			        	<label class="label label-danger">禁用</label>
+			        </case>
+			        <default />
+			        	-
+			    </switch>
+			</td>
+			<td>
+                <switch name="project.status">
+			        <case value="0">
+			        	<a href="{:U('admin/project/start', array('id' => $project['id']))}" class="btn btn-primary btn-sm"><i class="fa fa-power-off"></i>&nbsp;启动项目</a>
+			        </case>
+			        <case value="1">
+			        	<a href="{:U('admin/project/view', array('id' => $project['id']))}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i>&nbsp;查看</a>
+			        </case>
+			        <case value="2">
+			        	<a href="{:U('admin/project/evaluate', array('id' => $project['id']))}" class="btn btn-danger btn-sm"><i class="fa fa-trophy"></i>&nbsp;项目打分</a>
+			        </case>
+			        <default />
+			    </switch>
+			</td>
+		</tr>
+
+	</volist>
+
+</table>
+
+<if condition="$pagenum gt 1">
+	<div id="page">
+	    {$show}
+	</div>
+</if>
+
+</block>

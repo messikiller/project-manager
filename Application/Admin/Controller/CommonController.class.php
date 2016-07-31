@@ -8,11 +8,19 @@ class CommonController extends Controller
 	protected $is_leader = false;
 	protected $is_member = false;
 
+	protected $uid        = false;
+	protected $username   = false;
+	protected $user_level = false;
+
 	public function _initialize()
 	{
 		if (! session('?username') || ! session('?user_id') || ! session('?user_level')) {
 			$this->redirect('admin/login/index');
 		}
+
+		$this->uid 		  = session('user_id');
+		$this->username   = session('username');
+		$this->user_level = session('user_level');
 
 		switch (session('user_level')) {
 			case 0:
