@@ -194,92 +194,6 @@ class ProjectController extends CommonController
 	}
 
 	/**
-	 * @access admin
-	 */
-	public function edit()
-	{
-		if (! $this->is_admin) {
-			$this->redirect('admin/error/deny');
-		}
-
-		$id = I('get.id', 0, 'intval');
-		if ($id === 0) {
-			alert_back('参数错误！');
-		}
-
-		$authModel = M('auth');
-		$userModel = M('user');
-
-		$authArr    = $authModel->field('user_id')->where(array('level' => 1))->select();
-		$leaderUids = makeImplode($authArr, 'user_id');
-
-		$userArr = $userModel
-			->field('id, truename')
-			->where(array('id' => array('IN', "$leaderUids")))
-			->select();
-
-		$leaderIdsList = makeIndex($userArr, 'id'); 
-
-		$projectModel = M('project');
-		$projectArr   = $projectModel->where(array('id' => $id))->find();
-		if ($projectArr == false) {
-			alert_back('结果集为空！');	
-		}
-
-		$this->assign('data', $projectArr);
-		$this->assign('leader_list', $userArr);
-		$this->display();
-	}
-
-	/**
-	 * @access admin
-	 */
-	public function editHandle()
-	{
-		if (! $this->is_admin) {
-			$this->redirect('admin/error/deny');
-		}
-
-		$id = I('post.id', 0, 'intval');
-
-		$project_name = I('post.project_name', '', 'trim');
-		$leader_uid   = I('post.leader_uid', 0, 'intval');
-		$status = I('post.status', 0, 'intval');
-		$s_time = I('post.s_time', '', 'trim');
-		$e_time = I('post.e_time', '', 'trim');
-		$remark = I('post.remark', '', 'trim');
-
-		if ($id === 0
-			|| $project_name === ''
-			|| $leader_uid === 0
-			|| ($status != 0 && $status !=3)
-			|| $s_time === ''
-			|| $e_time === '')
-		{
-			alert_back('表单数据错误！');
-		}
-
-		$data = array(
-			'project_name' => $project_name,
-			'leader_uid'   => $leader_uid,
-			'status'	   => $status,
-			's_time'	   => strtotime($s_time),
-			'e_time'	   => strtotime($e_time),
-			'remark'	   => $remark,
-			'c_time'	   => time()
-		);
-
-		$projectModel = M('project');
-		$update_res = $projectModel->where(array(id => $id))->save($data);
-
-		if ($update_res === false) {
-			alert_back('更新信息失败！');
-		}
-
-		alert_back('更新信息成功！');
-	}
-
-	/**
 	 * publish a new project
 	 * 
 	 * @access admin
@@ -352,17 +266,170 @@ class ProjectController extends CommonController
 		alert_go('发起项目成功！', 'admin/project/add');
 	}
 
+		/**
+	 * @access admin
+	 */
+	public function edit()
+	{
+		if (! $this->is_admin) {
+			$this->redirect('admin/error/deny');
+		}
+
+		$id = I('get.id', 0, 'intval');
+		if ($id === 0) {
+			alert_back('参数错误！');
+		}
+
+		$authModel = M('auth');
+		$userModel = M('user');
+
+		$authArr    = $authModel->field('user_id')->where(array('level' => 1))->select();
+		$leaderUids = makeImplode($authArr, 'user_id');
+
+		$userArr = $userModel
+			->field('id, truename')
+			->where(array('id' => array('IN', "$leaderUids")))
+			->select();
+
+		$leaderIdsList = makeIndex($userArr, 'id'); 
+
+		$projectModel = M('project');
+		$projectArr   = $projectModel->where(array('id' => $id))->find();
+		if ($projectArr == false) {
+			alert_back('结果集为空！');	
+		}
+
+		$this->assign('data', $projectArr);
+		$this->assign('leader_list', $userArr);
+		$this->display();
+	}
+
 	/**
-	 * leader's active projects list
+	 * @access admin
+	 */
+	public function editHandle()
+	{
+		if (! $this->is_admin) {
+			$this->redirect('admin/error/deny');
+		}
+
+		$id = I('post.id', 0, 'intval');
+
+		$project_name = I('post.project_name', '', 'trim');
+		$leader_uid   = I('post.leader_uid', 0, 'intval');
+		$s_time = I('post.s_time', '', 'trim');
+		$e_time = I('post.e_time', '', 'trim');
+		$remark = I('post.remark', '', 'trim');
+
+		if ($id === 0
+			|| $project_name === ''
+			|| $leader_uid === 0
+			|| $s_time === ''
+			|| $e_time === '')
+		{
+			alert_back('表单数据错误！');
+		}
+
+		$data = array(
+			'project_name' => $project_name,
+			'leader_uid'   => $leader_uid,
+			'status'	   => $status,
+			's_time'	   => strtotime($s_time),
+			'e_time'	   => strtotime($e_time),
+			'remark'	   => $remark,
+			'c_time'	   => time()
+		);
+
+		$projectModel = M('project');
+		$update_res = $projectModel->where(array(id => $id))->save($data);
+
+		if ($update_res === false) {
+			alert_back('更新信息失败！');
+		}
+
+		alert_back('更新信息成功！');
+	}
+
+	/**
+	 * @access ALL
+	 */
+	public function view()
+	{
+		$id = I('get.id', 0, 'intval');
+		if ($id === 0) {
+			alert_back('参数错误！');
+		}
+
+		$projectModel = M('project');
+		$projectArr   = $projectModel->where(array('id' => $id))->find();
+		if ($projectArr == false) {
+			alert_back('结果集为空！');	
+		}
+
+		$userModel = M('user');
+		$userArr = $userModel
+			->field('truename')
+			->where(array('id' => $projectArr['leader_uid']))
+			->find();
+
+		$data = $projectArr;
+		$data['truename'] = $userArr['truename'];
+
+		$this->assign('data', $data);
+		$this->display();
+	}
+
+	/**
+	 * show available projects for leader, condition:
+	 *
+	 * 1. s_time <= today
+	 * 2. leader_uid = user_id
 	 *
 	 * @access leader
 	 */
-	public function active()
+	public function schedule()
 	{
 		if (! $this->is_leader) {
 			$this->redirect('admin/error/deny');
 		}
 
+		$pageno   = I('get.p', 1, 'intval');
+        $pagesize = C('pagesize');
+        $limit    = $pageno . ',' . $pagesize;
+
+		$uid 	  = $this->uid;
+		$username = $this->username;
+		$time     = time();
+
+		$where = array();
+		$where = array(
+			'leader_uid' => array('EQ', $uid),
+			's_time'	 => array('ELT', $time),
+			'status'     => array('NEQ', 3)
+		);
+
+		$projectModel = M('project');
+		$projectArr   = $projectModel
+			->where($where)
+			->order('status asc, s_time desc, id asc')
+			->page($limit)
+			->select();
+
+		$total = $projectModel->count();
+        $Page  = new \Think\Page($total, $pagesize);
+        $Page->setConfig('prev', '&laquo;上一页');
+        $Page->setConfig('next', '下一页&raquo;');
+        $show  = $Page->show();
+
+        $startable_num = get_startable_projects_num($uid);
+        $finished_num  = get_markable_projects_num($uid);
+
+        $this->assign('data',    $projectArr);
+        $this->assign('show',    $show);
+        $this->assign('pagenum', $Page->totalPages);
+        $this->assign('index',   $Page->firstRow+1);
+        $this->assign('startable_num', $startable_num);
+        $this->assign('finished_num', $finished_num);
 		$this->display();
 	}
 
@@ -377,6 +444,65 @@ class ProjectController extends CommonController
 			$this->redirect('admin/error/deny');
 		}
 
+		$id = I('get.id', 0, 'intval');
+		if ($id === 0) {
+			alert_back('参数错误！');
+		}
 
+		$projectModel = M('project');
+		$projectArr   = $projectModel->where(array('id' => $id))->find();
+
+		$memberIdsList = get_level_uids_list(array('truename'), 2);
+
+		$this->assign('data', $projectArr);
+		$this->assign('member_list', $memberIdsList);
+		$this->display();
+	}
+
+	/**
+	 * @access leader
+	 */
+	public function startHandle()
+	{
+		if (! $this->is_leader) {
+			$this->redirect('admin/error/deny');
+		}
+
+		$id = I('post.id', 0, 'intval');
+		if ($id === 0) {
+			alert_back('表单参数有误！');
+		}
+
+		$works = $_POST['work'];
+		if (! is_array($works)) {
+			alert_back('表单信息有误！');
+		}
+
+		$datalist = array();
+		foreach ($works as $work) {
+			$work['s_time'] = strtotime($work['s_time']);
+			$work['e_time'] = strtotime($work['e_time']);
+			$work['c_time'] = time();
+			$work['status'] = 0; 
+
+			$datalist[] = $work;
+		}
+
+		$workModel = M('work');
+
+		$add_res = $workModel->addAll($datalist);
+		if ($add_res === false) {
+			alert_back('写入数据失败！');
+		}
+
+		$projectModel = M('project');
+		$proj_data    = array('status' => 1);
+		$update_res   = $projectModel->where(array('id' => $id))->save($proj_data);
+
+		if ($update_res === false) {
+			alert_back('项目状态更新失败！');
+		}
+
+		alert_go('项目已经成功启动！', 'admin/project/schedule');
 	}
 }

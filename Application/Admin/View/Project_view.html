@@ -1,0 +1,63 @@
+<extend name="Content/layout" />
+<block name="module-name">管理</block>
+<block name="page-name">编辑项目</block>
+
+<block name="content">
+
+<div style="width:500px;">
+	<table class="table table-bordered">
+		<tr>
+			<td class="active" style="font-weight:bold;text-align:right;width:100px;">项目名称:</td>
+			<td>{$data.project_name}</td>
+		</tr>
+		<tr>
+			<td class="active" style="font-weight:bold;text-align:right;width:100px;">项目组长:</td>
+			<td>{$data.truename}</td>
+		</tr>
+		<tr>
+			<td class="active" style="font-weight:bold;text-align:right;width:100px;">项目状态:</td>
+			<td>
+				<switch name="data.status">
+			        <case value="0">
+			        	<label class="label label-warning">未启动</label>
+			        </case>
+			        <case value="1">
+			        	<label class="label label-primary">进行中</label>
+			        </case>
+			        <case value="2">
+			        	<label class="label label-success">已结束</label>
+			        </case>
+			        <case value="3">
+			        	<label class="label label-danger">禁用</label>
+			        </case>
+			        <default />
+			        	-
+			    </switch>
+			</td>
+		</tr>
+		<tr>
+			<td class="active" style="font-weight:bold;text-align:right;width:100px;">项目计划时间:</td>
+			<td>{$data.s_time|date='Y-m-d',###}&nbsp;~&nbsp;{$data.e_time|date='Y-m-d',###}</td>
+		</tr>
+		<tr>
+			<td class="active" style="font-weight:bold;text-align:right;width:100px;">项目完成时间:</td>
+			<td><if condition="$data.f_time neq 0">
+					{$data.f_time|date='Y-m-d',###}
+				<else />
+					-
+				</if>
+			</td>
+		</tr>
+		<tr>
+			<td class="active" style="font-weight:bold;text-align:right;width:100px;">备注说明:</td>
+			<td>{$data.remark}</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<a href="javascript:window.location=document.referrer" class="btn btn-success"><i class="fa fa-reply"></i>&nbsp;返回列表</a>
+			</td>
+		</tr>
+	</table>
+</div>
+
+</block>

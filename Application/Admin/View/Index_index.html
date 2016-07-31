@@ -14,24 +14,41 @@
 <div id="header">
 	<span class="header-left logo">工程项目管理系统</span>
 	<a href="javascript:void(0);" class="header-right header-btn" id="logout-btn">退出</a>
-	<span class="header-right">欢迎登录：{:session('username')}</span>
+	<span class="header-right">欢迎登录：{$username}</span>
 </div>
 
 <div id="wrap">
 	<div class="lefter">
+<if condition="$user_level neq 0">
 		<dl>
-			<dt><i class="fa fa-tachometer"></i>&nbsp;工作</dt>
-			<dd><a href="javascript:void(0);" target="content">今日工作</a></dd>
+			<dt><i class="fa fa-tachometer"></i>&nbsp;个人中心</dt>
+			<switch name="user_level">
+				<case value="1">
+					<dd><a href="{:U('admin/project/schedule')}" target="content">
+						项目管理
+						<if condition="$project_schedule_nums gt 0">
+							&nbsp;<span class="badge" style="background-color:#ea4a36;font-size:10px;">{$project_schedule_nums}</span>
+						</if>
+					</a></dd>
+				</case>
+				<case value="2">
+					<dd><a href="{:U('admin/work/schedule')}" target="content">
+						工作日程
+						<if condition="true">
+							&nbsp;<span class="badge" style="background-color:#ea4a36;font-size:10px;"></span>
+						</if>
+					</a></dd>
+				</case>
+				<default />
+			</switch>
 			<dd><a href="javascript:void(0);" target="content">我的打分</a></dd>
 			<dd><a href="{:U('admin/home/sign')}" target="content">我的考勤</a></dd>
-
-			<dt><i class="fa fa-list-alt"></i>&nbsp;项目</dt>
-			<dd><a href="{:U('admin/project/active')}" target="content">项目任务</a></dd>
 		</dl>
+</if>
 
-<if condition="session('user_level') eq 0">
+<if condition="$user_level eq 0">
 		<dl>
-			<dt><i class="fa fa-gears"></i>&nbsp;管理</dt>
+			<dt><i class="fa fa-gears"></i>&nbsp;系统管理</dt>
 			<dd><a href="{:U('admin/user/index')}" target="content">人员管理</a></dd>
 			<dd><a href="{:U('admin/project/index')}" target="content">项目管理</a></dd>
 			<dd><a href="{:U('admin/sign/index')}" target="content">考勤管理</a></dd>
