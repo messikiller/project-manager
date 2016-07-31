@@ -120,10 +120,12 @@ function get_level_uids_list($field, $level)
 function get_startable_projects_num($uid)
 {
 	$projectModel = M('project');
+	$time = time();
 	$count = $projectModel
 		->where(array(
-			array('leader_uid' => array('EQ', $uid)),
-			array('status' => array('EQ', 0))
+			'leader_uid' => array('EQ', $uid),
+			's_time'	 => array('ELT', $time),
+			'status'     => array('NEQ', 3)
 		))->count();
 
 	if ($count === false) {
