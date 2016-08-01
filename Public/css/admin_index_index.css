@@ -1,3 +1,7 @@
+* {
+	font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", STHeiti, "Microsoft YaHei";
+}
+
 body {
 	overflow-y: hidden;
 }
@@ -12,7 +16,7 @@ body {
 	color: white;
 	display: inline-block;
 	line-height: 50px;
-	padding: 0px 15px; 
+	padding: 0px 15px;
 	text-decoration: none;
 }
 
@@ -53,5 +57,5 @@ body {
 #wrap .lefter{
 	float: left;
 	width: 200px;
-	background-color: black;
+	background-color: #293038;
 }
