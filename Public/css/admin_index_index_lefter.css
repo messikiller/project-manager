@@ -4,6 +4,11 @@
 .lefter dt a {
 	display: block;
 	color: white;
+	font-size: 13px;
+	-o-transition: all 0.12s ease,0.12s ease;
+	-ms-transition: all 0.12s ease,0.12s ease;
+	-moz-transition: all 0.12s ease,0.12s ease;
+	-webkit-transition: all 0.12s ease,0.12s ease
 }
 
 .lefter dl{
@@ -13,21 +18,22 @@
 .lefter dt{
 	padding: 10px 15px 10px 20px;
 	margin-bottom: 2px;
-	background-color: #1a1a1a;
-	font-size: 14px;
+	background-color: #22282e;
+	font-weight: normal;
+	/*font-size: 14px;*/
 }
 
 .lefter dd a{
 	padding: 8px 15px 8px 20px;
 	margin-bottom: 2px;
-	font-size: 12px;
 	text-decoration: none;
-	color: #9E9E9E;
+	/*color: #9E9E9E;*/
 }
 
 .lefter dd a:hover{
 	/*background-color: #3399FF;*/
-	background-color: #0070cc;
+	/*background-color: #0070cc;*/
+	background-color: #394555;
 	color: white;
 }
 
