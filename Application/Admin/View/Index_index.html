@@ -12,8 +12,8 @@
 <body>
 
 <div id="header">
-	<span class="header-left logo">工程项目管理系统</span>
-	<a href="javascript:void(0);" class="header-right header-btn" id="logout-btn">退出</a>
+	<span class="header-left logo"><i class="fa fa-bar-chart"></i>&nbsp;工程项目管理系统</span>
+	<a href="javascript:void(0);" class="header-right header-btn" id="logout-btn"><i class="fa fa-power-off"></i>&nbsp;退出</a>
 	<span class="header-right">欢迎登录：{$username}</span>
 </div>
 
@@ -21,11 +21,11 @@
 	<div class="lefter">
 <if condition="$user_level neq 0">
 		<dl>
-			<dt><i class="fa fa-tachometer"></i>&nbsp;个人中心</dt>
+			<dt><i class="fa fa-tachometer"></i>&nbsp;&nbsp;个人中心</dt>
 			<switch name="user_level">
 				<case value="1">
 					<dd><a href="{:U('admin/project/schedule')}" target="content">
-						项目管理
+						<i class="fa fa-angle-double-right"></i>&nbsp;&nbsp;项目管理
 						<if condition="$project_schedule_nums gt 0">
 							&nbsp;<span class="badge" style="background-color:#ea4a36;font-size:10px;">{$project_schedule_nums}</span>
 						</if>
@@ -33,7 +33,7 @@
 				</case>
 				<case value="2">
 					<dd><a href="{:U('admin/work/schedule')}" target="content">
-						工作日程
+						<i class="fa fa-angle-double-right"></i>&nbsp;&nbsp;工作日程
 						<if condition="$work_schedule_nums gt 0">
 							&nbsp;<span class="badge" style="background-color:#ea4a36;font-size:10px;">{$work_schedule_nums}</span>
 						</if>
@@ -41,17 +41,17 @@
 				</case>
 				<default />
 			</switch>
-			<dd><a href="javascript:void(0);" target="content">我的打分</a></dd>
-			<dd><a href="{:U('admin/home/sign')}" target="content">我的考勤</a></dd>
+			<dd><a href="javascript:void(0);" target="content"><i class="fa fa-angle-double-right"></i>&nbsp;&nbsp;我的打分</a></dd>
+			<dd><a href="{:U('admin/home/sign')}" target="content"><i class="fa fa-angle-double-right"></i>&nbsp;&nbsp;我的考勤</a></dd>
 		</dl>
 </if>
 
 <if condition="$user_level eq 0">
 		<dl>
-			<dt><i class="fa fa-gears"></i>&nbsp;系统管理</dt>
-			<dd><a href="{:U('admin/user/index')}" target="content">人员管理</a></dd>
-			<dd><a href="{:U('admin/project/index')}" target="content">项目管理</a></dd>
-			<dd><a href="{:U('admin/sign/index')}" target="content">考勤管理</a></dd>
+			<dt><i class="fa fa-gears"></i>&nbsp;&nbsp;系统管理</dt>
+			<dd><a href="{:U('admin/user/index')}" target="content"><i class="fa fa-angle-double-right"></i>&nbsp;&nbsp;人员管理</a></dd>
+			<dd><a href="{:U('admin/project/index')}" target="content"><i class="fa fa-angle-double-right"></i>&nbsp;&nbsp;项目管理</a></dd>
+			<dd><a href="{:U('admin/sign/index')}" target="content"><i class="fa fa-angle-double-right"></i>&nbsp;&nbsp;考勤管理</a></dd>
 		</dl>
 </if>
 
