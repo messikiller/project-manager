@@ -80,10 +80,10 @@ function get_ip_address($convert=false)
 
 /**
  * get specific level users ids list
- * 
+ *
  * @param  array $field
  * @param  int   $level
- * 
+ *
  * @return array
  */
 function get_level_uids_list($field, $level)
@@ -125,7 +125,7 @@ function get_startable_projects_num($uid)
 		->where(array(
 			'leader_uid' => array('EQ', $uid),
 			's_time'	 => array('ELT', $time),
-			'status'     => array('NEQ', 3)
+			'status'     => array('EQ', 0)
 		))->count();
 
 	if ($count === false) {
@@ -140,6 +140,38 @@ function get_markable_projects_num($uid)
 	$count = $projectModel
 		->where(array(
 			array('leader_uid' => array('EQ', $uid)),
+			array('status' => array('EQ', 2))
+		))->count();
+
+	if ($count === false) {
+		return 0;
+	}
+	return $count;
+}
+
+function get_startable_works_num($uid)
+{
+	$workModel = M('work');
+	$time = time();
+	$count = $workModel
+		->where(array(
+			'member_uid' => array('EQ', $uid),
+			's_time'	 => array('ELT', $time),
+			'status'     => array('EQ', 0)
+		))->count();
+
+	if ($count === false) {
+		return 0;
+	}
+	return $count;
+}
+
+function get_finished_works_num($uid)
+{
+	$workModel = M('work');
+	$count = $workModel
+		->where(array(
+			array('member_uid' => array('EQ', $uid)),
 			array('status' => array('EQ', 2))
 		))->count();
 

@@ -7,7 +7,7 @@
 <div style="margin-bottom:15px;">
     <form action="{:U('admin/project/search')}" method="post" id="search-form">
         项目名称：
-        <input type="text" autocomplete="off" name="search-project_name" value="{$searched_project_name}" />
+        <input type="text" autocomplete="off" name="search-project_name" value="{$searched_project_name}" placeholder="输入项目名称" />
         &nbsp;&nbsp;&nbsp;
         组长：
         <select name="search-leader_uid" id="search-leader_uid-id" class="form-control" style="width:120px;display:inline-block;">
@@ -38,7 +38,7 @@
 </div>
 
 <div style="margin-bottom:15px;">
-    <a href="{:U('admin/project/add')}" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;发布新项目</a> 
+    <a href="{:U('admin/project/add')}" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;发布新项目</a>
     <a href="{:U('admin/project/index')}" class="btn btn-info"><i class="fa fa-reply"></i>&nbsp;查看全部</a>
 </div>
 
@@ -131,9 +131,9 @@
                 </switch>
 
             	<if condition="project.status eq 0">
-		        	
+
 		        <else />
-			         
+
                 </if>
             </td>
         </tr>

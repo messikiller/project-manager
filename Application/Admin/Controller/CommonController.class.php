@@ -11,6 +11,7 @@ class CommonController extends Controller
 	protected $uid        = false;
 	protected $username   = false;
 	protected $user_level = false;
+	protected $truename   = false;
 
 	public function _initialize()
 	{
@@ -21,6 +22,7 @@ class CommonController extends Controller
 		$this->uid 		  = session('user_id');
 		$this->username   = session('username');
 		$this->user_level = session('user_level');
+		$this->truename   = session('truename');
 
 		switch (session('user_level')) {
 			case 0:
