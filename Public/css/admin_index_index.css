@@ -2,18 +2,26 @@
 	font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", STHeiti, "Microsoft YaHei";
 }
 
+a:link,a:visited,a:hover,a:active{  
+    text-decoration:none;  
+}  
+  
+a:focus{  
+    outline:0;   
+}    
+
 body {
 	overflow-y: hidden;
 }
 #header{
 	height: 50px;
-	background-color: #101010;
-	color: white;
+	background-color: #009688;
+	color: rgba(255,255,255, 0.84);
 }
 
 #header span,
 #header a{
-	color: white;
+	color: rgba(255,255,255, 0.84);
 	display: inline-block;
 	line-height: 50px;
 	padding: 0px 15px;
@@ -21,11 +29,17 @@ body {
 }
 
 #header a:hover{
-	background-color: #0070cc;
+	/*background-color: #3399FF;*/
+	background-color: #01ace6;
+	color: white;
 }
 
 #header .header-btn{
-	background-color: #3399FF;
+	background-color: rgba(255, 255, 255, 0.1);
+}
+
+#header .header-btn:hover{
+	color: white;
 }
 
 #header .logo{
@@ -46,7 +60,7 @@ body {
 }
 
 #wrap .main{
-	padding-left: 200px;
+	padding-left: 170px;
 }
 
 #wrap .content-frame{
@@ -56,6 +70,6 @@ body {
 
 #wrap .lefter{
 	float: left;
-	width: 200px;
+	width: 170px;
 	background-color: #293038;
 }

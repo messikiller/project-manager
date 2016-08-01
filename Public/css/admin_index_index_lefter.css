@@ -5,10 +5,10 @@
 	display: block;
 	color: white;
 	font-size: 13px;
-	-o-transition: all 0.12s ease,0.12s ease;
-	-ms-transition: all 0.12s ease,0.12s ease;
-	-moz-transition: all 0.12s ease,0.12s ease;
-	-webkit-transition: all 0.12s ease,0.12s ease
+	-o-transition: all 0.2s ease,0.2s ease;
+	-ms-transition: all 0.2s ease,0.2s ease;
+	-moz-transition: all 0.2s ease,0.2s ease;
+	-webkit-transition: all 0.2s ease,0.2s ease
 }
 
 .lefter dl{
@@ -16,28 +16,33 @@
 }
 
 .lefter dt{
-	padding: 10px 15px 10px 20px;
+	padding: 12px 15px 12px 15px;
 	margin-bottom: 2px;
-	background-color: #22282e;
+	background-color: #323941;
 	font-weight: normal;
-	/*font-size: 14px;*/
-}
-
-.lefter dd a{
-	padding: 8px 15px 8px 20px;
-	margin-bottom: 2px;
-	text-decoration: none;
-	/*color: #9E9E9E;*/
-}
-
-.lefter dd a:hover{
-	/*background-color: #3399FF;*/
-	/*background-color: #0070cc;*/
-	background-color: #394555;
+	font-size: 14px;
 	color: white;
 }
 
+.lefter dd a{
+	padding: 8px 15px 8px 25px;
+	border-bottom: 1px dashed #686868;
+	text-decoration: none;
+	color: #d8d8d8;
+}
+
+.lefter dd a:hover{
+	background-color: #394555;
+	color: white;
+	-o-transition: all 0.12s ease,0.12s ease;
+	-ms-transition: all 0.12s ease,0.12s ease;
+	-moz-transition: all 0.5s ease,0.5s ease;
+	-webkit-transition: all 0.12s ease,0.12s ease
+}
+
 .lefter dd a.active{
-	background-color: #0070cc;
+	/*background-color: #0070cc;*/
+	background-color: #0b98c8;
+	border-bottom: 1px solid #394555;
 	color: white;
 }
