@@ -29,14 +29,17 @@ class LoginController extends Controller
     	$userModel = M('user');
     	$authModel = M('auth');
 
-    	$userArr = $userModel->field('id, username')
+    	$userArr = $userModel->field('id, username, truename')
     		->where(array('username' => $username))->find();
 
     	if (! $userArr) {
     		alert_go('用户不存在！', 'admin/login/index');
     	}
-    	$user_id = $userArr['id'];
-    	$authArr = $authModel->where(array(
+
+		$truename = $userArr['truename'];
+    	$user_id  = $userArr['id'];
+
+		$authArr = $authModel->where(array(
     		'user_id'  => $user_id,
     		'password' => md5($password)
     	))->find();
@@ -50,15 +53,18 @@ class LoginController extends Controller
     	session('username',   $username);
     	session('user_id',    $user_id);
         session('user_level', $user_level);
+		session('truename',   $truename);
 
 		$this->redirect('admin/index/index');
     }
 
     public function logout()
     {
-    	session('username', NULL);
-    	session('user_id',  NULL);
-        session('is_admin', NULL);
+    	session('username',   NULL);
+    	session('user_id',    NULL);
+		session('user_level', NULL);
+		session('truename',   NULL);
+        session('is_admin',   NULL);
 
     	alert_go('注销成功！即将跳转到登录页面……', 'admin/login/index');
     }

@@ -34,8 +34,8 @@
 				<case value="2">
 					<dd><a href="{:U('admin/work/schedule')}" target="content">
 						工作日程
-						<if condition="true">
-							&nbsp;<span class="badge" style="background-color:#ea4a36;font-size:10px;"></span>
+						<if condition="$work_schedule_nums gt 0">
+							&nbsp;<span class="badge" style="background-color:#ea4a36;font-size:10px;">{$work_schedule_nums}</span>
 						</if>
 					</a></dd>
 				</case>

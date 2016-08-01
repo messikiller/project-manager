@@ -14,10 +14,16 @@ class IndexController extends CommonController
 		$project_schedule_nums = get_startable_projects_num($this->uid)
 			+ get_markable_projects_num($this->uid);
 
+		$work_schedule_nums = get_startable_works_num($this->uid)
+			+ get_finished_works_num($this->uid);
+
 		$this->assign('project_schedule_nums', $project_schedule_nums);
+		$this->assign('work_schedule_nums', $work_schedule_nums);
+
 		$this->assign('uid', $this->uid);
 		$this->assign('username', $this->username);
 		$this->assign('user_level', $this->user_level);
-        $this->display();
+
+		$this->display();
     }
 }

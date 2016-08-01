@@ -100,7 +100,7 @@ class ProjectController extends CommonController
         		'status'          => $project['status'],
         		'leader_truename' => $leader_truename
         	);
-        	
+
         	$data[] = $arr;
         }
 
@@ -195,7 +195,7 @@ class ProjectController extends CommonController
 
 	/**
 	 * publish a new project
-	 * 
+	 *
 	 * @access admin
 	 */
 	public function add()
@@ -215,7 +215,7 @@ class ProjectController extends CommonController
 			->where(array('id' => array('IN', "$leaderUids")))
 			->select();
 
-		$leaderIdsList = makeIndex($userArr, 'id'); 
+		$leaderIdsList = makeIndex($userArr, 'id');
 
 		$this->assign('leader_list', $userArr);
 		$this->display();
@@ -291,12 +291,12 @@ class ProjectController extends CommonController
 			->where(array('id' => array('IN', "$leaderUids")))
 			->select();
 
-		$leaderIdsList = makeIndex($userArr, 'id'); 
+		$leaderIdsList = makeIndex($userArr, 'id');
 
 		$projectModel = M('project');
 		$projectArr   = $projectModel->where(array('id' => $id))->find();
 		if ($projectArr == false) {
-			alert_back('结果集为空！');	
+			alert_back('结果集为空！');
 		}
 
 		$this->assign('data', $projectArr);
@@ -363,7 +363,7 @@ class ProjectController extends CommonController
 		$projectModel = M('project');
 		$projectArr   = $projectModel->where(array('id' => $id))->find();
 		if ($projectArr == false) {
-			alert_back('结果集为空！');	
+			alert_back('结果集为空！');
 		}
 
 		$userModel = M('user');
@@ -384,6 +384,7 @@ class ProjectController extends CommonController
 	 *
 	 * 1. s_time <= today
 	 * 2. leader_uid = user_id
+	 * 3. status != 3
 	 *
 	 * @access leader
 	 */
@@ -435,7 +436,7 @@ class ProjectController extends CommonController
 
 	/**
 	 * start a project
-	 * 
+	 *
 	 * @access leader
 	 */
 	public function start()
@@ -483,7 +484,10 @@ class ProjectController extends CommonController
 			$work['s_time'] = strtotime($work['s_time']);
 			$work['e_time'] = strtotime($work['e_time']);
 			$work['c_time'] = time();
-			$work['status'] = 0; 
+			$work['status'] = 0;
+
+			$work['project_id'] = $id;
+			$work['leader_uid'] = $this->uid;
 
 			$datalist[] = $work;
 		}

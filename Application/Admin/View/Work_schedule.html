@@ -8,7 +8,7 @@
 	<div class="alert alert-info alert-dismissible" role="alert">
 	  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
 	  <i class="iconfont icon-warning"></i>
-	  有新的项目任务可以启动，注意检查！
+	  有新的工作任务可以启动，注意检查！
 	</div>
 </if>
 
@@ -16,39 +16,50 @@
 	<div class="alert alert-warning alert-dismissible" role="alert">
 	  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
 	  <i class="iconfont icon-success"></i>
-	  有新的项目可以打分，注意检查！
+	  有新的工作可以提交完成，注意检查！
 	</div>
 </if>
 
 <table class="table table-bordered table-hover">
 	<tr class="active">
 		<th>序号</th>
-		<th>项目名称</th>
-		<th>备注说明</th>
+		<th>工作名称</th>
+		<th>内容说明</th>
+		<th>所属项目</th>
 		<th>项目组长</th>
+		<th>执行员工</th>
 		<th>计划开始时间</th>
 		<th>计划完成时间</th>
+		<th>实际完成时间</th>
 		<th>当前状态</th>
 		<th>操作</th>
 	</tr>
 
-	<volist name="data" id="project">
+	<volist name="data" id="work">
 
-		<tr {$project['status']==0?'class=\"info\"':''}>
+		<tr {$work['status']==0?'class=\"info\"':''}>
 			<td>{$index++}</td>
-			<td>{$project.project_name}</td>
-			<td>{$project.remark}</td>
+			<td>{$work.work_name}</td>
+			<td>{$work.remark}</td>
+			<td>{$work.project_name}</td>
+			<td>{$work.leader_truename}</td>
 			<td>
-				<if condition="$project.leader_uid eq session('user_id')">
+				<if condition="$work.member_uid eq session('user_id')">
 					{:session('truename')}
 				<else />
 					-
 				</if>
 			</td>
-			<td>{$project.s_time|date="Y-m-d",###}</td>
-			<td>{$project.e_time|date="Y-m-d",###}</td>
+			<td>{$work.s_time|date="Y-m-d",###}</td>
+			<td>{$work.e_time|date="Y-m-d",###}</td>
 			<td>
-				<switch name="project.status">
+				<if condition="$work['f_time'] eq 0">
+					-
+				<else />
+					{$work.f_time|date="Y-m-d",###}
+				</if></td>
+			<td>
+				<switch name="work.status">
 			        <case value="0">
 			        	<label class="label label-warning">未启动</label>
 			        </case>
@@ -66,15 +77,12 @@
 			    </switch>
 			</td>
 			<td>
-                <switch name="project.status">
+                <switch name="work.status">
 			        <case value="0">
-			        	<a href="{:U('admin/project/start', array('id' => $project['id']))}" class="btn btn-primary btn-sm"><i class="fa fa-power-off"></i>&nbsp;启动项目</a>
+			        	<a href="{:U('admin/work/start', array('id' => $work['id']))}" class="btn btn-primary btn-sm"><i class="fa fa-user-plus"></i>&nbsp;启动日常任务</a>
 			        </case>
 			        <case value="1">
-			        	<a href="{:U('admin/project/view', array('id' => $project['id']))}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i>&nbsp;查看</a>
-			        </case>
-			        <case value="2">
-			        	<a href="{:U('admin/project/evaluate', array('id' => $project['id']))}" class="btn btn-danger btn-sm"><i class="fa fa-trophy"></i>&nbsp;项目打分</a>
+			        	<a href="{:U('admin/project/submit', array('id' => $work['id']))}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i>&nbsp;提交完成</a>
 			        </case>
 			        <default />
 			    </switch>
