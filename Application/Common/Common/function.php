@@ -180,3 +180,28 @@ function get_finished_works_num($uid)
 	}
 	return $count;
 }
+
+function is_sign_time($timestamp)
+{
+	$time_str = date('Y-m-d ', $time);
+	
+	$morning_s_time   = $time_str . trim(C('morning_s_time'));
+	$morning_e_time   = $time_str . trim(C('morning_e_time'));
+	
+	$afternoon_s_time = $time_str . trim(C('afternoon_s_time'));
+	$afternoon_e_time = $time_str . trim(C('afternoon_e_time'));
+
+	$m_s_time = strtotime($morning_s_time);
+	$m_e_time = strtotime($morning_e_time);
+	$a_s_time = strtotime($afternoon_s_time)
+	$a_e_time = strtotime($afternoon_e_time)
+
+	if ($timestamp < $m_s_time
+		|| ($timestamp > $m_e_time && $timestamp < $a_s_time)
+		|| $timestamp > $a_e_time)
+	{
+		return false;
+	} else {
+		return true;
+	}
+}

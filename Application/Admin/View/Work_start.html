@@ -1,0 +1,118 @@
+<extend name="Content/layout" />
+<block name="module-name">项目</block>
+<block name="page-name">工作任务划分</block>
+<block name="content">
+
+<div>
+	<form class="form-horizontal" method="post" action="{:U('admin/work/startHandle')}" id="form-id">
+
+		<input type="hidden" name='work_id' value="{$data.work_id}">
+		<input type="hidden" name='project_id' value="{$data.project_id}">
+		<input type="hidden" name='member_uid' value="{$data.member_uid}">
+		<input type="hidden" name='leader_uid' value="{$data.leader_uid}">
+
+		<div class="form-group" style="width:400px;">
+			<label for="inputEmail3" class="col-sm-3 control-label">工作名称：</label>
+			<div class="col-sm-8">
+				<span>
+					{$data.work_name}
+				</span>
+			</div>
+		</div>
+		<div class="form-group" style="width:400px;">
+			<label for="inputEmail3" class="col-sm-3 control-label">所属项目：</label>
+			<div class="col-sm-8">
+				<span>
+					{$data.project_name}
+				</span>
+			</div>
+		</div>
+		<div class="form-group" style="width:400px;">
+			<label for="inputEmail3" class="col-sm-3 control-label">项目组长：</label>
+			<div class="col-sm-8">
+				<span>
+					{$data.leader_truename}
+				</span>
+			</div>
+		</div>
+		<div class="form-group" style="width:400px;">
+			<label for="inputEmail3" class="col-sm-3 control-label">规定时间：</label>
+			<div class="col-sm-8">
+				{$data.s_time|date="Y-m-d",###}
+				&nbsp;~&nbsp;
+				{$data.e_time|date="Y-m-d",###}
+			</div>
+		</div>
+
+		<div id="task-container">
+
+			<div class="form-group task-sample">
+				<label for="inputEmail3" class="control-label" style="width:100px;padding-right:15px;">任务划分：</label>
+				<div style="width:900px;display:inline-block;padding-left:10px;">
+					<input type="text" autocomplete="off" placeholder="任务名称" name="task[0][task_name]" class="task-name">
+					&nbsp;
+					<input type="text" autocomplete="off" placeholder="任务说明" name="task[0][remark]" class="task-remark" >
+					&nbsp;
+					<span class="input-daterange" data-toggle="datepicker" data-date-start-date='{$data.s_time|date="Y-m-d",###}' data-date-end-date='{$data.e_time|date="Y-m-d",###}'>
+						<input type="text" class="input-date task-s_time" placeholder="任务开始日期" autocomplete="off" readonly="true" name="task[0][s_time]" value="{$data.s_time|date="Y-m-d",###}" />
+						~
+						<input type="text" class="input-date task-e_time" placeholder="工作结束日期" autocomplete="off" readonly="true" name="task[0][e_time]" value="{$data.e_time|date="Y-m-d",###}" />
+					</span>
+					&nbsp;
+					<a href="javascript:void(0);" class="btn btn-info" id="add-task-btn"><i class="fa fa-plus"></i></a>
+					<a href="javascript:void(0);" class="btn btn-danger" id="delete-task-btn"><i class="fa fa-minus"></i></a>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="form-group" style="width:400px;">
+			<div class="col-sm-offset-3 col-sm-8">
+				<button type="submit" class="btn btn-primary" id="submit-btn"><i class="fa fa-floppy-o"></i>&nbsp;提交</button>
+				<a href="{:U('admin/work/schedule')}" class="btn btn-success"><i class="fa fa-reply"></i>&nbsp;返回列表</a>
+			</div>
+		</div>
+
+	</form>
+</div>
+
+<div class="form-group task-sample" id="init-task" style="display:none">
+	<label for="inputEmail3" class="control-label" style="width:100px;padding-right:15px;"></label>
+	<div style="width:800px;display:inline-block;padding-left:10px;">
+		<input type="text" autocomplete="off" placeholder="任务名称" class="task-name">
+		&nbsp;
+		<input type="text" autocomplete="off" placeholder="任务说明" class="task-remark" >
+		&nbsp;
+		<span class="input-daterange" data-toggle="datepicker" data-date-start-date='{$data.s_time|date="Y-m-d",###}' data-date-end-date='{$data.e_time|date="Y-m-d",###}'>
+			<input type="text" class="input-date task-s_time" placeholder="任务开始日期" autocomplete="off" readonly="true" value="{$data.s_time|date="Y-m-d",###}" />
+			~
+			<input type="text" class="input-date task-e_time" placeholder="任务结束日期" autocomplete="off" readonly="true" value="{$data.e_time|date="Y-m-d",###}" />
+		</span>
+	</div>
+</div>
+
+</block>
+<block name="own-js">
+<script type="text/javascript">
+var index = 0;
+$('#add-task-btn').click(function(){
+	index++;
+	var obj = $('#init-task').clone(true);
+	obj.attr('id', '').show();
+	obj.find('input.task-name').attr('name', 'task['+index+'][task_name]');
+	obj.find('input.task-remark').attr('name', 'task['+index+'][remark]');
+	obj.find('input.task-s_time').attr('name', 'task['+index+'][s_time]');
+	obj.find('input.task-e_time').attr('name', 'task['+index+'][e_time]');
+	$('#task-container').append(obj);
+});
+$('#delete-task-btn').click(function(){
+	if (index === 0) {
+		return false;
+	}
+	var obj = $('#task-container').find('.task-sample').last();
+	console.log(obj);
+	obj.remove();
+	index--;
+});
+</script>
+</block>

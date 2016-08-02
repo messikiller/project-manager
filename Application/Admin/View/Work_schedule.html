@@ -61,13 +61,13 @@
 			<td>
 				<switch name="work.status">
 			        <case value="0">
-			        	<label class="label label-warning">未启动</label>
+			        	<label class="label label-primary">未启动</label>
 			        </case>
 			        <case value="1">
-			        	<label class="label label-primary">进行中</label>
+			        	<label class="label label-success">进行中</label>
 			        </case>
 			        <case value="2">
-			        	<label class="label label-success">已结束</label>
+			        	<label class="label label-warning">已结束</label>
 			        </case>
 			        <case value="3">
 			        	<label class="label label-danger">禁用</label>
@@ -79,10 +79,14 @@
 			<td>
                 <switch name="work.status">
 			        <case value="0">
-			        	<a href="{:U('admin/work/start', array('id' => $work['id']))}" class="btn btn-primary btn-sm"><i class="fa fa-user-plus"></i>&nbsp;启动日常任务</a>
+			        	<a href="{:U('admin/work/start', array('id' => $work['id']))}" class="btn btn-primary btn-sm"><i class="fa fa-power-off"></i>&nbsp;启动</a>
 			        </case>
 			        <case value="1">
-			        	<a href="{:U('admin/project/submit', array('id' => $work['id']))}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i>&nbsp;提交完成</a>
+			        	<a href="{:U('admin/work/view', array('id' => $work['id']))}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i>&nbsp;查看</a>
+			        	<a href="{:U('admin/work/edit', array('id' => $work['id']))}" class="btn btn-success btn-sm"><i class="fa fa-pencil"></i>&nbsp;修改</a>
+			        </case>
+			        <case value="2">
+			        	<a href="{:U('admin/work/view', array('id' => $work['id']))}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i>&nbsp;查看</a>
 			        </case>
 			        <default />
 			    </switch>

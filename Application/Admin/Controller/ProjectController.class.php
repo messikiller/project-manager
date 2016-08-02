@@ -509,4 +509,16 @@ class ProjectController extends CommonController
 
 		alert_go('项目已经成功启动！', 'admin/project/schedule');
 	}
+
+	/**
+	 * @access leader
+	 */
+	public function evaluate()
+	{
+		if (! $this->is_leader) {
+			$this->redirect('admin/error/deny');
+		}
+		
+		// code
+	}
 }
