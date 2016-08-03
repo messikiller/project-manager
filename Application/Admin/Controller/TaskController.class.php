@@ -95,25 +95,12 @@ class TaskController extends CommonController
         }
 
         $user_id = $this->uid;
-        $ip = get_ip_address(true);
 
-        $signModel = M('sign_records');
-
-        $time_str = date('Y-m-d ', $time);
-
-        $s_timestamp = strtorime($time_str . '00:00:00');
-        $e_timestamp = strtorime($time_str . '23:59:59');
-
-        $total_where = array(
-            'user_id' => array('EQ', $user_id),
-            'c_time'  => array('EGT', $s_timestamp),
-            'c_time'  => array('ELT', $e_timestamp)
-        );
-
-        $total = $signModel->where($total_where)->count();
-        if ($total > 0) {
-            alert_back('打卡失败！今日你已经打过卡了！');
+        if (is_signed_today($user_id, $time, true)) {
+            alert_back('打卡失败！你今天上午已经打过卡了！');
         }
+        
+        $ip = get_ip_address(true);
 
         $sign_data = array(
             'user_id' => $user_id,
@@ -121,14 +108,15 @@ class TaskController extends CommonController
             'c_time'  => $time
         );
 
+        $signModel = M('sign_records');
         $sign_res  = $signModel->add($sign_data);
 
         if ($sign_res === false) {
-            alert_go('打卡失败！请联系管理员处理', 'admin/home/sign');
+            alert_back('打卡失败！请联系管理员处理');
         }
 
         $time_str = date('Y年m月d日 H:i:s', $time);
-        $success  = '打卡成功！今日打卡时间：' . $time_str;
+        $success  = '上午打卡成功！今日打卡时间：' . $time_str;
 
         alert_back($success);
     }
@@ -140,8 +128,33 @@ class TaskController extends CommonController
         	alert_back('现在不是下午打卡时间！');
         }
 
+        $user_id = $this->uid;
+
+        if (is_signed_today($user_id, $time, false)) {
+            alert_back('打卡失败！你今天下午已经打过卡了！');
+        }
+
+        $ip = get_ip_address(true);
+
+        $sign_data = array(
+            'user_id' => $user_id,
+            'ip'      => $ip,
+            'c_time'  => $time
+        );
+
+        $signModel = M('sign_records');
+        $sign_res  = $signModel->add($sign_data);
+
+        if ($sign_res === false) {
+            alert_back('打卡失败！请联系管理员处理');
+        }
+
         $post_task = $_POST['task'];
         $finished_task_ids = array();
+
+        $taskModel    = M('task');
+        $workModel    = M('work');
+        $projectModel = M('project');
 
         if (! empty($post_task)) {
             if (! is_array($post_task)) {
@@ -153,14 +166,42 @@ class TaskController extends CommonController
                 $id = intval($task['id']);
                 $completion = intval($task['completion']);
 
-                if ($completion === 100) {
+                if ($completion == 100) {
                     $finished_task_ids[] = $id;
                 }
 
-                $task_data[] = array(
-                    // ''
-                );
-            }
+                $res = $taskModel->where(array('id' => $id))
+                    ->setField('completion', $completion);
+               
+                if ($res === false) {
+                   alert_back('进度更新失败！'); 
+                }
+            } // end of foreach $post_task
+
         } // end of if task is not empty
+
+        foreach ($finished_task_id as $task_id) {
+            $project_id = $taskModel->where(array('id' => $task_id))->getField('project_id');
+            $work_id    = $taskModel->where(array('id' => $task_id))->getField('work_id');
+            
+            if (is_work_finished($work_id)) {
+                $res = $workModel->where(array('id' => $work_id))->setField('status', 2);
+                if ($res === false) {
+                    alert_back('更新工作状态失败！');
+                }
+            }
+
+            if (is_project_finished($project_id)) {
+                $res = $projectModel->where(array('id' => $project_id))->setField('status', 2);
+                if ($res === false) {
+                    alert_back('更新项目状态失败！');
+                }
+            }
+        } // end of foreach $finished_task_id
+
+        $time_str = date('Y年m月d日 H:i:s', $time);
+        $success  = '下午打卡成功！今日打卡时间：' . $time_str;
+
+        alert_back($success);
     }
 }

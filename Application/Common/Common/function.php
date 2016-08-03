@@ -187,7 +187,7 @@ function get_finished_works_num($uid)
 
 function is_sign_time($timestamp)
 {
-	$time_str = date('Y-m-d ', $time);
+	$time_str = date('Y-m-d ', $timestamp);
 
 	$morning_s_time   = $time_str . trim(C('morning_s_time'));
 	$morning_e_time   = $time_str . trim(C('morning_e_time'));
@@ -208,4 +208,67 @@ function is_sign_time($timestamp)
 	} else {
 		return true;
 	}
+}
+
+function is_signed_today($user_id, $timestamp, $is_morning = true)
+{
+	$signModel = M('sign_records');
+    $time_str = date('Y-m-d ', $timestamp);
+
+    if ($is_morning) {
+    	$s_timestamp = strtotime($time_str . C('morning_s_time'));
+    	$e_timestamp = strtotime($time_str . C('morning_e_time'));
+    } else {
+    	$s_timestamp = strtotime($time_str . C('afternoon_s_time'));
+    	$e_timestamp = strtotime($time_str . C('afternoon_e_time'));
+    }
+
+    $total_where = array(
+        'user_id' => array('EQ', $user_id),
+        'c_time'  => array('EGT', $s_timestamp),
+        'c_time'  => array('ELT', $e_timestamp)
+    );
+
+    $total = $signModel->where($total_where)->count();
+    if ($total > 0) {
+        return true;
+    } else {
+    	return false;
+    }
+}
+
+function is_work_finished($work_id)
+{
+	$taskModel = M('task');
+	$statusArr   = $taskModel
+		->where(array('work_id' => $work_id))
+		->getField('status', true);
+	
+	$is_finished = true;
+	foreach ($statusArr as $status) {
+		if ($status != 1) {
+			$is_finished = false;
+			break;
+		}
+	}
+
+	return $is_finished;
+}
+
+function is_project_finished($project_id)
+{
+	$workModel = M('work');
+	$statusArr = $workModel
+		->where(array('project_id' => $project_id))
+		->getField('status', true);
+
+	$is_finished = true;
+	foreach ($statusArr as $status) {
+		if ($status != 2) {
+			$is_finished = false;
+			break;
+		}
+	}
+
+	return $is_finished;
 }

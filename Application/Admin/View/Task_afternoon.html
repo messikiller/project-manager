@@ -34,8 +34,8 @@
             <td>{$task.s_time|date='Y-m-d',###}</td>
             <td>{$task.e_time|date='Y-m-d',###}</td>
             <td>
-                <input type="hidden" name="task[{$index}]['id']" value="{$task.id}">
-                <input type="text" name="task[{$index}]['completion']" value="{$task.completion}" data-index="{$index++}" data-init="{$task.completion}" class="completion" style="width:30px;">&nbsp;%
+                <input type="hidden" name="task[{$index}][id]" value="{$task.id}">
+                <input type="text" name="task[{$index}][completion]" value="{$task.completion}" data-index="{$index++}" data-init="{$task.completion}" class="completion" autocomplete="off" style="width:30px;">&nbsp;%
             </td>
         </tr>
     </volist>
@@ -50,28 +50,34 @@
 <script type="text/javascript">
 $('#submit-btn').click(function(){
     var finish = false;
+    var error  = false;
+
     $('.completion').each(function(){
-        var val = $.trim($(this).val());
-        var init = $(this).attr('data-init');
-        var index = $(this).attr('data-index');
+        var val   = parseInt($.trim($(this).val()));
+        var init  = parseInt($(this).attr('data-init'));
+        var index = parseInt($(this).attr('data-index'));
         if (val == '') {
             window.alert('序号为'+index+'的任务进度不能为空，请检查！');
-            exit();
+            error = true;
+            return false;
         }
 
         if (val == init) {
             window.alert('序号为'+index+'的任务进度没有更新，请更新后提交！');
-            exit();
+            error = true;
+            return false;
         }
 
         if (val < init) {
             window.alert('序号为'+index+'的任务进度更新错误，更新后进度值必须大于'+init+'！');
-            exit();
+            error = true;
+            return false;
         }
 
         if (parseInt(val) != val || val < 0 || val > 100) {
             window.alert('序号为'+index+'的任务进度更新错误，进度值必须是介于0~100之间的整数！');
-            exit();
+            error = true;
+            return false;
         }
 
         if (val == 100) {
@@ -79,13 +85,17 @@ $('#submit-btn').click(function(){
         }
     });
 
+    if (error) {
+        return false;
+    }
+
     var info = '你确定要提交今日的任务进度吗？';
     if (finish) {
         info = '检测到有已经完成的任务进度，确定要提交吗？'
     }
 
     if (window.confirm(info)) {
-        $('#form_id').submit();
+        $('#form-id').submit();
     }
 });
 </script>
