@@ -1,0 +1,102 @@
+<extend name="Content/layout" />
+<block name="module-name">个人中心</block>
+<block name="page-name">我的考勤</block>
+
+<block name="content">
+
+<div style="margin-bottom:15px;">
+    <button class="btn btn-success btn-lg" id="submit-btn">确认下午打卡</button>
+</div>
+
+<table class="table table-bordered table-hover">
+    <tr class="active">
+        <th>序号</th>
+        <th>日常任务名称</th>
+        <th>说明</th>
+        <th>所属工作</th>
+        <th>所属项目</th>
+        <th>项目组长</th>
+        <th>任务计划开始时间</th>
+        <th>任务计划完成时间</th>
+        <th>任务完成度（%）</th>
+    </tr>
+
+<form action="{:U('admin/task/afternoonHandle')}" method="post" id="form-id">
+
+    <volist name="data" id="task">
+        <tr>
+            <td>{$index}</td>
+            <td>{$task.task_name}</td>
+            <td>{$task.remark}</td>
+            <td>{$task.work_name}</td>
+            <td>{$task.project_name}</td>
+            <td>{$task.leader_truename}</td>
+            <td>{$task.s_time|date='Y-m-d',###}</td>
+            <td>{$task.e_time|date='Y-m-d',###}</td>
+            <td>
+                <input type="hidden" name="task[{$index}][id]" value="{$task.id}">
+                <input type="text" name="task[{$index}][completion]" value="{$task.completion}" data-index="{$index++}" data-init="{$task.completion}" class="completion" autocomplete="off" style="width:30px;">&nbsp;%
+            </td>
+        </tr>
+    </volist>
+
+</form>
+
+</table>
+
+</block>
+
+<block name="own-js">
+<script type="text/javascript">
+$('#submit-btn').click(function(){
+    var finish = false;
+    var error  = false;
+
+    $('.completion').each(function(){
+        var val   = parseInt($.trim($(this).val()));
+        var init  = parseInt($(this).attr('data-init'));
+        var index = parseInt($(this).attr('data-index'));
+        if (val == '') {
+            window.alert('序号为'+index+'的任务进度不能为空，请检查！');
+            error = true;
+            return false;
+        }
+
+        if (val == init) {
+            window.alert('序号为'+index+'的任务进度没有更新，请更新后提交！');
+            error = true;
+            return false;
+        }
+
+        if (val < init) {
+            window.alert('序号为'+index+'的任务进度更新错误，更新后进度值必须大于'+init+'！');
+            error = true;
+            return false;
+        }
+
+        if (parseInt(val) != val || val < 0 || val > 100) {
+            window.alert('序号为'+index+'的任务进度更新错误，进度值必须是介于0~100之间的整数！');
+            error = true;
+            return false;
+        }
+
+        if (val == 100) {
+            finish = true;
+        }
+    });
+
+    if (error) {
+        return false;
+    }
+
+    var info = '你确定要提交今日的任务进度吗？';
+    if (finish) {
+        info = '检测到有已经完成的任务进度，确定要提交吗？'
+    }
+
+    if (window.confirm(info)) {
+        $('#form-id').submit();
+    }
+});
+</script>
+</block>

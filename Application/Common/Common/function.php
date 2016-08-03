@@ -1,11 +1,13 @@
 <?php
 
-function p($str)
+function p($str, $exit = true)
 {
 	echo '<pre>';
 	print_r($str);
 	echo '</pre>';
-	die();
+	if ($exit) {
+		exit();
+	}
 }
 
 function alert_go($info, $url)
@@ -131,6 +133,7 @@ function get_startable_projects_num($uid)
 	if ($count === false) {
 		return 0;
 	}
+
 	return $count;
 }
 
@@ -146,6 +149,7 @@ function get_markable_projects_num($uid)
 	if ($count === false) {
 		return 0;
 	}
+
 	return $count;
 }
 
@@ -172,11 +176,99 @@ function get_finished_works_num($uid)
 	$count = $workModel
 		->where(array(
 			array('member_uid' => array('EQ', $uid)),
-			array('status' => array('EQ', 2))
+			array('status'     => array('EQ', 2))
 		))->count();
 
 	if ($count === false) {
 		return 0;
 	}
 	return $count;
+}
+
+function is_sign_time($timestamp)
+{
+	$time_str = date('Y-m-d ', $timestamp);
+
+	$morning_s_time   = $time_str . trim(C('morning_s_time'));
+	$morning_e_time   = $time_str . trim(C('morning_e_time'));
+
+	$afternoon_s_time = $time_str . trim(C('afternoon_s_time'));
+	$afternoon_e_time = $time_str . trim(C('afternoon_e_time'));
+
+	$m_s_time = strtotime($morning_s_time);
+	$m_e_time = strtotime($morning_e_time);
+	$a_s_time = strtotime($afternoon_s_time);
+	$a_e_time = strtotime($afternoon_e_time);
+
+	if ($timestamp < $m_s_time
+		|| ($timestamp > $m_e_time && $timestamp < $a_s_time)
+		|| $timestamp > $a_e_time)
+	{
+		return false;
+	} else {
+		return true;
+	}
+}
+
+function is_signed_today($user_id, $timestamp, $is_morning = true)
+{
+	$signModel = M('sign_records');
+    $time_str = date('Y-m-d ', $timestamp);
+
+    if ($is_morning) {
+    	$s_timestamp = strtotime($time_str . C('morning_s_time'));
+    	$e_timestamp = strtotime($time_str . C('morning_e_time'));
+    } else {
+    	$s_timestamp = strtotime($time_str . C('afternoon_s_time'));
+    	$e_timestamp = strtotime($time_str . C('afternoon_e_time'));
+    }
+
+    $total_where = array(
+        'user_id' => array('EQ', $user_id),
+        'c_time'  => array('EGT', $s_timestamp),
+        'c_time'  => array('ELT', $e_timestamp)
+    );
+
+    $total = $signModel->where($total_where)->count();
+    if ($total > 0) {
+        return true;
+    } else {
+    	return false;
+    }
+}
+
+function is_work_finished($work_id)
+{
+	$taskModel = M('task');
+	$statusArr   = $taskModel
+		->where(array('work_id' => $work_id))
+		->getField('status', true);
+	
+	$is_finished = true;
+	foreach ($statusArr as $status) {
+		if ($status != 1) {
+			$is_finished = false;
+			break;
+		}
+	}
+
+	return $is_finished;
+}
+
+function is_project_finished($project_id)
+{
+	$workModel = M('work');
+	$statusArr = $workModel
+		->where(array('project_id' => $project_id))
+		->getField('status', true);
+
+	$is_finished = true;
+	foreach ($statusArr as $status) {
+		if ($status != 2) {
+			$is_finished = false;
+			break;
+		}
+	}
+
+	return $is_finished;
 }

@@ -12,9 +12,9 @@
 <body>
 
 <div id="header">
-	<span class="header-left logo"><i class="fa fa-bar-chart"></i>&nbsp;工程项目管理系统</span>
+	<span class="header-left logo"><i class="fa fa-bar-chart"></i>&nbsp;{:C('systemname')}</span>
 	<a href="javascript:void(0);" class="header-right header-btn" id="logout-btn"><i class="fa fa-power-off"></i>&nbsp;退出</a>
-	<span class="header-right">欢迎登录：{$username}</span>
+	<span class="header-right">欢迎登录：{:session('truename')}</span>
 </div>
 
 <div id="wrap">
@@ -42,7 +42,7 @@
 				<default />
 			</switch>
 			<dd><a href="javascript:void(0);" target="content"><i class="fa fa-angle-double-right"></i>&nbsp;&nbsp;我的打分</a></dd>
-			<dd><a href="{:U('admin/home/sign')}" target="content"><i class="fa fa-angle-double-right"></i>&nbsp;&nbsp;我的考勤</a></dd>
+			<dd><a href="{:U('admin/task/sign')}" target="content"><i class="fa fa-angle-double-right"></i>&nbsp;&nbsp;我的考勤</a></dd>
 		</dl>
 </if>
 

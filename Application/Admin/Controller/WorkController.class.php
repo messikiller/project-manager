@@ -90,4 +90,143 @@ class WorkController extends CommonController
         $this->assign('finished_num', $finished_num);
 		$this->display();
 	}
+
+	/**
+	 * @access member
+	 */
+	public function start()
+	{
+		if (! $this->is_member) {
+			$this->redirect('admin/error/deny');
+		}
+
+		$id = I('get.id', 0, 'intval');
+		if ($id === 0) {
+			alert_back('参数错误！');
+		}
+
+		$workModel = M('work');
+		$workArr   = $workModel->where(array('id' => $id))->find();
+
+		$userModel    = M('user');
+		$projectModel = M('project');
+
+		$data = array();
+		$leader_truename = $userModel
+			->where(array('id' => $workArr['leader_uid']))
+			->getField('truename');
+
+		$member_truename = $userModel
+			->where(array('id' => $workArr['member_uid']))
+			->getField('truename');
+
+		$project_name = $projectModel
+			->where(array('id' => $workArr['project_id']))
+			->getField('project_name');
+
+		$data = $workArr;
+		$data['member_truename'] = $member_truename;
+		$data['leader_truename'] = $leader_truename;
+		$data['project_name']    = $project_name;
+		$data['work_id']         = $workArr['id'];
+
+		$this->assign('data', $data);
+		$this->display();
+	}
+
+	/**
+	 * @access member
+	 */
+	public function startHandle()
+	{
+		if (! IS_POST) {
+			$this->redirect('admin/index/index');
+		}
+
+		if (! $this->is_member) {
+			$this->redirect('admin/error/deny');
+		}
+
+		$work_id    = I('post.work_id',    0, 'intval');
+		$project_id = I('post.project_id', 0, 'intval');
+		$member_uid = I('post.member_uid', 0, 'intval');
+		$leader_uid = I('post.leader_uid', 0, 'intval');
+
+		if ($work_id === 0
+			|| $project_id === 0
+			|| $member_uid === 0
+			|| $leader_uid === 0)
+		{
+			alert_back('表单数据错误！');
+		}
+
+		$task_arr = I('post.task');
+		$data = array();
+		foreach ($task_arr as $task) {
+			
+			$tmp = array();
+
+			$tmp['task_name']  = trim($task['task_name']);
+			$tmp['remark']     = trim($task['remark']);
+			$tmp['s_time']     = strtotime($task['s_time']);
+			$tmp['e_time']     = strtotime($task['e_time']);
+
+			$tmp['work_id']    = $work_id;
+			$tmp['project_id'] = $project_id;
+			$tmp['member_uid'] = $member_uid;
+			$tmp['leader_uid'] = $leader_uid;
+			$tmp['c_time']     = time();
+
+			$data[] = $tmp;
+		}
+
+		$task_model = M('task');
+		$add_res = $task_model->addAll($data);
+
+		if ($add_res === false) {
+			alert_back('数据写入失败！');
+		}
+
+		$workModel  = M('work');
+		$update_data = array('status' => 1);
+		$update_res = $workModel->where(array('id' => $work_id))->save($update_data);
+
+		if ($update_res === false) {
+			alert_back('更新工作状态失败！');
+		}
+
+		alert_back('划分日常任务成功！');
+	}
+
+	/**
+	 * @access member
+	 */
+	public function edit()
+	{
+		if (! $this->is_member) {
+			$this->redirect('admin/error/deny');
+		}
+
+		// code
+	}
+
+	/**
+	 * @access member
+	 */
+	public function editHandle()
+	{
+		if (! $this->is_member) {
+			$this->redirect('admin/error/deny');
+		}
+
+		// code
+	}
+
+	/**
+	 * @access ALL
+	 */
+	public function view()
+	{
+		// code
+	}
 }

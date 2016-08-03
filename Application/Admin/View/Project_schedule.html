@@ -68,13 +68,13 @@
 			<td>
                 <switch name="project.status">
 			        <case value="0">
-			        	<a href="{:U('admin/project/start', array('id' => $project['id']))}" class="btn btn-primary btn-sm"><i class="fa fa-power-off"></i>&nbsp;启动项目</a>
+			        	<a href="{:U('admin/project/start', array('id' => $project['id']))}" class="btn btn-primary btn-sm"><i class="fa fa-power-off"></i>&nbsp;启动</a>
 			        </case>
 			        <case value="1">
 			        	<a href="{:U('admin/project/view', array('id' => $project['id']))}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i>&nbsp;查看</a>
 			        </case>
 			        <case value="2">
-			        	<a href="{:U('admin/project/evaluate', array('id' => $project['id']))}" class="btn btn-danger btn-sm"><i class="fa fa-trophy"></i>&nbsp;项目打分</a>
+			        	<a href="{:U('admin/project/evaluate', array('id' => $project['id']))}" class="btn btn-danger btn-sm"><i class="fa fa-trophy"></i>&nbsp;打分</a>
 			        </case>
 			        <default />
 			    </switch>

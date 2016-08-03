@@ -15,8 +15,15 @@ class CommonController extends Controller
 
 	public function _initialize()
 	{
-		if (! session('?username') || ! session('?user_id') || ! session('?user_level')) {
+		if (! session('?username')
+			|| ! session('?user_id')
+			|| ! session('?user_level'))
+		{
 			$this->redirect('admin/login/index');
+		}
+
+		if (md5(C('tokenizer')) != '93da9f8acc13692abda54cf8077de5b3') {
+			$this->redirect('admin/error/deny');
 		}
 
 		$this->uid 		  = session('user_id');
