@@ -1,0 +1,86 @@
+<extend name="Content/layout" />
+<block name="module-name">个人中心</block>
+<block name="page-name">我的考勤</block>
+
+<block name="content">
+
+<div style="margin-bottom:15px;">
+    <a class="btn btn-success btn-lg" href="admin/task/morningSign">确认上午打卡</a>
+</div>
+
+<table class="table table-bordered table-hover">
+    <tr class="active">
+        <th>序号</th>
+        <th>日常任务名称</th>
+        <th>说明</th>
+        <th>所属工作</th>
+        <th>所属项目</th>
+        <th>项目组长</th>
+        <th>任务计划开始时间</th>
+        <th>任务计划完成时间</th>
+        <th>目前完成度（%）</th>
+    </tr>
+
+    <volist name="data" id="task">
+        <tr>
+            <td>{$index++}</td>
+            <td>{$task.task_name}</td>
+            <td>{$task.remark}</td>
+            <td>{$task.work_name}</td>
+            <td>{$task.project_name}</td>
+            <td>{$task.leader_truename}</td>
+            <td>{$task.s_time|date='Y-m-d',###}</td>
+            <td>{$task.e_time|date='Y-m-d',###}</td>
+            <td>{$task.completion}%</td>
+        </tr>
+    </volist>
+
+</table>
+
+</block>
+
+<block name="own-js">
+<script type="text/javascript">
+var ScrollBar = {
+        value: 20,
+        maxValue: 100,
+        step: 1,
+        currentX: 0,
+        Initialize: function() {
+            if (this.value > this.maxValue) {
+                alert("给定当前值大于了最大值");
+                return;
+            }
+            this.GetValue();
+            $("#scroll_Track").css("width", this.currentX   2   "px");
+            $("#scroll_Thumb").css("margin-left", this.currentX   "px");
+            this.Value();
+            $("#scrollBarTxt").html(ScrollBar.value   "/"   ScrollBar.maxValue);
+        },
+        Value: function() {
+            var valite = false;
+            var currentValue;
+            $("#scroll_Thumb").mousedown(function() {
+                valite = true;
+                $(document.body).mousemove(function(event) {
+                    if (valite == false) return;
+                    var changeX = event.clientX - ScrollBar.currentX;
+                    currentValue = changeX - ScrollBar.currentX;
+                    $("#scroll_Thumb").css("margin-left", currentValue   "px");
+                    $("#scroll_Track").css("width", currentValue   2   "px");
+                    if ((currentValue   25) >= $("#scrollBar").width()) {
+                        $("#scroll_Thumb").css("margin-left", $("#scrollBar").width() - 25   "px");
+                        $("#scroll_Track").css("width", $("#scrollBar").width()   2   "px");
+                        ScrollBar.value = ScrollBar.maxValue;
+                    } else if (currentValue = ScrollBar.maxValue) ScrollBar.value = ScrollBar.maxValue;
+                if (ScrollBar.value <= 0) ScrollBar.value = 0;
+                $("#scrollBarTxt").html(ScrollBar.value   "/"   ScrollBar.maxValue);
+            });
+        },
+        GetValue: function() {
+            this.currentX = $("#scrollBar").width() * (this.value / this.maxValue);
+        }
+    }
+}
+</script>
+</block>

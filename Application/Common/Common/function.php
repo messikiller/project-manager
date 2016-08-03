@@ -1,11 +1,13 @@
 <?php
 
-function p($str)
+function p($str, $exit = true)
 {
 	echo '<pre>';
 	print_r($str);
 	echo '</pre>';
-	die();
+	if ($exit) {
+		exit();
+	}
 }
 
 function alert_go($info, $url)
@@ -131,6 +133,7 @@ function get_startable_projects_num($uid)
 	if ($count === false) {
 		return 0;
 	}
+
 	return $count;
 }
 
@@ -146,6 +149,7 @@ function get_markable_projects_num($uid)
 	if ($count === false) {
 		return 0;
 	}
+
 	return $count;
 }
 
@@ -172,7 +176,7 @@ function get_finished_works_num($uid)
 	$count = $workModel
 		->where(array(
 			array('member_uid' => array('EQ', $uid)),
-			array('status' => array('EQ', 2))
+			array('status'     => array('EQ', 2))
 		))->count();
 
 	if ($count === false) {
@@ -184,17 +188,17 @@ function get_finished_works_num($uid)
 function is_sign_time($timestamp)
 {
 	$time_str = date('Y-m-d ', $time);
-	
+
 	$morning_s_time   = $time_str . trim(C('morning_s_time'));
 	$morning_e_time   = $time_str . trim(C('morning_e_time'));
-	
+
 	$afternoon_s_time = $time_str . trim(C('afternoon_s_time'));
 	$afternoon_e_time = $time_str . trim(C('afternoon_e_time'));
 
 	$m_s_time = strtotime($morning_s_time);
 	$m_e_time = strtotime($morning_e_time);
-	$a_s_time = strtotime($afternoon_s_time)
-	$a_e_time = strtotime($afternoon_e_time)
+	$a_s_time = strtotime($afternoon_s_time);
+	$a_e_time = strtotime($afternoon_e_time);
 
 	if ($timestamp < $m_s_time
 		|| ($timestamp > $m_e_time && $timestamp < $a_s_time)
