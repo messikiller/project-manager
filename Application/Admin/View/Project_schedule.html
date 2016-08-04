@@ -39,8 +39,8 @@
 			<td>{$project.project_name}</td>
 			<td>{$project.remark}</td>
 			<td>
-				<if condition="$project.leader_uid eq session('user_id')">
-					{:session('truename')}
+				<if condition="$project.leader_uid eq $uid">
+					{$truename}
 				<else />
 					-
 				</if>

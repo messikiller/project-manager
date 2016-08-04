@@ -12,18 +12,17 @@
   <link rel="stylesheet" href="__PUBLIC__/lib/AdminLTE/AdminLTE.min.css">
   <!-- iCheck -->
   <link rel="stylesheet" href="__PUBLIC__/lib/AdminLTE/plugins/iCheck/square/blue.css">
+  <link rel="stylesheet" href="__PUBLIC__/css/admin_login_index.css">
 
 </head>
-<body class="hold-transition login-page">
+<body class="hold-transition login-page" style="background: url(__PUBLIC__/images/bg.jpg) no-repeat center;background-size: cover;">
 <div class="login-box">
-  <div class="login-logo">
-    CSCEC&nbsp;商务中心
-  </div>
-  <!-- /.login-logo -->
-  <div class="login-box-body">
-      <div style="height:20px;"></div>
 
-    <form action="{:U('admin/login/loginHandle')}" method="post">
+  <div class="login-box-body" id="login-box-body-id">
+
+      <h1 id="form-title-id">CSCEC</h1>
+
+    <form action="{:U('admin/login/loginHandle')}" method="post" id="form-id">
       <div class="form-group has-feedback">
           <span class="glyphicon glyphicon-user form-control-feedback" style="right:auto;"></span>
           <input type="text" class="form-control" autocomplete="off" placeholder="请输入用户名" name="username" style="padding-left:40px;padding-right:10px;">

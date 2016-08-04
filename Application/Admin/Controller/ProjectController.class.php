@@ -455,6 +455,8 @@ class ProjectController extends CommonController
         $this->assign('index',   $Page->firstRow+1);
         $this->assign('startable_num', $startable_num);
         $this->assign('finished_num', $finished_num);
+        $this->assign('uid',	  $this->uid);
+        $this->assign('truename', $this->truename);
 		$this->display();
 	}
 
