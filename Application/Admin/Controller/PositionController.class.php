@@ -9,7 +9,7 @@ class PositionController extends CommonController
 		parent::_initialize();
 
         if (! $this->is_admin) {
-            $this->redirect('admin//error/deny');
+            $this->redirect('admin/error/deny');
         }
     }
 
