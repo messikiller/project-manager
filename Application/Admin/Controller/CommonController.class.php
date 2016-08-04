@@ -38,6 +38,7 @@ class CommonController extends Controller
 
 			case 1:
 				$this->is_leader = true;
+				$this->is_member = true;
 				break;
 
 			case 2:

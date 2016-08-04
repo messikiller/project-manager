@@ -4,6 +4,16 @@
 
 <block name="content">
 
+<div style="width:800px;">
+    <div class="alert alert-warning" role="alert">
+      <i class="iconfont icon-warning alert-icon"></i>
+      <div class="alert-content">
+        <h4>注意</h4>
+        <p>编辑或者项目信息，有可能会影响正在进行中的项目，请慎重操作！</p>
+      </div>
+    </div>
+</div>
+
 <div style="width:500px;">
 	<form class="form-horizontal" method="post" action="{:U('admin/project/editHandle')}" id="form-id">
 
@@ -20,7 +30,7 @@
 			<label for="inputEmail3" class="col-sm-3 control-label">指定项目组长</label>
 			<div class="col-sm-8">
 				<select class="form-control" name="leader_uid" id="leader_uid-id">
-					
+
 					<volist name="leader_list" id="leader">
 						<option value="{$leader.id}" {$data['leader_uid']==$leader['id']?'selected=\"selected\"':''}>{$leader.truename}</option>
 					</volist>
@@ -33,9 +43,9 @@
 			<label for="inputEmail3" class="col-sm-3 control-label">项目计划时间</label>
 			<div class="col-sm-8">
 				<span class="input-daterange" data-toggle="datepicker">
-					<input type="text" class="input-date" placeholder="开始日期" autocomplete="off" readonly="true" name="s_time" id="s_time-id" value="{$data.s_time|date='Y-m-d',###}" />
+					<input type="text" class="input-date" placeholder="开始日期" autocomplete="off" readonly="true" name="s_time" id="s_time-id" value="{$data.s_time|date='Y-m-d',###}" style="width:140px;" />
 					&nbsp;至&nbsp;
-					<input type="text" class="input-date" placeholder="结束日期" autocomplete="off" readonly="true" name="e_time" id="e_time-id" value="{$data.e_time|date='Y-m-d',###}" />
+					<input type="text" class="input-date" placeholder="结束日期" autocomplete="off" readonly="true" name="e_time" id="e_time-id" value="{$data.e_time|date='Y-m-d',###}" style="width:140px;" />
 				</span>
 			</div>
 		</div>

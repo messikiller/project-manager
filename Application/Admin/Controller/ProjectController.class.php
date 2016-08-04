@@ -453,10 +453,13 @@ class ProjectController extends CommonController
 		$projectModel = M('project');
 		$projectArr   = $projectModel->where(array('id' => $id))->find();
 
+		$leaderIdsList = get_level_uids_list(array('truename'), 1);
 		$memberIdsList = get_level_uids_list(array('truename'), 2);
 
+		$userList = array_merge($leaderIdsList, $memberIdsList);
+
 		$this->assign('data', $projectArr);
-		$this->assign('member_list', $memberIdsList);
+		$this->assign('member_list', $userList);
 		$this->display();
 	}
 
@@ -518,7 +521,7 @@ class ProjectController extends CommonController
 		if (! $this->is_leader) {
 			$this->redirect('admin/error/deny');
 		}
-		
+
 		// code
 	}
 }
