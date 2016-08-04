@@ -367,15 +367,39 @@ class ProjectController extends CommonController
 		}
 
 		$userModel = M('user');
-		$userArr = $userModel
-			->field('truename')
-			->where(array('id' => $projectArr['leader_uid']))
-			->find();
+		$truename = $userModel->where(array('id' => $projectArr['leader_uid']))->getField('truename');
 
 		$data = $projectArr;
-		$data['truename'] = $userArr['truename'];
+		$data['truename'] = $truename;
 
-		$this->assign('data', $data);
+		$workModel = M('work');
+		$workArr = $workModel
+			->field('project_id , member_uid, work_name, s_time, e_time, f_time, status')
+			->where(array('project_id' => $id))
+			->select();
+
+		$memberUids     = makeImplode($workArr, 'member_uid');
+		$memberArr      = $userModel->where(array('id' => array('IN', "{$memberUids}")))->select();
+		$memberUidsList = makeIndex($memberArr, 'id');
+
+		$work_data = array();
+		foreach ($workArr as $work) {
+			$arr = array();
+
+			$member_uid = $work['member_uid'];
+			$arr = $work;
+
+			$member_truename = '';
+			if (isset($memberUidsList[$member_uid])) {
+				$member_truename = $memberUidsList[$member_uid]['truename'];
+			}
+
+			$arr['member_truename'] = $member_truename;
+			$work_data[] = $arr;
+		}
+		
+		$this->assign('data', 	   $data);
+		$this->assign('work_data', $work_data);
 		$this->display();
 	}
 
@@ -453,6 +477,7 @@ class ProjectController extends CommonController
 		$projectModel = M('project');
 		$projectArr   = $projectModel->where(array('id' => $id))->find();
 
+		// permit arrange works to both leaders and members
 		$leaderIdsList = get_level_uids_list(array('truename'), 1);
 		$memberIdsList = get_level_uids_list(array('truename'), 2);
 

@@ -4,7 +4,7 @@
 
 <block name="content">
 
-<div style="width:500px;">
+<div style="width:800px;">
 	<table class="table table-bordered">
 		<tr>
 			<td class="active" style="font-weight:bold;text-align:right;width:100px;">项目名称:</td>
@@ -51,6 +51,51 @@
 		<tr>
 			<td class="active" style="font-weight:bold;text-align:right;width:100px;">备注说明:</td>
 			<td>{$data.remark}</td>
+		</tr>
+		<tr>
+			<td class="active" style="font-weight:bold;text-align:right;width:100px;vertical-align:middle;">工作分配：</td>
+			<td>
+				<table class="table table-bordered">
+					<notempty name="work_data">
+						<tr class="active">
+							<th>项目组员</th>
+							<th>工作</th>
+							<th>状态</th>
+							<th>项目计划时间</th>
+							<th>实际完成时间</th>
+						</tr>
+					</notempry>
+					<volist name="work_data" id="work">
+						<tr>
+							<td>{$work.member_truename}</td>
+							<td>{$work.work_name}</td>
+							<td>
+								<switch name="work.status">
+							        <case value="0">
+							        	<label class="label label-warning">未启动</label>
+							        </case>
+							        <case value="1">
+							        	<label class="label label-primary">进行中</label>
+							        </case>
+							        <case value="2">
+							        	<label class="label label-success">已结束</label>
+							        </case>
+							        <default />
+							        	-
+							    </switch>
+							</td>
+							<td>{$work.s_time|date="Y-m-d",###}&nbsp;~&nbsp;{$work.e_time|date="Y-m-d",###}</td>
+							<td>
+								<if condition="$work.f_time neq 0">
+									{$work.f_time|date='Y-m-d',###}
+								<else />
+									-
+								</if>
+							</td>
+						</tr>
+					</volist>
+				</table>
+			</td>
 		</tr>
 		<tr>
 			<td colspan="2">
