@@ -1,5 +1,4 @@
 <?php
-
 function p($str, $exit = true)
 {
 	echo '<pre>';
@@ -119,6 +118,12 @@ function get_level_uids_list($field, $level)
 	return $userlist;
 }
 
+/**
+ * project startable conditions:
+ * 1. leader_uid = $uid
+ * 2. s_time <= $time
+ * 3. status = 0
+ */
 function get_startable_projects_num($uid)
 {
 	$projectModel = M('project');
@@ -137,6 +142,11 @@ function get_startable_projects_num($uid)
 	return $count;
 }
 
+/**
+ * markable project conditions:
+ * 1. leader_uid = $uid
+ * 2. status = 2
+ */
 function get_markable_projects_num($uid)
 {
 	$projectModel = M('project');
@@ -153,6 +163,12 @@ function get_markable_projects_num($uid)
 	return $count;
 }
 
+/**
+ * work startable condition:
+ * 1. member_uid = $uid
+ * 2. s_time <= $time
+ * 3. status = 0
+ */
 function get_startable_works_num($uid)
 {
 	$workModel = M('work');
@@ -170,6 +186,11 @@ function get_startable_works_num($uid)
 	return $count;
 }
 
+/**
+ * work finished condition:
+ * 1. member_uid = $uid
+ * 2. status = 2
+ */
 function get_finished_works_num($uid)
 {
 	$workModel = M('work');
@@ -243,7 +264,7 @@ function is_work_finished($work_id)
 	$statusArr   = $taskModel
 		->where(array('work_id' => $work_id))
 		->getField('status', true);
-	
+
 	$is_finished = true;
 	foreach ($statusArr as $status) {
 		if ($status != 1) {
