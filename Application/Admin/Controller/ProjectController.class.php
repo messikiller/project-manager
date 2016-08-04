@@ -397,7 +397,7 @@ class ProjectController extends CommonController
 			$arr['member_truename'] = $member_truename;
 			$work_data[] = $arr;
 		}
-		
+
 		$this->assign('data', 	   $data);
 		$this->assign('work_data', $work_data);
 		$this->display();
