@@ -50,21 +50,21 @@ class LoginController extends Controller
 
         $user_level = intval($authArr['level']);
 
-    	session('username',   $username);
-    	session('user_id',    $user_id);
-        session('user_level', $user_level);
-		session('truename',   $truename);
+    	session('user.username',   $username);
+    	session('user.user_id',    $user_id);
+        session('user.user_level', $user_level);
+		session('user.truename',   $truename);
 
 		$this->redirect('admin/index/index');
     }
 
     public function logout()
     {
-    	session('username',   NULL);
-    	session('user_id',    NULL);
-		session('user_level', NULL);
-		session('truename',   NULL);
-        session('is_admin',   NULL);
+		session('user', NULL);
+    	// session('username',   NULL);
+    	// session('user_id',    NULL);
+		// session('user_level', NULL);
+		// session('truename',   NULL);
 
     	alert_go('注销成功！即将跳转到登录页面……', 'admin/login/index');
     }

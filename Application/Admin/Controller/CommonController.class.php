@@ -15,9 +15,7 @@ class CommonController extends Controller
 
 	public function _initialize()
 	{
-		if (! session('?username')
-			|| ! session('?user_id')
-			|| ! session('?user_level'))
+		if (! session('?user'))
 		{
 			$this->redirect('admin/login/index');
 		}
@@ -26,12 +24,12 @@ class CommonController extends Controller
 			$this->redirect('admin/error/deny');
 		}
 
-		$this->uid 		  = session('user_id');
-		$this->username   = session('username');
-		$this->user_level = session('user_level');
-		$this->truename   = session('truename');
+		$this->uid 		  = session('user.user_id');
+		$this->username   = session('user.username');
+		$this->user_level = session('user.user_level');
+		$this->truename   = session('user.truename');
 
-		switch (session('user_level')) {
+		switch (session('user.user_level')) {
 			case 0:
 				$this->is_admin = true;
 				break;
