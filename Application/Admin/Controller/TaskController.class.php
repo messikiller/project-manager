@@ -99,7 +99,7 @@ class TaskController extends CommonController
         if (is_signed_today($user_id, $time, true)) {
             alert_back('打卡失败！你今天上午已经打过卡了！');
         }
-        
+
         $ip = get_ip_address(true);
 
         $sign_data = array(
@@ -172,9 +172,9 @@ class TaskController extends CommonController
 
                 $res = $taskModel->where(array('id' => $id))
                     ->setField('completion', $completion);
-               
+
                 if ($res === false) {
-                   alert_back('进度更新失败！'); 
+                   alert_back('进度更新失败！');
                 }
             } // end of foreach $post_task
 
@@ -183,16 +183,16 @@ class TaskController extends CommonController
         foreach ($finished_task_id as $task_id) {
             $project_id = $taskModel->where(array('id' => $task_id))->getField('project_id');
             $work_id    = $taskModel->where(array('id' => $task_id))->getField('work_id');
-            
+
             if (is_work_finished($work_id)) {
-                $res = $workModel->where(array('id' => $work_id))->setField('status', 2);
+                $res = $workModel->where(array('id' => $work_id))->setField(array('status' => 2, 'f_time' => $time));
                 if ($res === false) {
                     alert_back('更新工作状态失败！');
                 }
             }
 
             if (is_project_finished($project_id)) {
-                $res = $projectModel->where(array('id' => $project_id))->setField('status', 2);
+                $res = $projectModel->where(array('id' => $project_id))->setField(array('status' => 2, 'f_time' => $time));
                 if ($res === false) {
                     alert_back('更新项目状态失败！');
                 }
