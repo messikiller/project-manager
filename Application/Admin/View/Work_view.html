@@ -1,0 +1,113 @@
+<extend name="Content/layout" />
+<block name="module-name">管理</block>
+<block name="page-name">工作详情</block>
+
+<block name="content">
+
+<div style="width:800px;">
+	<table class="table table-bordered">
+		<tr>
+			<td class="active" style="font-weight:bold;text-align:right;width:100px;">工作名称:</td>
+			<td>{$work_info.work_name}</td>
+		</tr>
+        <tr>
+			<td class="active" style="font-weight:bold;text-align:right;width:100px;">所属项目:</td>
+			<td>{$work_info.project_name}</td>
+		</tr>
+        <tr>
+			<td class="active" style="font-weight:bold;text-align:right;width:100px;">项目组长:</td>
+			<td>{$work_info.leader_truename}</td>
+		</tr>
+		<tr>
+			<td class="active" style="font-weight:bold;text-align:right;width:100px;">最新状态:</td>
+			<td>
+				<switch name="work_info.status">
+			        <case value="0">
+			        	<label class="label label-warning">未启动</label>
+			        </case>
+			        <case value="1">
+			        	<label class="label label-primary">进行中</label>
+			        </case>
+			        <case value="2">
+			        	<label class="label label-success">已结束</label>
+			        </case>
+			        <default />
+			        	-
+			    </switch>
+			</td>
+		</tr>
+		<tr>
+			<td class="active" style="font-weight:bold;text-align:right;width:100px;">工作计划时间:</td>
+			<td>{$work_info.s_time|date='Y-m-d',###}&nbsp;~&nbsp;{$work_info.e_time|date='Y-m-d',###}</td>
+		</tr>
+		<tr>
+			<td class="active" style="font-weight:bold;text-align:right;width:100px;">实际完成时间:</td>
+			<td><if condition="$work_info.f_time neq 0">
+					{$work_info.f_time|date='Y-m-d',###}
+				<else />
+					-
+				</if>
+			</td>
+		</tr>
+		<tr>
+			<td class="active" style="font-weight:bold;text-align:right;width:100px;">备注说明:</td>
+			<td>{$work_info.remark}</td>
+		</tr>
+		<tr>
+			<td class="active" style="font-weight:bold;text-align:right;width:100px;vertical-align:middle;">任务分配：</td>
+			<td>
+				<if condition="count($task_data) neq 0">
+					<table class="table table-bordered">
+						<tr class="active">
+							<th>任务</th>
+                            <th>说明</th>
+							<th>任务计划时间</th>
+							<th>实际完成时间</th>
+                            <th>状态</th>
+                            <th>进度</th>
+						</tr>
+						<volist name="task_data" id="task">
+							<tr>
+								<td>{$task.task_name}</td>
+								<td>{$task.remark}</td>
+                                <td>{$task.s_time|date="Y-m-d",###}&nbsp;~&nbsp;{$task.e_time|date="Y-m-d",###}</td>
+								<td>
+									<if condition="$task.f_time neq 0">
+										{$task.f_time|date='Y-m-d',###}
+									<else />
+										-
+									</if>
+								</td>
+								<td>
+									<switch name="task.status">
+								        <case value="0">
+								        	<label class="label label-primary">进行中</label>
+								        </case>
+                                        <case value="1">
+								        	<label class="label label-success">已完成</label>
+								        </case>
+                                        <case value="2">
+								        	<label class="label label-danger">已禁用</label>
+								        </case>
+								        <default />
+								        	-
+								    </switch>
+								</td>
+                                <td>{$task.completion}&nbsp;%</td>
+							</tr>
+						</volist>
+					</table>
+				<else />
+					-
+				</if>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<a href="javascript:window.location=document.referrer" class="btn btn-success"><i class="fa fa-reply"></i>&nbsp;返回列表</a>
+			</td>
+		</tr>
+	</table>
+</div>
+
+</block>

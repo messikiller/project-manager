@@ -1,0 +1,71 @@
+<extend name="Content/layout" />
+<block name="module-name">管理</block>
+<block name="page-name">职务管理</block>
+
+<block name="content">
+
+<a href="{:U('admin/position/add')}" class="btn btn-success"><i class="fa fa-user-plus"></i>&nbsp;现在备份</a>
+
+<div style="height:20px;"></div>
+
+<div style="width:800px;">
+    <div class="alert alert-danger" role="alert">
+      <i class="iconfont icon-warning alert-icon"></i>
+      <div class="alert-content">
+        <h4>注意</h4>
+        <p>恢复数据库会清空当前数据库中的信息，并还原到数据库到指定的时间节点，执行过程中有可能出现不可恢复的错误，请务必慎重操作！</p>
+      </div>
+    </div>
+</div>
+
+<table class="table table-bordered table-hover">
+    <tr class="active">
+        <th>序号</th>
+        <th>SQL文件名</th>
+        <th>文件大小</th>
+        <th>生成时间</th>
+        <th>操作</th>
+    </tr>
+
+    <volist name="files" id="file">
+        <tr>
+            <td>{$index++}</td>
+            <td>{$file.filename}</td>
+            <td>{$file.filesize|filesize_format}</td>
+            <td>{$file.timestamp|date="Y-m-d H:i:s",###}</td>
+            <td>
+                <a href="javascript:void(0);" data-time="{$file.timestamp|date='Y-m-d H:i:s',###}" data-url="{:U('admin/backup/recover', array('timestamp' => $file['timestamp']))}" class="btn btn-primary btn-sm recover-btn"><i class="fa fa-undo"></i>&nbsp;恢复数据库</a>
+                <a ref="javascript:void(0);" data-filename="{$file.filename}" data-url="{:U('admin/backup/delete', array('timestamp' => $file['timestamp']))}" class="btn btn-danger btn-sm delete-btn"><i class="fa fa-times"></i>&nbsp;删除文件</a>
+            </td>
+        </tr>
+    </volist>
+
+</table>
+
+<if condition="$pagenum gt 1">
+<div id="page">
+    {$show}
+</div>
+</if>
+
+</block>
+
+<block name="own-js">
+<script type="text/javascript">
+$('.delete-btn').click(function(){
+    var filename = $(this).attr('data-filename');
+    var url = $(this).attr('data-url');
+    if(confirm('确定要删除备份文件:' + filename + '？')) {
+        window.location.href = url;
+    }
+});
+
+$('.recover-btn').click(function(){
+    var time = $(this).attr('data-time');
+    var url = $(this).attr('data-url');
+    if(confirm('这一操作十分危险！你确定要将当前数据库恢复到: ' + time + ' ？')) {
+        window.location.href = url;
+    }
+});
+</script>
+</block>

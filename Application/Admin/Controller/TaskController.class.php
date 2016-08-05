@@ -166,12 +166,19 @@ class TaskController extends CommonController
                 $id = intval($task['id']);
                 $completion = intval($task['completion']);
 
+                $update_arr = array();
                 if ($completion == 100) {
                     $finished_task_ids[] = $id;
+                    $update_arr = array(
+                        'completion' => $completion,
+                        'f_time'     => $time,
+                        'status'     => 1
+                    );
+                } else {
+                    $update_arr = array('completion' => $completion);
                 }
 
-                $res = $taskModel->where(array('id' => $id))
-                    ->setField('completion', $completion);
+                $res = $taskModel->where(array('id' => $id))->setField($update_arr);
 
                 if ($res === false) {
                    alert_back('进度更新失败！');

@@ -1,0 +1,144 @@
+<extend name="Content/layout" />
+<block name="module-name">管理</block>
+<block name="page-name">项目评价</block>
+
+<block name="content">
+
+<div>
+
+    <form class="form-horizontal" method="post" action="{:U('admin/project/evaluateHandle')}" id="form-id">
+		<input type="hidden" name='id' value="{$data.id}">
+
+		<div class="form-group" style="width:400px;">
+			<label for="inputEmail3" class="col-sm-3 control-label">项目名称</label>
+			<div class="col-sm-8">
+				<span>
+					{$project_data.project_name}
+				</span>
+			</div>
+		</div>
+        <div class="form-group" style="width:400px;">
+			<label for="inputEmail3" class="col-sm-3 control-label">计划开始时间</label>
+			<div class="col-sm-8">
+				{$project_data.s_time|date="Y-m-d",###}
+			</div>
+		</div>
+        <div class="form-group" style="width:400px;">
+			<label for="inputEmail3" class="col-sm-3 control-label">计划开始时间</label>
+			<div class="col-sm-8">
+				{$project_data.e_time|date="Y-m-d",###}
+			</div>
+		</div>
+
+            <label for="inputEmail3" class="col-sm-3 control-label">评价</label>
+			<div class="col-sm-9">
+				<table class="table table-bordered">
+                    <if condition="count($data) neq 0">
+                        <tr>
+                            <th>序号</th>
+                            <th>组员姓名</th>
+                            <th>工作名称</th>
+                            <th>内容说明</th>
+                            <th>创建时间</th>
+                            <th>计划时间</th>
+                            <th>最新状态</th>
+                            <th>完成时间</th>
+                            <th colspan="3">打分</th>
+                        </tr>
+                    <else />
+                        -
+                    </if>
+
+                    <volist name="data" id="work">
+
+                        <tr>
+                            <td>{$index}</td>
+                            <td>{$work.member_truename}</td>
+                            <td>{$work.work_name}</td>
+                            <td>{$work.remark}</td>
+                            <td>{$work.c_time|date="Y-m-d"}</td>
+                            <td>
+                                {$work.s_time|date="Y-m-d"}
+                                &nbsp;~&nbsp;
+                                {$work.e_time|date="Y-m-d"}
+                            </td>
+                            <td>
+                                <switch name="work.status">
+                			        <case value="0">
+                			        	<label class="label label-primary">未启动</label>
+                			        </case>
+                			        <case value="1">
+                			        	<label class="label label-success">进行中</label>
+                			        </case>
+                			        <case value="2">
+                			        	<label class="label label-warning">已结束</label>
+                			        </case>
+                			        <case value="3">
+                			        	<label class="label label-danger">禁用</label>
+                			        </case>
+                			        <default />
+                			        	-
+                			    </switch>
+                            </td>
+                            <td>{$work.f_time|date="Y-m-d"}</td>
+                            <td>
+                                <input type="hidden" name="work[{$index}][leader_uid]" value="{$work.leader_uid}">
+                                <input type="hidden" name="work[{$index}][member_uid]" value="{$work.member_uid}">
+                                <input type="hidden" name="work[{$index}][project_id]" value="{$work.project_id}">
+                                <input type="hidden" name="work[{$index}][work_id]" value="{$work.id}">
+                                总体精准度：
+                                <input type="text" autocomplete="off" name="work[{$index}][overall_accuracy_mark]">
+                            </td>
+                            <td>
+                                抽量检查：
+                                <input type="text" autocomplete="off" name="work[{$index}][sampling_inspection_mark]">
+                            </td>
+                            <td>
+                                总结得分：
+                                <input type="text" autocomplete="off" name="work[{$index}][summary_mark]">
+                            </td>
+                        </tr>
+                        <php>$index++</php>
+                    </volist>
+
+				</table>
+			</div>
+
+
+		<div class="form-group" style="width:400px;">
+			<div class="col-sm-offset-3 col-sm-8">
+				<a href="javascript:void(0);" class="btn btn-primary" id="submit-btn"><i class="fa fa-floppy-o"></i>&nbsp;提交</a>
+				<a href="{:U('admin/project/schedule')}" class="btn btn-success"><i class="fa fa-reply"></i>&nbsp;返回列表</a>
+			</div>
+		</div>
+
+	</form>
+</div>
+
+</block>
+
+<block name="own-js">
+<script type="text/javascript">
+var index = 0;
+$('#add-work-btn').click(function(){
+	index++;
+	var obj = $('#init-work').clone(true);
+	obj.attr('id', '').show();
+	obj.find('select.work-member').attr('name', 'work['+index+'][member_uid]');
+	obj.find('input.work-name').attr('name', 'work['+index+'][work_name]');
+	obj.find('input.work-remark').attr('name', 'work['+index+'][remark]');
+	obj.find('input.work-s_time').attr('name', 'work['+index+'][s_time]');
+	obj.find('input.work-e_time').attr('name', 'work['+index+'][e_time]');
+	$('#work-container').append(obj);
+});
+$('#delete-work-btn').click(function(){
+	if (index === 0) {
+		return false;
+	}
+	var obj = $('#work-container').find('.work-sample').last();
+	console.log(obj);
+	obj.remove();
+	index--;
+});
+</script>
+</block>

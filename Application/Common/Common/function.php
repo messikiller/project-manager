@@ -245,9 +245,8 @@ function is_signed_today($user_id, $timestamp, $is_morning = true)
     }
 
     $total_where = array(
-        'user_id' => array('EQ', $user_id),
-        'c_time'  => array('EGT', $s_timestamp),
-        'c_time'  => array('ELT', $e_timestamp)
+        'user_id' => array('EQ',  $user_id),
+        'c_time'  => array('BETWEEN', "$s_timestamp, $e_timestamp")
     );
 
     $total = $signModel->where($total_where)->count();
@@ -292,4 +291,20 @@ function is_project_finished($project_id)
 	}
 
 	return $is_finished;
+}
+
+/**
+ * format byte unit filesize
+ *
+ * @param  int    	filesize, unit:Byte
+ * @return string
+ */
+function filesize_format($bytesize)
+{
+	$units = array(' B', ' KB', ' MB', ' GB', ' TB');
+	for ($i = 0; $bytesize >= 1024 && $i < 4; $i++){
+		$bytesize /= 1024;
+	}
+	$r = round($bytesize, 2).$units[$i];
+	return $r;
 }

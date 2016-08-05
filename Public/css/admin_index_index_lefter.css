@@ -41,8 +41,22 @@
 }
 
 .lefter dd a.active{
-	/*background-color: #0070cc;*/
 	background-color: #0b98c8;
 	border-bottom: 1px solid #394555;
 	color: white;
+}
+
+.lefter .notice {
+	display: inline-block;
+	min-width: 10px;
+	padding: 3px 7px;
+	font-size: 12px;
+	font-weight: normal;
+	line-height: 1;
+	color: white;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	border-radius: 15px;
+	background-color: #ea4a36;
 }

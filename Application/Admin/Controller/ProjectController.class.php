@@ -549,6 +549,66 @@ class ProjectController extends CommonController
 			$this->redirect('admin/error/deny');
 		}
 
+		$project_id = I('project_id', 0, 'intval');
+		if ($project_id === 0) {
+			alert_back('失败，参数错误！');
+		}
+
+		if (! is_project_finished($project_id)) {
+			alert_back('失败！项目还没有全部完成，禁止评价！');
+		}
+
+		$projectModel = M('project');
+		$workModel    = M('work');
+		$userModel    = M('user');
+
+		$project_info = array();
+		$projectArr = $projectModel->where(array('project_id' => $project_id))->find();
+		$project_info = $projectArr;
+
+		$workArr = $workModel
+			->where(array('project_id' => $project_id))
+			->select();
+		$member_uids = makeImplode($workArr, 'member_uid');
+		$leader_uids = makeImplode($workArr, 'leader_uid');
+
+		$memberIdsList = $userModel->where(array('id' => array('IN', "{$member_uids}")))->getField('id, truename');
+		$leaderIdsList = $userModel->where(array('id' => array('IN', "{$leader_uids}")))->getField('id, truename');
+
+		$data = array();
+		foreach ($workArr as $work) {
+			$arr = array();
+			$arr = $work;
+
+			$member_uid = $work['member_uid'];
+
+			$arr['member_truename'] = '';
+
+			if (isset($memberIdsList[$member_uid])) {
+				$arr['member_truename'] = $memberIdsList[$member_uid]['truename'];
+			}
+			if (isset($leaderIdsList[$leader_uid])) {
+				$arr['leader_truename'] = $leaderIdsList[$leader_uid]['truename'];
+			}
+
+			$data[] = $arr;
+		}
+
+		$this->assign('data', $data);
+		$this->assign('project_data', $project_info);
+		$this->assign('index', 1);
+		$this->display();
+	}
+
+	/**
+	 * @access leader
+	 */
+	public function evaluateHanle()
+	{
+		if (! $this->is_leader) {
+			$this->redirect('admin/error/deny');
+		}
+
 		// code
 	}
 }

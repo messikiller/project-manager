@@ -163,7 +163,7 @@ class WorkController extends CommonController
 		$task_arr = I('post.task');
 		$data = array();
 		foreach ($task_arr as $task) {
-			
+
 			$tmp = array();
 
 			$tmp['task_name']  = trim($task['task_name']);
@@ -227,6 +227,40 @@ class WorkController extends CommonController
 	 */
 	public function view()
 	{
-		// code
+		$id = I('get.id', 0, 'intval');
+		if ($id === 0) {
+			alert_back('参数错误！');
+		}
+
+		$projectModel = M('project');
+		$workModel    = M('work');
+		$taskModel    = M('task');
+		$userModel    = M('user');
+
+		$workArr = $workModel->where(array('id' => $id))->find();
+		if ($workArr === false) {
+			alert_back('结果集为空！');
+		}
+
+		$project_name = $projectModel->where(array('id' => $workArr['project_id']))->getField('project_name');
+
+		$member_truename = $userModel->where(array('id' => $workArr['member_uid']))->getField('truename');
+		$leader_truename = $userModel->where(array('id' => $workArr['leader_uid']))->getField('truename');
+
+		$work_info = array();
+		$work_info = $workArr;
+
+		$work_info['project_name']    = $project_name;
+		$work_info['member_truename'] = $member_truename;
+		$work_info['leader_truename'] = $leader_truename;
+
+		$taskArr = $taskModel->where(array('work_id' => $id))->select();
+
+		$task_data = array();
+		$task_data = $taskArr;
+
+		$this->assign('work_info', $work_info);
+		$this->assign('task_data', $task_data);
+		$this->display();
 	}
 }
