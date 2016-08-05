@@ -549,7 +549,7 @@ class ProjectController extends CommonController
 			$this->redirect('admin/error/deny');
 		}
 
-		$project_id = I('project_id', 0, 'intval');
+		$project_id = I('id', 0, 'intval');
 		if ($project_id === 0) {
 			alert_back('失败，参数错误！');
 		}
@@ -563,7 +563,7 @@ class ProjectController extends CommonController
 		$userModel    = M('user');
 
 		$project_info = array();
-		$projectArr = $projectModel->where(array('project_id' => $project_id))->find();
+		$projectArr = $projectModel->where(array('id' => $project_id))->find();
 		$project_info = $projectArr;
 
 		$workArr = $workModel
@@ -585,15 +585,15 @@ class ProjectController extends CommonController
 			$arr['member_truename'] = '';
 
 			if (isset($memberIdsList[$member_uid])) {
-				$arr['member_truename'] = $memberIdsList[$member_uid]['truename'];
+				$arr['member_truename'] = $memberIdsList[$member_uid];
 			}
 			if (isset($leaderIdsList[$leader_uid])) {
-				$arr['leader_truename'] = $leaderIdsList[$leader_uid]['truename'];
+				$arr['leader_truename'] = $leaderIdsList[$leader_uid];
 			}
 
 			$data[] = $arr;
 		}
-
+// p($data);
 		$this->assign('data', $data);
 		$this->assign('project_data', $project_info);
 		$this->assign('index', 1);

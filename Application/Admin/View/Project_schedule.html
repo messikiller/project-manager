@@ -34,7 +34,7 @@
 
 	<volist name="data" id="project">
 
-		<tr {$project['status']==0?'class=\"info\"':''}>
+		<tr {$project['status']==0?'class=\"info\"':''} {$project['status']==2?'class=\"info\"':''}>
 			<td>{$index++}</td>
 			<td>{$project.project_name}</td>
 			<td>{$project.remark}</td>
@@ -56,7 +56,7 @@
 			        	<label class="label label-primary">进行中</label>
 			        </case>
 			        <case value="2">
-			        	<label class="label label-success">已结束</label>
+			        	<label class="label label-success">已完成</label>
 			        </case>
 			        <case value="3">
 			        	<label class="label label-danger">禁用</label>
@@ -71,10 +71,10 @@
 			        	<a href="{:U('admin/project/start', array('id' => $project['id']))}" class="btn btn-primary btn-sm"><i class="fa fa-power-off"></i>&nbsp;启动</a>
 			        </case>
 			        <case value="1">
-			        	<a href="{:U('admin/project/view', array('id' => $project['id']))}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i>&nbsp;查看</a>
+			        	<a href="{:U('admin/project/view', array('id' => $project['id']))}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i>&nbsp;查看</a>
 			        </case>
 			        <case value="2">
-			        	<a href="{:U('admin/project/evaluate', array('id' => $project['id']))}" class="btn btn-danger btn-sm"><i class="fa fa-trophy"></i>&nbsp;打分</a>
+			        	<a href="{:U('admin/project/evaluate', array('id' => $project['id']))}" class="btn btn-success btn-sm"><i class="fa fa-trophy"></i>&nbsp;打分</a>
 			        </case>
 			        <default />
 			    </switch>

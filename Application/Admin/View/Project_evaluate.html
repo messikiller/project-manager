@@ -3,117 +3,98 @@
 <block name="page-name">项目评价</block>
 
 <block name="content">
+<form class="form-horizontal" method="post" action="{:U('admin/project/evaluateHandle')}" id="form-id">
+    <table class="table table-bordered">
+        <if condition="count($data) neq 0">
+            <tr class="active">
+                <th rowspan="2" style="text-align:center;vertical-align:middle;">项目</th>
+                <th rowspan="2" style="text-align:center;vertical-align:middle;">项目计划</th>
+                <th rowspan="2" style="text-align:center;vertical-align:middle;">工作</th>
+                <th rowspan="2" style="text-align:center;vertical-align:middle;">说明</th>
+                <th rowspan="2" style="text-align:center;vertical-align:middle;">组员</th>
+                <th rowspan="2" style="text-align:center;vertical-align:middle;">计划时间</th>
+                <th rowspan="2" style="text-align:center;vertical-align:middle;">实际情况</th>
+                <th rowspan="2" style="text-align:center;vertical-align:middle;">最新状态</th>
+                <th colspan="3" style="text-align:center;vertical-align:middle;">打分</th>
+                <th rowspan="2" style="text-align:center;vertical-align:middle;">操作</th>
+            </tr>
+            <tr class="active">
+                <th style="text-align:center;vertical-align:middle;">总体精准度</th>
+                <th style="text-align:center;vertical-align:middle;">抽量检查</th>
+                <th style="text-align:center;vertical-align:middle;">总结得分</th>
+            </tr>
+        <else />
+            -
+        </if>
 
-<div>
+        <volist name="data" id="work">
 
-    <form class="form-horizontal" method="post" action="{:U('admin/project/evaluateHandle')}" id="form-id">
-		<input type="hidden" name='id' value="{$data.id}">
+            <tr>
+                <if condition="$index eq 1">
+                    <td rowspan="{$data|count}" style="text-align:center;vertical-align:middle;">{$project_data.project_name}</td>
+                    <td rowspan="{$data|count}" style="text-align:center;vertical-align:middle;">
+                        {$project_data.s_time|date="Y-m-d",###}
+                        &nbsp;~&nbsp;
+                        {$project_data.e_time|date="Y-m-d",###}
+                    </td>
+                </if>
+                <td style="text-align:center;vertical-align:middle;">{$work.work_name}</td>
+                <td style="text-align:center;vertical-align:middle;">{$work.remark}</td>
+                <td style="text-align:center;vertical-align:middle;">{$work.member_truename}</td>
+                <td style="text-align:center;vertical-align:middle;">
+                    {$work.s_time|date="Y-m-d",###}
+                    &nbsp;~&nbsp;
+                    {$work.e_time|date="Y-m-d",###}
+                </td>
+                <td style="text-align:center;vertical-align:middle;">
+                    {$work.c_time|date="Y-m-d",###}
+                    &nbsp;~&nbsp;
+                    {$work.f_time|date="Y-m-d",###}
+                </td>
+                <td style="text-align:center;vertical-align:middle;">
+                    <switch name="work.status">
+                        <case value="0">
+                            <label class="label label-primary">未启动</label>
+                        </case>
+                        <case value="1">
+                            <label class="label label-success">进行中</label>
+                        </case>
+                        <case value="2">
+                            <label class="label label-warning">已结束</label>
+                        </case>
+                        <case value="3">
+                            <label class="label label-danger">禁用</label>
+                        </case>
+                        <default />
+                            -
+                    </switch>
+                </td>
+                <td style="text-align:center;vertical-align:middle;">
+                    <input type="hidden" name="work[{$index}][leader_uid]" value="{$work.leader_uid}">
+                    <input type="hidden" name="work[{$index}][member_uid]" value="{$work.member_uid}">
+                    <input type="hidden" name="work[{$index}][project_id]" value="{$work.project_id}">
+                    <input type="hidden" name="work[{$index}][work_id]" value="{$work.id}">
 
-		<div class="form-group" style="width:400px;">
-			<label for="inputEmail3" class="col-sm-3 control-label">项目名称</label>
-			<div class="col-sm-8">
-				<span>
-					{$project_data.project_name}
-				</span>
-			</div>
-		</div>
-        <div class="form-group" style="width:400px;">
-			<label for="inputEmail3" class="col-sm-3 control-label">计划开始时间</label>
-			<div class="col-sm-8">
-				{$project_data.s_time|date="Y-m-d",###}
-			</div>
-		</div>
-        <div class="form-group" style="width:400px;">
-			<label for="inputEmail3" class="col-sm-3 control-label">计划开始时间</label>
-			<div class="col-sm-8">
-				{$project_data.e_time|date="Y-m-d",###}
-			</div>
-		</div>
+                    <input type="text" autocomplete="off" name="work[{$index}][overall_accuracy_mark]">
+                </td>
+                <td style="text-align:center;vertical-align:middle;">
+                    <input type="text" autocomplete="off" name="work[{$index}][sampling_inspection_mark]">
+                </td>
+                <td style="text-align:center;vertical-align:middle;">
+                    <input type="text" autocomplete="off" name="work[{$index}][summary_mark]">
+                </td>
+                <if condition="$index eq 1">
+                    <td rowspan="{$data|count}" style="text-align:center;vertical-align:middle;">
+                        <a href="javascript:void(0);" class="btn btn-primary" id="submit-btn"><i class="fa fa-floppy-o"></i>&nbsp;提交</a>
+                        <a href="{:U('admin/project/schedule')}" class="btn btn-success"><i class="fa fa-reply"></i>&nbsp;返回列表</a>
+                    </td>
+                </if>
+            </tr>
+            <php>$index++;</php>
+        </volist>
 
-            <label for="inputEmail3" class="col-sm-3 control-label">评价</label>
-			<div class="col-sm-9">
-				<table class="table table-bordered">
-                    <if condition="count($data) neq 0">
-                        <tr>
-                            <th>序号</th>
-                            <th>组员姓名</th>
-                            <th>工作名称</th>
-                            <th>内容说明</th>
-                            <th>创建时间</th>
-                            <th>计划时间</th>
-                            <th>最新状态</th>
-                            <th>完成时间</th>
-                            <th colspan="3">打分</th>
-                        </tr>
-                    <else />
-                        -
-                    </if>
-
-                    <volist name="data" id="work">
-
-                        <tr>
-                            <td>{$index}</td>
-                            <td>{$work.member_truename}</td>
-                            <td>{$work.work_name}</td>
-                            <td>{$work.remark}</td>
-                            <td>{$work.c_time|date="Y-m-d"}</td>
-                            <td>
-                                {$work.s_time|date="Y-m-d"}
-                                &nbsp;~&nbsp;
-                                {$work.e_time|date="Y-m-d"}
-                            </td>
-                            <td>
-                                <switch name="work.status">
-                			        <case value="0">
-                			        	<label class="label label-primary">未启动</label>
-                			        </case>
-                			        <case value="1">
-                			        	<label class="label label-success">进行中</label>
-                			        </case>
-                			        <case value="2">
-                			        	<label class="label label-warning">已结束</label>
-                			        </case>
-                			        <case value="3">
-                			        	<label class="label label-danger">禁用</label>
-                			        </case>
-                			        <default />
-                			        	-
-                			    </switch>
-                            </td>
-                            <td>{$work.f_time|date="Y-m-d"}</td>
-                            <td>
-                                <input type="hidden" name="work[{$index}][leader_uid]" value="{$work.leader_uid}">
-                                <input type="hidden" name="work[{$index}][member_uid]" value="{$work.member_uid}">
-                                <input type="hidden" name="work[{$index}][project_id]" value="{$work.project_id}">
-                                <input type="hidden" name="work[{$index}][work_id]" value="{$work.id}">
-                                总体精准度：
-                                <input type="text" autocomplete="off" name="work[{$index}][overall_accuracy_mark]">
-                            </td>
-                            <td>
-                                抽量检查：
-                                <input type="text" autocomplete="off" name="work[{$index}][sampling_inspection_mark]">
-                            </td>
-                            <td>
-                                总结得分：
-                                <input type="text" autocomplete="off" name="work[{$index}][summary_mark]">
-                            </td>
-                        </tr>
-                        <php>$index++</php>
-                    </volist>
-
-				</table>
-			</div>
-
-
-		<div class="form-group" style="width:400px;">
-			<div class="col-sm-offset-3 col-sm-8">
-				<a href="javascript:void(0);" class="btn btn-primary" id="submit-btn"><i class="fa fa-floppy-o"></i>&nbsp;提交</a>
-				<a href="{:U('admin/project/schedule')}" class="btn btn-success"><i class="fa fa-reply"></i>&nbsp;返回列表</a>
-			</div>
-		</div>
-
-	</form>
-</div>
+    </table>
+</form>
 
 </block>
 

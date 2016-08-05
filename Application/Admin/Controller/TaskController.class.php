@@ -187,7 +187,7 @@ class TaskController extends CommonController
 
         } // end of if task is not empty
 
-        foreach ($finished_task_id as $task_id) {
+        foreach ($finished_task_ids as $task_id) {
             $project_id = $taskModel->where(array('id' => $task_id))->getField('project_id');
             $work_id    = $taskModel->where(array('id' => $task_id))->getField('work_id');
 

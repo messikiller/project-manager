@@ -14,14 +14,22 @@ class TestController extends CommonController
 
     public function index()
     {
-        $taskModel = M('task');
-        $workModel = M('work');
-        $task_id = 8;
-        $project_id = $taskModel->where(array('id' => $task_id))->getField('project_id');
-    	$statusArr = $workModel
-    		->where(array('project_id' => $project_id))
-    		->getField('status', true);
+        $work_id = 13;
+        var_dump(is_work_finished(13));
 
-        p($statusArr);
+        // $taskModel = M('task');
+    	// $statusArr   = $taskModel
+    	// 	->where(array('work_id' => $work_id))
+    	// 	->getField('status', true);
+        //
+        // $is_finished = true;
+    	// foreach ($statusArr as $status) {
+    	// 	if ($status != 1) {
+    	// 		$is_finished = false;
+    	// 		break;
+    	// 	}
+    	// }
+        //
+        // var_dump($is_finished);
     }
 }

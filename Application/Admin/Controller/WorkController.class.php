@@ -53,7 +53,6 @@ class WorkController extends CommonController
         $show  = $Page->show();
 
         $startable_num = get_startable_works_num($uid);
-        $finished_num  = get_finished_works_num($uid);
 
 		$leaderIdsList = get_level_uids_list(array('truename'), 1);
 
