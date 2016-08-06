@@ -1,5 +1,5 @@
 ﻿/**
- * jQuery EasyUI 1.4.5
+ * jQuery EasyUI 1.5
  * 
  * Copyright (c) 2009-2016 www.jeasyui.com. All rights reserved.
  *
@@ -160,6 +160,41 @@
 		moveWindow(target);
 		if (!closed){win.window('open');}
 	}
+
+	function constrain(left, top, width, height){
+		var target = this;
+		var state = $.data(target, 'window');
+		var opts = state.options;
+		if (!opts.constrain){return {};}
+		if ($.isFunction(opts.constrain)){
+			return opts.constrain.call(target, left, top, width, height);
+		}
+		var win = $(target).window('window');
+		var parent = opts.inline ? win.parent() : $(window);
+		if (left < 0){left = 0;}
+		if (top < parent.scrollTop()){top = parent.scrollTop();}
+		if (left + width > parent.width()){
+			if (width == win.outerWidth()){	// moving
+				left = parent.width() - width;
+			} else {	// resizing
+				width = parent.width() - left;
+			}
+		}
+		if (top - parent.scrollTop() + height > parent.height()){
+			if (height == win.outerHeight()){	// moving
+				top = parent.height() - height + parent.scrollTop();
+			} else {	// resizing
+				height = parent.height() - top + parent.scrollTop();
+			}
+		}
+
+		return {
+			left:left,
+			top:top,
+			width:width,
+			height:height
+		};
+	}
 	
 	
 	/**
@@ -177,101 +212,91 @@
 				state.window.css('z-index', $.fn.window.defaults.zIndex++);
 			},
 			onStartDrag: function(e){
-				if (!state.proxy){
-					state.proxy = $('<div class="window-proxy"></div>').insertAfter(state.window);
-				}
-				state.proxy.css({
-					display:'none',
-					zIndex: $.fn.window.defaults.zIndex++,
-					left: e.data.left,
-					top: e.data.top
-				});
-				state.proxy._outerWidth(state.window._outerWidth());
-				state.proxy._outerHeight(state.window._outerHeight());
-				setTimeout(function(){
-					if (state.proxy) state.proxy.show();
-				}, 500);
+				start1(e);
 			},
 			onDrag: function(e){
-				state.proxy.css({
-					display:'block',
-					left: e.data.left,
-					top: e.data.top
-				});
+				proc1(e);
 				return false;
 			},
 			onStopDrag: function(e){
-				state.options.left = e.data.left;
-				state.options.top = e.data.top;
-				$(target).window('move');
-				state.proxy.remove();
-				state.proxy = null;
+				stop1(e);
 			}
 		});
 		
 		state.window.resizable({
 			disabled: state.options.resizable == false,
 			onStartResize:function(e){
-				if (state.pmask){state.pmask.remove();}
-				state.pmask = $('<div class="window-proxy-mask"></div>').insertAfter(state.window);
-				state.pmask.css({
-					zIndex: $.fn.window.defaults.zIndex++,
-					left: e.data.left,
-					top: e.data.top,
-					width: state.window._outerWidth(),
-					height: state.window._outerHeight()
-				});
-				if (state.proxy){state.proxy.remove();}
-				state.proxy = $('<div class="window-proxy"></div>').insertAfter(state.window);
-				state.proxy.css({
-					zIndex: $.fn.window.defaults.zIndex++,
-					left: e.data.left,
-					top: e.data.top
-				});
-				state.proxy._outerWidth(e.data.width)._outerHeight(e.data.height);
+				start1(e);
 			},
 			onResize: function(e){
-				state.proxy.css({
-					left: e.data.left,
-					top: e.data.top
-				});
-				state.proxy._outerWidth(e.data.width);
-				state.proxy._outerHeight(e.data.height);
+				proc1(e);
 				return false;
 			},
 			onStopResize: function(e){
-				$(target).window('resize', e.data);
-				state.pmask.remove();
-				state.pmask = null;
-				state.proxy.remove();
-				state.proxy = null;
+				stop1(e);
 			}
 		});
+
+		function start1(e){
+			if (state.pmask){state.pmask.remove();}
+			state.pmask = $('<div class="window-proxy-mask"></div>').insertAfter(state.window);
+			state.pmask.css({
+				display: 'none',
+				zIndex: $.fn.window.defaults.zIndex++,
+				left: e.data.left,
+				top: e.data.top,
+				width: state.window._outerWidth(),
+				height: state.window._outerHeight()
+			});
+			if (state.proxy){state.proxy.remove();}
+			state.proxy = $('<div class="window-proxy"></div>').insertAfter(state.window);
+			state.proxy.css({
+				display: 'none',
+				zIndex: $.fn.window.defaults.zIndex++,
+				left: e.data.left,
+				top: e.data.top
+			});
+			state.proxy._outerWidth(e.data.width)._outerHeight(e.data.height);
+			state.proxy.hide();
+			setTimeout(function(){
+				if (state.pmask){state.pmask.show();}
+				if (state.proxy){state.proxy.show();}
+			}, 500);
+		}
+		function proc1(e){
+			$.extend(e.data, constrain.call(target, e.data.left, e.data.top, e.data.width, e.data.height));
+			state.pmask.show();
+			state.proxy.css({
+				display: 'block',
+				left: e.data.left,
+				top: e.data.top
+			});
+			state.proxy._outerWidth(e.data.width);
+			state.proxy._outerHeight(e.data.height);
+		}
+		function stop1(e){
+			$.extend(e.data, constrain.call(target, e.data.left, e.data.top, e.data.width+0.1, e.data.height+0.1));
+			$(target).window('resize', e.data);
+			state.pmask.remove();
+			state.pmask = null;
+			state.proxy.remove();
+			state.proxy = null;
+		}
 	}
-	
-	// function getPageArea() {
-	// 	if (document.compatMode == 'BackCompat') {
-	// 		return {
-	// 			width: Math.max(document.body.scrollWidth, document.body.clientWidth),
-	// 			height: Math.max(document.body.scrollHeight, document.body.clientHeight)
-	// 		}
-	// 	} else {
-	// 		return {
-	// 			width: Math.max(document.documentElement.scrollWidth, document.documentElement.clientWidth),
-	// 			height: Math.max(document.documentElement.scrollHeight, document.documentElement.clientHeight)
-	// 		}
-	// 	}
-	// }
-	
+		
 	// when window resize, reset the width and height of the window's mask
-	$(window).resize(function(){
-		$('body>div.window-mask').css({
-			width: $(window)._outerWidth(),
-			height: $(window)._outerHeight()
-		});
-		setTimeout(function(){
-			$('body>div.window-mask').css($.fn.window.getMaskSize());
-		}, 50);
+	$(function(){
+		if (!$._positionFixed){
+			$(window).resize(function(){
+				$('body>div.window-mask:visible').css({
+					width: '',
+					height: ''
+				});
+				setTimeout(function(){
+					$('body>div.window-mask:visible').css($.fn.window.getMaskSize());
+				}, 50);
+			});
+		}
 	});
 	
 	$.fn.window = function(options, param){
@@ -342,11 +367,16 @@
 
 	$.fn.window.getMaskSize = function(target){
 		var state = $(target).data('window');
-		var inline = (state && state.options.inline);
-		return {
-			width: (inline ? '100%' : $(document).width()),
-			height: (inline ? '100%' : $(document).height())
-		};
+		if (state && state.options.inline){
+			return {};
+		} else if ($._positionFixed){
+			return {position: 'fixed'};
+		} else {
+			return {
+				width: $(document).width(),
+				height: $(document).height()
+			};
+		}
 	};
 	
 	$.fn.window.parseOptions = function(target){
@@ -371,6 +401,17 @@
 		minimizable: true,
 		maximizable: true,
 		closable: true,
-		closed: false
+		closed: false,
+		constrain: false
+		/*
+		constrain: function(left,top,width,height){
+			return {
+				left:left,
+				top:top,
+				width:width,
+				height:height
+			};
+		}
+		*/
 	});
 })(jQuery);

@@ -1,0 +1,24 @@
+body{
+    margin: 0px;
+    padding: 20px 20px 0px 20px;
+}
+
+.label-inactive{
+	background-color: #fac603;
+}
+
+.label-started{
+	background-color: #28a3ef;
+}
+
+.label-finished{
+	background-color: #43cd6e;
+}
+
+.label-evaluated{
+	background-color: #D812CF;
+}
+
+.label-disabled{
+	background-color: #777;
+}

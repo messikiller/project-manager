@@ -1,9 +1,14 @@
 <extend name="Content/layout" />
+<block name="own-css">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/lib/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/lib/easyui/themes/icon.css">
+</block>
 <block name="module-name">管理</block>
 <block name="page-name">项目评价</block>
 
 <block name="content">
 <form class="form-horizontal" method="post" action="{:U('admin/project/evaluateHandle')}" id="form-id">
+    <input type="hidden" name="project_id" value="{$project_id}">
     <table class="table table-bordered">
         <if condition="count($data) neq 0">
             <tr class="active">
@@ -19,9 +24,9 @@
                 <th rowspan="2" style="text-align:center;vertical-align:middle;">操作</th>
             </tr>
             <tr class="active">
-                <th style="text-align:center;vertical-align:middle;">总体精准度</th>
-                <th style="text-align:center;vertical-align:middle;">抽量检查</th>
-                <th style="text-align:center;vertical-align:middle;">总结得分</th>
+                <th style="text-align:center;vertical-align:middle;">总体精准度（{:C('accuracy_percentage')}%）</th>
+                <th style="text-align:center;vertical-align:middle;">抽量检查（{:C('sampling_percentage')}%）</th>
+                <th style="text-align:center;vertical-align:middle;">总结得分（{:C('summary_percentage')}%）</th>
             </tr>
         <else />
             -
@@ -60,32 +65,37 @@
                             <label class="label label-success">进行中</label>
                         </case>
                         <case value="2">
-                            <label class="label label-warning">已结束</label>
+                            <label class="label label-warning">已完成</label>
                         </case>
                         <case value="3">
-                            <label class="label label-danger">禁用</label>
+                            <label class="label label-danger">已禁用</label>
+                        </case>
+                        <case value="4">
+                            <label class="label label-info">已评价</label>
                         </case>
                         <default />
                             -
                     </switch>
                 </td>
-                <td style="text-align:center;vertical-align:middle;">
-                    <input type="hidden" name="work[{$index}][leader_uid]" value="{$work.leader_uid}">
-                    <input type="hidden" name="work[{$index}][member_uid]" value="{$work.member_uid}">
-                    <input type="hidden" name="work[{$index}][project_id]" value="{$work.project_id}">
-                    <input type="hidden" name="work[{$index}][work_id]" value="{$work.id}">
+                <td style="text-align:center;vertical-align:middle;padding:25px 15px 10px 15px;">
+                    <input type="hidden" name="evaluate[{$index}][leader_uid]" value="{$work.leader_uid}">
+                    <input type="hidden" name="evaluate[{$index}][member_uid]" value="{$work.member_uid}">
+                    <input type="hidden" name="evaluate[{$index}][project_id]" value="{$work.project_id}">
+                    <input type="hidden" name="evaluate[{$index}][work_id]" value="{$work.id}">
 
-                    <input type="text" autocomplete="off" name="work[{$index}][overall_accuracy_mark]">
+                    <input id="slider" class="easyui-slider" style="width:100px" data-options="showTip:true" name="evaluate[{$index}][overall_accuracy_mark]">
+
                 </td>
-                <td style="text-align:center;vertical-align:middle;">
-                    <input type="text" autocomplete="off" name="work[{$index}][sampling_inspection_mark]">
+                <td style="text-align:center;vertical-align:middle;padding:25px 15px 10px 15px;">
+                    <input id="slider" class="easyui-slider" style="width:100px;" data-options="showTip:true" name="evaluate[{$index}][sampling_inspection_mark]">
                 </td>
-                <td style="text-align:center;vertical-align:middle;">
-                    <input type="text" autocomplete="off" name="work[{$index}][summary_mark]">
+                <td style="text-align:center;vertical-align:middle;padding:25px 15px 10px 15px;">
+                    <input class="easyui-slider" style="width:100px" data-options="showTip:true" name="evaluate[{$index}][summary_mark]" >
                 </td>
                 <if condition="$index eq 1">
                     <td rowspan="{$data|count}" style="text-align:center;vertical-align:middle;">
-                        <a href="javascript:void(0);" class="btn btn-primary" id="submit-btn"><i class="fa fa-floppy-o"></i>&nbsp;提交</a>
+                        <a href="javascript:void(0);" class="btn btn-primary" id="submit-btn"><i class="fa fa-floppy-o"></i>&nbsp;提交评分</a>
+                        <div style="height:5px;"></div>
                         <a href="{:U('admin/project/schedule')}" class="btn btn-success"><i class="fa fa-reply"></i>&nbsp;返回列表</a>
                     </td>
                 </if>
@@ -99,27 +109,29 @@
 </block>
 
 <block name="own-js">
-<script type="text/javascript">
-var index = 0;
-$('#add-work-btn').click(function(){
-	index++;
-	var obj = $('#init-work').clone(true);
-	obj.attr('id', '').show();
-	obj.find('select.work-member').attr('name', 'work['+index+'][member_uid]');
-	obj.find('input.work-name').attr('name', 'work['+index+'][work_name]');
-	obj.find('input.work-remark').attr('name', 'work['+index+'][remark]');
-	obj.find('input.work-s_time').attr('name', 'work['+index+'][s_time]');
-	obj.find('input.work-e_time').attr('name', 'work['+index+'][e_time]');
-	$('#work-container').append(obj);
-});
-$('#delete-work-btn').click(function(){
-	if (index === 0) {
-		return false;
-	}
-	var obj = $('#work-container').find('.work-sample').last();
-	console.log(obj);
-	obj.remove();
-	index--;
+<script type="text/javascript" src="__PUBLIC__/lib/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/lib/easyui/plugins/jquery.textbox.js"></script>
+<script type="text/javascript" src="__PUBLIC__/lib/easyui/plugins/jquery.spinner.js"></script>
+<script>
+$('#submit-btn').click(function(){
+    var check = true;
+    $('#form-id input').each(function(){
+        var type = $(this).attr('type');
+        var val  = $(this).val();
+        if (type != 'hidden' && val == 0) {
+            check = false;
+            return false;
+        }
+    });
+
+    var info = '你确定要提交所有评分吗？';
+    if (! check) {
+        info = '检测到有评分为0的项目，你确定要提交吗？'
+    }
+
+    if (confirm(info)) {
+        $('#form-id').submit();
+    }
 });
 </script>
 </block>

@@ -1,5 +1,5 @@
 ﻿/**
- * jQuery EasyUI 1.4.5
+ * jQuery EasyUI 1.5
  * 
  * Copyright (c) 2009-2016 www.jeasyui.com. All rights reserved.
  *
@@ -123,6 +123,11 @@
 			css:'textbox.css',
 			dependencies:['validatebox','linkbutton']
 		},
+		passwordbox:{
+			js:'jquery.passwordbox.js',
+			css:'passwordbox.css',
+			dependencies:['textbox']
+		},
 		filebox:{
 			js:'jquery.filebox.js',
 			css:'filebox.css',
@@ -145,6 +150,10 @@
 		combogrid:{
 			js:'jquery.combogrid.js',
 			dependencies:['combo','datagrid']
+		},
+		combotreegrid:{
+			js:'jquery.combotreegrid.js',
+			dependencies:['combo','treegrid']
 		},
 		validatebox:{
 			js:'jquery.validatebox.js',

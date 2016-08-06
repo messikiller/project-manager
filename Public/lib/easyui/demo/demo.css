@@ -16,3 +16,9 @@ h2 {
 .demo-tip{
 	display:none;
 }
+.label-top{
+    display: block;
+    height: 22px;
+    line-height: 22px;
+    vertical-align: middle;
+}

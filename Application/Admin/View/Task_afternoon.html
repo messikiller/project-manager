@@ -1,4 +1,8 @@
 <extend name="Content/layout" />
+<block name="own-css">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/lib/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/lib/easyui/themes/icon.css">
+</block>
 <block name="module-name">个人中心</block>
 <block name="page-name">我的考勤</block>
 
@@ -7,6 +11,8 @@
 <div style="margin-bottom:15px;">
     <button class="btn btn-success btn-lg" id="submit-btn">确认下午打卡</button>
 </div>
+
+<form action="{:U('admin/task/afternoonHandle')}" method="post" id="form-id">
 
 <table class="table table-bordered table-hover">
     <tr class="active">
@@ -21,32 +27,34 @@
         <th>任务完成度（%）</th>
     </tr>
 
-<form action="{:U('admin/task/afternoonHandle')}" method="post" id="form-id">
-
     <volist name="data" id="task">
         <tr>
-            <td>{$index}</td>
-            <td>{$task.task_name}</td>
-            <td>{$task.remark}</td>
-            <td>{$task.work_name}</td>
-            <td>{$task.project_name}</td>
-            <td>{$task.leader_truename}</td>
-            <td>{$task.s_time|date='Y-m-d',###}</td>
-            <td>{$task.e_time|date='Y-m-d',###}</td>
-            <td>
+            <td style="vertical-align:middle;">{$index}</td>
+            <td style="vertical-align:middle;">{$task.task_name}</td>
+            <td style="vertical-align:middle;">{$task.remark}</td>
+            <td style="vertical-align:middle;">{$task.work_name}</td>
+            <td style="vertical-align:middle;">{$task.project_name}</td>
+            <td style="vertical-align:middle;">{$task.leader_truename}</td>
+            <td style="vertical-align:middle;">{$task.s_time|date='Y-m-d',###}</td>
+            <td style="vertical-align:middle;">{$task.e_time|date='Y-m-d',###}</td>
+            <td style="vertical-align:middle;text-align:center;padding-top:20px;padding-left:15px;">
                 <input type="hidden" name="task[{$index}][id]" value="{$task.id}">
-                <input type="text" name="task[{$index}][completion]" value="{$task.completion}" data-index="{$index++}" data-init="{$task.completion}" class="completion" autocomplete="off" style="width:30px;">&nbsp;%
+                <input type="text" name="task[{$index}][completion]" value="{$task.completion}" class="easyui-slider completion" data-init="{$task.completion}" data-options="showTip:true,min:0,max:100,tipFormatter: function(value){return value+'%';},onChange: function(v){var init=$(this).attr('data-init');if(v<init){$(this).slider('setValue', init);}}" data-index="{$index}" style="width:150px;">
             </td>
         </tr>
+        <php>$index++;</php>
     </volist>
 
-</form>
-
 </table>
+
+</form>
 
 </block>
 
 <block name="own-js">
+<script type="text/javascript" src="__PUBLIC__/lib/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/lib/easyui/plugins/jquery.textbox.js"></script>
+<script type="text/javascript" src="__PUBLIC__/lib/easyui/plugins/jquery.spinner.js"></script>
 <script type="text/javascript">
 $('#submit-btn').click(function(){
     var finish = false;
@@ -55,6 +63,7 @@ $('#submit-btn').click(function(){
     $('.completion').each(function(){
         var val   = parseInt($.trim($(this).val()));
         var init  = parseInt($(this).attr('data-init'));
+        console.log(init);
         var index = parseInt($(this).attr('data-index'));
         if (val == '') {
             window.alert('序号为'+index+'的任务进度不能为空，请检查！');

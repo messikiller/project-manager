@@ -13,43 +13,34 @@
 	<h2>Error Placement in ValidateBox</h2>
 	<p>This example shows how to display the error message below the field.</p>
 	<div style="margin:20px 0;"></div>
-	<div class="easyui-panel" title="Register" style="width:500px;padding:10px 60px 20px 60px">
-		<table class="form-table" cellpadding="5">
-			<tr>
-				<td>User Name:</td>
-				<td><input class="easyui-validatebox textbox" data-options="required:true,validType:'length[3,10]',validateOnCreate:true,err:err"></td>
-			</tr>
-			<tr>
-				<td>Email:</td>
-				<td><input class="easyui-validatebox textbox" data-options="required:true,validType:'email',validateOnCreate:false,err:err"></td>
-			</tr>
-			<tr>
-				<td>Birthday:</td>
-				<td><input class="easyui-datebox textbox" data-options="required:true,validateOnCreate:false,err:err"></td>
-			</tr>
-			<tr>
-				<td>URL:</td>
-				<td><input class="easyui-validatebox textbox" data-options="required:true,validType:'url',validateOnCreate:false,err:err"></td>
-			</tr>
-			<tr>
-				<td>Phone:</td>
-				<td><input class="easyui-validatebox textbox" data-options="required:true,validateOnCreate:false,err:err"></td>
-			</tr>
-		</table>
+	<div class="easyui-panel" title="Register" style="width:100%;max-width:400px;padding:30px 60px;">
+		<div style="margin-bottom:20px">
+			<label for="username" class="label-top">User Name:</label>
+			<input id="username" class="easyui-validatebox tb" data-options="required:true,validType:'length[3,10]',validateOnCreate:true,err:err">
+		</div>
+		<div style="margin-bottom:20px">
+			<label for="email" class="label-top">Email:</label>
+			<input id="email" class="easyui-validatebox tb" data-options="required:true,validType:'email',validateOnCreate:false,err:err">
+		</div>
+		<div style="margin-bottom:20px">
+			<label for="url" class="label-top">Url:</label>
+			<input id="url" class="easyui-validatebox tb" data-options="required:true,validType:'url',validateOnCreate:false,err:err">
+		</div>
+		<div style="margin-bottom:20px">
+			<label for="phone" class="label-top">Phone:</label>
+			<input id="phone" class="easyui-validatebox tb" data-options="required:true,validateOnCreate:false,err:err">
+		</div>
 	</div>
 	<style scoped="scoped">
-		.textbox{
-			height:20px;
+		.tb{
+			width:100%;
 			margin:0;
-			padding:0 2px;
-			box-sizing:content-box;
-		}
-		.form-table td{
-			vertical-align: top;
-			line-height: 20px;
+			padding:5px 4px;
+			border:1px solid #ccc;
+			box-sizing:border-box;
 		}
 		.error-message{
-			margin: 0;
+			margin: 4px 0 0 0;
 			padding: 0;
 			color: red;
 		}

@@ -1,0 +1,21 @@
+<extend name="Content/layout" />
+<block name="own-css">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/lib/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/lib/easyui/themes/icon.css">
+</block>
+
+<block name="content">
+
+<input id="slider" class="easyui-slider" style="width:100px" data-options="showTip:true">
+
+<input class="easyui-numberspinner" value="30" data-options="min:10,max:100,label:'Horizontal:',labelPosition:'top',spinAlign:'horizontal'" style="width:100px;">
+
+<input class="easyui-numberspinner" data-options="min:0,max:100" style="width:80px;" readonly="true">
+
+</block>
+
+<block name="own-js">
+<script type="text/javascript" src="__PUBLIC__/lib/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/lib/easyui/plugins/jquery.textbox.js"></script>
+<script type="text/javascript" src="__PUBLIC__/lib/easyui/plugins/jquery.spinner.js"></script>
+</block>

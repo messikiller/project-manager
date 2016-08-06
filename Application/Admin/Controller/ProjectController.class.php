@@ -593,9 +593,9 @@ class ProjectController extends CommonController
 
 			$data[] = $arr;
 		}
-// p($data);
 		$this->assign('data', $data);
 		$this->assign('project_data', $project_info);
+		$this->assign('project_id', $project_id);
 		$this->assign('index', 1);
 		$this->display();
 	}
@@ -603,12 +603,63 @@ class ProjectController extends CommonController
 	/**
 	 * @access leader
 	 */
-	public function evaluateHanle()
+	public function evaluateHandle()
 	{
 		if (! $this->is_leader) {
 			$this->redirect('admin/error/deny');
 		}
 
-		// code
+		$project_id = I('post.project_id', 0, 'intval');
+		if ($project_id === 0) {
+			alert_back('项目id参数错误！');
+		}
+
+		$evaluate = isset($_POST['evaluate']) ? $_POST['evaluate'] : false;
+		if (! $evaluate) {
+			alert_back('表单数据错误！');
+		}
+
+		$add_data = array();
+		$work_id_arr = array();
+		$time = time();
+		foreach ($evaluate as $eval) {
+			$arr = array();
+			$arr = array_map('intval', $eval);
+
+			$arr['c_time'] = $time;
+
+			$add_data[] = $arr;
+			$work_id_arr[] = $arr['work_id'];
+		}
+
+		// p($work_id_arr);
+		
+		$evalModel = M('evaluation_records');
+		$add_res   = $evalModel->addAll($add_data);
+		if ($add_res === false) {
+			alert_back('数据库错误，评分添加失败！');
+		}
+
+		$projectModel = M('project');
+		$update_res = $projectModel
+			->where(array('id' => $project_id))
+			->setField('status', 4);
+
+		if ($update_res === false) {
+			alert_back('数据库错误，更新项目状态失败！');
+		}
+
+		$workModel = M('work');
+		foreach ($work_id_arr as $work_id) {
+			$update_work_res = $workModel
+				->where(array('id' => $work_id))
+				->setField('status', 3);
+
+			if ($update_work_res === false) {
+				alert_back('数据库错误，更新工作状态失败！');
+			}
+		}
+
+		alert_go('评价项目成功！', 'admin/project/schedule');
 	}
 }
