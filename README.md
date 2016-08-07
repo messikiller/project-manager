@@ -12,8 +12,16 @@
 
 3. 配置：
 
-	* /Application/Common/Conf/config.php
+	* /config.php
 
-4. 数据库：
+4. 入口：
 
-	* /Database/
+	* /index.php
+
+5. 数据库：
+
+	/Database
+
+6. 数据备份：
+
+	/Backup
