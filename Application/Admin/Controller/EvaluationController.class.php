@@ -48,19 +48,12 @@ class EvaluationController extends CommonController
         	->where(array('id' => array('IN', "$project_ids")))
         	->getField('id, project_name', true);
 
-        $workModel = M('work');
-        $work_ids = makeImplode($evalArr, 'work_id');
-        $workIdsList = $workModel
-        	->where(array('id' => array('IN', "$work_ids")))
-        	->getField('id, work_name', true);
-
 		$data = array();
 		foreach ($evalArr as $eval) {
 			$arr = array();
 
 			$leader_uid = $eval['leader_uid'];
 			$project_id = $eval['project_id'];
-			$work_id    = $eval['work_id'];
 
 			$arr = $eval;
 
@@ -72,11 +65,6 @@ class EvaluationController extends CommonController
 			$arr['project_name'] = '';
 			if (isset($projectIdsList[$project_id])) {
 				$arr['project_name'] = $projectIdsList[$project_id];
-			}
-
-			$arr['work_name'] = '';
-			if (isset($workIdsList[$work_id])) {
-				$arr['work_name'] = $workIdsList[$work_id];
 			}
 
 			$p_a = intval(C('accuracy_percentage')) / 100;

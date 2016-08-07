@@ -572,8 +572,13 @@ class ProjectController extends CommonController
 		$member_uids = makeImplode($workArr, 'member_uid');
 		$leader_uids = makeImplode($workArr, 'leader_uid');
 
-		$memberIdsList = $userModel->where(array('id' => array('IN', "{$member_uids}")))->getField('id, truename');
-		$leaderIdsList = $userModel->where(array('id' => array('IN', "{$leader_uids}")))->getField('id, truename');
+		$memberIdsList = $userModel
+			->where(array('id' => array('IN', "{$member_uids}")))
+			->getField('id, truename');
+		
+		$leaderIdsList = $userModel
+			->where(array('id' => array('IN', "{$leader_uids}")))
+			->getField('id, truename');
 
 		$data = array();
 		foreach ($workArr as $work) {
@@ -620,7 +625,6 @@ class ProjectController extends CommonController
 		}
 
 		$add_data = array();
-		$work_id_arr = array();
 		$time = time();
 		foreach ($evaluate as $eval) {
 			$arr = array();
@@ -629,7 +633,6 @@ class ProjectController extends CommonController
 			$arr['c_time'] = $time;
 
 			$add_data[] = $arr;
-			$work_id_arr[] = $arr['work_id'];
 		}
 
 		// p($work_id_arr);
@@ -647,17 +650,6 @@ class ProjectController extends CommonController
 
 		if ($update_res === false) {
 			alert_back('数据库错误，更新项目状态失败！');
-		}
-
-		$workModel = M('work');
-		foreach ($work_id_arr as $work_id) {
-			$update_work_res = $workModel
-				->where(array('id' => $work_id))
-				->setField('status', 3);
-
-			if ($update_work_res === false) {
-				alert_back('数据库错误，更新工作状态失败！');
-			}
 		}
 
 		alert_go('评价项目成功！', 'admin/project/schedule');

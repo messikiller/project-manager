@@ -14,7 +14,6 @@ class WorkController extends CommonController
 	 *
 	 * 1. s_time <= today
 	 * 2. member_uid = user_id
-	 * 3. status != 3
 	 *
 	 * @access member
 	 */
@@ -35,8 +34,7 @@ class WorkController extends CommonController
 		$where = array();
 		$where = array(
 			'member_uid' => array('EQ', $uid),
-			's_time'	 => array('ELT', $time),
-			'status'     => array('NEQ', 3)
+			's_time'	 => array('ELT', $time)
 		);
 
 		$workModel = M('work');
@@ -86,7 +84,6 @@ class WorkController extends CommonController
         $this->assign('pagenum', $Page->totalPages);
         $this->assign('index',   $Page->firstRow+1);
         $this->assign('startable_num', $startable_num);
-        $this->assign('finished_num', $finished_num);
 		$this->display();
 	}
 

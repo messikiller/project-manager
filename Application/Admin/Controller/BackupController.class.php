@@ -4,17 +4,30 @@ use Think\Controller;
 
 class BackupController extends CommonController
 {
+    private $backup = NULL;
+
 	public function _initialize()
 	{
 		parent::_initialize();
+        header("Content-type: text/html; charset=utf-8");
 
         if (! $this->is_admin) {
             $this->redirect('admin/error/deny');
         }
+
+        $host     = C('db_host');
+        $username = C('db_user');
+        $password = C('db_pwd');
+        $database = C('db_name');
+
+        $class = C('class_path') . 'Backup.class.php';
+        require($class);
+
+        $this->backup = new \Backup($host, $username, $password, $database);
     }
 
     public function index()
-    {p(C('CLASS_PATH'));
+    {
 		header("Content-type: text/html; charset=utf-8");
 
     	$backup_dir = C('backup_path');
@@ -33,7 +46,9 @@ class BackupController extends CommonController
     	$dir  = @ dir($backup_dir);
     	if ($dir) {
     		while (($file = $dir->read()) != false) {
-	    		if (is_file($backup_dir . $file) && preg_match('/(\d+)\.sql$/', $file, $match)) {
+	    		if (is_file($backup_dir . $file)
+                        && preg_match('/(\d+)\.sql$/', $file, $match))
+                {
 					$size = filesize($backup_dir . $file);
 	    			$sqls[] = array(
 						'filename'  => $file,
@@ -66,15 +81,28 @@ class BackupController extends CommonController
 
     public function backup()
     {
+        
+        $obj = $this->backup;
+        // $res1 = $obj->clear();
+        // if ($res1 == false) {
+        //     echo '清空数据库失败！';
+        //     return false;
+        // }
 
+        $filename = 'test.sql';
+        $path = C('backup_path');
+
+        $res2 = $obj->export($filename, $path);
+        if($res2 == false) {
+            echo '导出数据库失败！';
+            return false;
+        }
+        p($res2);
+
+        echo '数据库导出成功！';
     }
 
     public function recover()
-    {
-
-    }
-
-    private function clear()
     {
 
     }
