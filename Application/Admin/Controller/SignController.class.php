@@ -7,14 +7,17 @@ class SignController extends CommonController
     public function _initialize()
 	{
 		parent::_initialize();
+    }
 
+    /**
+     * @access admin
+     */
+    public function index()
+    {
         if (! $this->is_admin) {
             $this->redirect('admin/error/deny');
         }
-    }
 
-    public function index()
-    {
         $pageno   = I('get.p', 1, 'intval');
         $pagesize = C('pagesize');
         $limit    = $pageno . ',' . $pagesize;
@@ -100,8 +103,15 @@ class SignController extends CommonController
         $this->display();
     }
 
+    /**
+     * @access admin
+     */
     public function search()
     {
+        if (! $this->is_admin) {
+            $this->redirect('admin/error/deny');
+        }
+
         if (! IS_POST) {
             $this->redirect('admin/index/index');
         }
@@ -137,8 +147,15 @@ class SignController extends CommonController
         $this->redirect('admin/sign/index', $param);
     }
 
+    /**
+     * @access admin
+     */
     public function delete()
     {
+        if (! $this->is_admin) {
+            $this->redirect('admin/error/deny');
+        }
+
         $id = I('get.id', false, 'intval');
         if ($id === false) {
             alert_back('参数错误！');
@@ -153,5 +170,106 @@ class SignController extends CommonController
         }
 
         alert_back('删除记录成功！');
+    }
+
+    /**
+     * @access member
+     */
+    public function history()
+    {
+        if (! $this->is_member) {
+            $this->redirect('admin/error/deny');
+        }
+
+        $pageno   = I('get.p', 1, 'intval');
+        $pagesize = C('pagesize');
+        $limit    = $pageno . ',' . $pagesize;
+
+        $where = array();
+
+        $uid = $this->uid;
+        $where['user_id'] = array('EQ', $uid);
+
+        $ip = I('get.ip', false, 'intval');
+        if ($ip !== false) {
+            $where['ip'] = array('EQ', $ip);
+            $this->assign('searched_ip', long2ip($ip));
+            $this->assign('is_searched', true);
+        }
+
+        $s_time = I('get.s_time', false, 'intval');
+        if ($s_time !== false) {
+            $where['c_time'] = array('EGT', $s_time);
+            $this->assign('searched_s_time', date('Y-m-d', $s_time));
+            $this->assign('is_searched', true);
+        }
+
+        $e_time = I('get.e_time', false, 'intval');
+        if ($e_time !== false) {
+            $where['c_time'] = array('ELT', $e_time);
+            $this->assign('searched_e_time', date('Y-m-d', $e_time));
+            $this->assign('is_searched', true);
+        }
+
+        $signModel = M('sign_records');
+
+        $total = $signModel->where($where)->count();
+        $Page  = new \Think\Page($total, $pagesize);
+        $Page->setConfig('prev', '&laquo;上一页');
+        $Page->setConfig('next', '下一页&raquo;');
+        $show  = $Page->show();
+
+        $signArr = $signModel
+            ->where($where)
+            ->order('c_time desc, id asc')
+            ->page($limit)
+            ->select();
+
+        $user_ids = makeImplode($signArr, 'user_id');
+        $userModel = M('user');
+        $truename = $userModel->where(array('id' => $uid))->getField('truename');
+
+        $data = $signArr;
+
+        $this->assign('data',     $data);
+        $this->assign('truename', $truename);
+        $this->assign('show',     $show);
+        $this->assign('pagenum',  $Page->totalPages);
+        $this->assign('index',    $Page->firstRow+1);
+        $this->display();
+    }
+
+    /**
+     * @access member
+     */
+    public function historySearch()
+    {
+        if (! $this->is_member) {
+            $this->redirect('admin/error/deny');
+        }
+
+        if (! IS_POST) {
+            $this->redirect('admin/index/index');
+        }
+
+        $ip       = I('post.search-ip',     false, 'trim');
+        $s_time   = I('post.search-s-time', false, 'trim');
+        $e_time   = I('post.search-e-time', false, 'trim');
+
+        $param = array();
+
+        if (! empty($ip)) {
+            $param['ip'] = ip2long($ip);
+        }
+
+        if (! empty($s_time)) {
+            $param['s_time'] = strtotime(trim($s_time));
+        }
+
+        if (! empty($e_time)) {
+            $param['e_time'] = strtotime(trim($e_time));
+        }
+
+        $this->redirect('admin/sign/history', $param);
     }
 }

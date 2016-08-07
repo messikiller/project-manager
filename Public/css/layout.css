@@ -4,7 +4,7 @@ body{
 }
 
 .label-inactive{
-	background-color: #fac603;
+	background-color: #ea8c00;
 }
 
 .label-started{
@@ -16,7 +16,7 @@ body{
 }
 
 .label-evaluated{
-	background-color: #D812CF;
+	background-color: #EF1EE5;
 }
 
 .label-disabled{
