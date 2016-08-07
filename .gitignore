@@ -1,3 +1,4 @@
 .idea
+index.php
+config.php
 Application/Runtime/*
-Application/Common/Conf/config.php

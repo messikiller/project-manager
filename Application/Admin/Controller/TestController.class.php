@@ -7,13 +7,11 @@ class TestController extends CommonController
     public function _initialize()
 	{
 		parent::_initialize();
-		if (! $this->is_member) {
-			$this->redirect('admin/error/deny');
-		}
     }
 
     public function index()
     {
-        $this->display();
+        echo THINK_PATH . '../config.php';
+        // $this->display();
     }
 }
