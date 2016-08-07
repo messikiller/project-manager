@@ -20,8 +20,8 @@
 
 5. 数据库：
 
-	/Database
+	* /Database
 
 6. 数据备份：
 
-	/Backup
+	* /Backup
