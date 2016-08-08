@@ -207,7 +207,7 @@ class SummaryController extends CommonController
 
         $data = array('content' => $content);
         $summaryModel = M('summary');
-        $res = $summaryModel->where(array('id' => $id))->save($data);
+        $res = $summaryModel->where(array('id' => $id))->setField('content', $content);
         if ($res === false) {
             alert_back('更新总结失败！');
         }
