@@ -22,7 +22,7 @@ class EvaluationController extends CommonController
         $limit    = $pageno . ',' . $pagesize;
 
         $where = array('member_uid' => $uid);
-		
+
 		$evalModel = M('evaluation_records');
 		$evalArr   = $evalModel
 			->where($where)

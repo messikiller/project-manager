@@ -1,0 +1,87 @@
+<extend name="Content/layout" />
+<block name="module-name">个人中心</block>
+<block name="page-name">我的项目</block>
+
+<block name="content">
+
+<table class="table table-bordered table-hover">
+    <tr class="active">
+		<th>序号</th>
+        <th>项目名称</th>
+        <th>说明</th>
+        <th>项目组长</th>
+        <th>计划时间</th>
+        <th>发起时间</th>
+        <th>完成时间</th>
+		<th>当前状态</th>
+		<th>操作</th>
+	</tr>
+
+    <volist name="data" id="project">
+        <tr>
+            <td>{$index++}</td>
+            <td>{$project.project_name}</td>
+            <td>{$project.remark}</td>
+            <td>{$project.leader_truename}</td>
+            <td>{$project.s_time|date="Y-m-d",###}&nbsp;~&nbsp;{$project.e_time|date="Y-m-d",###}</td>
+            <td>{$project.c_time|date="Y-m-d",###}</td>
+            <td>
+                <if condition="$project['f_time'] eq 0">
+					-
+            	<else />
+            		{$project.f_time|date="Y-m-d",###}
+            	</if>
+            </td>
+            <td>
+                <switch name="project.status">
+			        <case value="0">
+                        <label class="label label-inactive">未启动</label>
+                    </case>
+                    <case value="1">
+                        <label class="label label-started">进行中</label>
+                    </case>
+                    <case value="2">
+                        <label class="label label-finished">已完成</label>
+                    </case>
+                    <case value="3">
+                        <label class="label label-disabled">已禁用</label>
+                    </case>
+                    <case value="4">
+                        <label class="label label-evaluated">已评价</label>
+                    </case>
+                    <default />
+                        -
+			    </switch>
+            </td>
+            <td>
+                <switch name="project.status">
+                    <case value="0">
+                    </case>
+                    <case value="1">
+                        <a class="btn btn-sm btn-info" href="{:U('admin/project/view', array('id' => $project['id']))}"><i class="fa fa-eye"></i>&nbsp;详情</a>
+                    </case>
+                    <case value="2">
+                        <a class="btn btn-sm btn-info" href="{:U('admin/project/view', array('id' => $project['id']))}"><i class="fa fa-eye"></i>&nbsp;详情</a>
+                    </case>
+                    <case value="3">
+                    </case>
+                    <case value="4">
+                        <a class="btn btn-sm btn-info" href="{:U('admin/project/view', array('id' => $project['id']))}"><i class="fa fa-eye"></i>&nbsp;详情</a>
+                        <a class="btn btn-sm btn-success" href="{:U('admin/summary/add', array('project_id' => $project['id']))}"><i class="fa fa-commenting-o"></i>&nbsp;总结</a>
+                    </case>
+                    <default />
+                        -
+			    </switch>
+            </td>
+        </tr>
+    </volist>
+
+</table>
+
+<if condition="$pagenum gt 1">
+<div id="page">
+    {$show}
+</div>
+</if>
+
+</block>

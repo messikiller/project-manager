@@ -44,7 +44,7 @@ class WorkController extends CommonController
 			->page($limit)
 			->select();
 
-		$total = $workModel->count();
+		$total = $workModel->where($where)->count();
         $Page  = new \Think\Page($total, $pagesize);
         $Page->setConfig('prev', '&laquo;上一页');
         $Page->setConfig('next', '下一页&raquo;');

@@ -1,0 +1,59 @@
+<extend name="Content/layout" />
+<block name="module-name">个人中心</block>
+<block name="page-name">添加总结</block>
+
+<block name="content">
+
+<div style="width:500px;">
+
+<form class="form-horizontal" action="{:U('admin/summary/addHandle')}" method="post" id="form-id">
+    <input type="hidden" name="project_id" value="{$project.id}">
+    <input type="hidden" name="member_uid" value="{$member_uid}">
+    <div class="form-group">
+        <label for="inputEmail3" class="col-sm-3 control-label">项目名称：</label>
+        <div class="col-sm-8">
+            {$project.project_name}
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inputEmail3" class="col-sm-3 control-label">计划时间：</label>
+        <div class="col-sm-8">
+            {$project.s_time|date="Y-m-d",###}&nbsp;~&nbsp;{$project.e_time|date="Y-m-d",###}
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inputEmail3" class="col-sm-3 control-label">完成时间：</label>
+        <div class="col-sm-8">
+            {$project.f_time|date="Y-m-d",###}
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inputEmail3" class="col-sm-3 control-label">总结内容：</label>
+        <div class="col-sm-8">
+            <textarea class="form-control" name="content" rows="10" cols="40" style="resize:vertical;" id="text"></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-8">
+            <a href="javascript:void(0);" class="btn btn-primary" id="submit-btn"><i class="fa fa-floppy-o"></i>&nbsp;提交</a>
+            <a href="{:U('admin/project/home')}" class="btn btn-success"><i class="fa fa-reply"></i>&nbsp;返回列表</a>
+        </div>
+    </div>
+</form>
+
+</div>
+
+</block>
+
+<block name="own-js">
+<script type="text/javascript">
+$('#submit-btn').click(function(){
+    var text = $('#text').val();
+    if (! text) {
+        alert('总结内容不能为空！');
+        return false;
+    }
+    $('#form-id').submit();
+});
+</script>
+</block>

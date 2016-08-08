@@ -22,31 +22,24 @@
 <if condition="$user_level neq 0">
 		<dl>
 			<dt><i class="fa fa-tachometer"></i>&nbsp;&nbsp;个人中心</dt>
-			<switch name="user_level">
-				<case value="1">
-					<dd><a href="{:U('admin/project/schedule')}" target="content">
-						<i class="fa fa-angle-double-right"></i>&nbsp;&nbsp;项目管理
-						<if condition="$project_schedule_nums gt 0">
-							&nbsp;<span class="notice">{$project_schedule_nums}</span>
-						</if>
-					</a></dd>
-					<dd><a href="{:U('admin/work/schedule')}" target="content">
-						<i class="fa fa-angle-double-right"></i>&nbsp;&nbsp;工作日程
-						<if condition="$work_schedule_nums gt 0">
-							&nbsp;<span class="notice">{$work_schedule_nums}</span>
-						</if>
-					</a></dd>
-				</case>
-				<case value="2">
-					<dd><a href="{:U('admin/work/schedule')}" target="content">
-						<i class="fa fa-angle-double-right"></i>&nbsp;&nbsp;工作日程
-						<if condition="$work_schedule_nums gt 0">
-							&nbsp;<span class="notice">{$work_schedule_nums}</span>
-						</if>
-					</a></dd>
-				</case>
-				<default />
-			</switch>
+
+			<if condition="$user_level eq 1">
+				<dd><a href="{:U('admin/project/schedule')}" target="content">
+					<i class="fa fa-angle-double-right"></i>&nbsp;&nbsp;项目日程
+					<php>if ($project_schedule_nums > 0) {</php>
+						&nbsp;<span class="notice">{$project_schedule_nums}</span>
+					<php>}</php>
+				</a></dd>
+			</if>
+
+			<dd><a href="{:U('admin/work/schedule')}" target="content">
+				<i class="fa fa-angle-double-right"></i>&nbsp;&nbsp;工作日程
+				<if condition="$work_schedule_nums gt 0">
+					&nbsp;<span class="notice">{$work_schedule_nums}</span>
+				</if>
+			</a></dd>
+			<dd><a href="{:U('admin/project/home')}" target="content"><i class="fa fa-angle-double-right"></i>&nbsp;&nbsp;我的项目</a></dd>
+			<dd><a href="{:U('admin/summary/home')}" target="content"><i class="fa fa-angle-double-right"></i>&nbsp;&nbsp;我的总结</a></dd>
 			<dd><a href="{:U('admin/evaluation/schedule')}" target="content"><i class="fa fa-angle-double-right"></i>&nbsp;&nbsp;我的打分</a></dd>
 			<dd><a href="{:U('admin/task/sign')}" target="content"><i class="fa fa-angle-double-right"></i>&nbsp;&nbsp;我的考勤</a></dd>
 		</dl>
@@ -57,6 +50,7 @@
 			<dt><i class="fa fa-gears"></i>&nbsp;&nbsp;系统管理</dt>
 			<dd><a href="{:U('admin/user/index')}" target="content"><i class="fa fa-angle-double-right"></i>&nbsp;&nbsp;人员管理</a></dd>
 			<dd><a href="{:U('admin/project/index')}" target="content"><i class="fa fa-angle-double-right"></i>&nbsp;&nbsp;项目管理</a></dd>
+			<dd><a href="{:U('admin/summary/index')}" target="content"><i class="fa fa-angle-double-right"></i>&nbsp;&nbsp;总结管理</a></dd>
 			<dd><a href="{:U('admin/sign/index')}" target="content"><i class="fa fa-angle-double-right"></i>&nbsp;&nbsp;考勤管理</a></dd>
 			<dd><a href="{:U('admin/backup/index')}" target="content"><i class="fa fa-angle-double-right"></i>&nbsp;&nbsp;备份管理</a></dd>
 		</dl>

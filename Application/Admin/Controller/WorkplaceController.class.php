@@ -50,7 +50,7 @@ class WorkplaceController extends CommonController
         }
 
         $work_place = I('post.work_place', NULL, 'trim');
-        
+
         if ($work_place === NULL) {
             alert_go('工作地点名称不能为空！', 'admin/workplace/add');
         }

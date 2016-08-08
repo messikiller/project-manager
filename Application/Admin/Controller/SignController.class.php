@@ -64,7 +64,7 @@ class SignController extends CommonController
             ->page($limit)
             ->select();
 
-        $total = $signModel->count();
+        $total = $signModel->where($where)->count();
         $Page  = new \Think\Page($total, $pagesize);
         $Page->setConfig('prev', '&laquo;上一页');
         $Page->setConfig('next', '下一页&raquo;');
@@ -213,11 +213,6 @@ class SignController extends CommonController
 
         $signModel = M('sign_records');
 
-        $total = $signModel->where($where)->count();
-        $Page  = new \Think\Page($total, $pagesize);
-        $Page->setConfig('prev', '&laquo;上一页');
-        $Page->setConfig('next', '下一页&raquo;');
-        $show  = $Page->show();
 
         $signArr = $signModel
             ->where($where)
@@ -229,6 +224,12 @@ class SignController extends CommonController
         $userModel = M('user');
         $truename = $userModel->where(array('id' => $uid))->getField('truename');
 
+        $total = $signModel->where($where)->count();
+        $Page  = new \Think\Page($total, $pagesize);
+        $Page->setConfig('prev', '&laquo;上一页');
+        $Page->setConfig('next', '下一页&raquo;');
+        $show  = $Page->show();
+        
         $data = $signArr;
 
         $this->assign('data',     $data);

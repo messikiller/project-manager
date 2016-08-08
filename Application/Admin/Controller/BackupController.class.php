@@ -81,13 +81,8 @@ class BackupController extends CommonController
 
     public function backup()
     {
-        
+
         $obj = $this->backup;
-        // $res1 = $obj->clear();
-        // if ($res1 == false) {
-        //     echo '清空数据库失败！';
-        //     return false;
-        // }
 
         $filename = 'test.sql';
         $path = C('backup_path');

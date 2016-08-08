@@ -67,7 +67,7 @@ class ProjectController extends CommonController
             ->page($limit)
             ->select();
 
-        $total = $projectModel->count();
+        $total = $projectModel->where($where)->count();
         $Page  = new \Think\Page($total, $pagesize);
         $Page->setConfig('prev', '&laquo;上一页');
         $Page->setConfig('next', '下一页&raquo;');
@@ -440,7 +440,7 @@ class ProjectController extends CommonController
 			->page($limit)
 			->select();
 
-		$total = $projectModel->count();
+		$total = $projectModel->where($where)->count();
         $Page  = new \Think\Page($total, $pagesize);
         $Page->setConfig('prev', '&laquo;上一页');
         $Page->setConfig('next', '下一页&raquo;');
@@ -575,7 +575,7 @@ class ProjectController extends CommonController
 		$memberIdsList = $userModel
 			->where(array('id' => array('IN', "{$member_uids}")))
 			->getField('id, truename');
-		
+
 		$leaderIdsList = $userModel
 			->where(array('id' => array('IN', "{$leader_uids}")))
 			->getField('id, truename');
@@ -636,7 +636,7 @@ class ProjectController extends CommonController
 		}
 
 		// p($work_id_arr);
-		
+
 		$evalModel = M('evaluation_records');
 		$add_res   = $evalModel->addAll($add_data);
 		if ($add_res === false) {
@@ -653,5 +653,63 @@ class ProjectController extends CommonController
 		}
 
 		alert_go('评价项目成功！', 'admin/project/schedule');
+	}
+
+	/**
+	 * show members' own project
+	 *
+	 * @access member
+	 */
+	public function home()
+	{
+		if (! $this->is_member) {
+			$this->redirect('admin/error/deny');
+		}
+
+		$pageno   = I('get.p', 1, 'intval');
+        $pagesize = C('pagesize');
+        $limit    = $pageno . ',' . $pagesize;
+
+		$uid = $this->uid;
+
+		$workModel = M('work');
+		$workArr   = $workModel->where(array('member_uid' => $uid))->getField('project_id', true);
+		$project_ids = implode(',', $workArr);
+
+		$where = array();
+		$where['id'] = array('IN', "$project_ids");
+
+		$projectModel = M('project');
+		$projectArr = $projectModel
+			->where($where)
+			->order('status asc, s_time desc, id asc')
+			->page($limit)
+			->select();
+
+		$total = $projectModel->where($where)->count();
+        $Page  = new \Think\Page($total, $pagesize);
+        $Page->setConfig('prev', '&laquo;上一页');
+        $Page->setConfig('next', '下一页&raquo;');
+        $show  = $Page->show();
+
+		$leader_uids = makeImplode($projectArr, 'leader_uid');
+		$userModel = M('user');
+		$leaderIdsList = $userModel->where(array('id' => array('IN', "$leader_uids")))->getField('id, truename');
+
+		$data = array();
+		foreach ($projectArr as $project) {
+			$arr = array();
+			$arr = $project;
+			$leader_uid = $project['leader_uid'];
+			$arr['leader_truename'] = isset($leaderIdsList[$leader_uid]) ? $leaderIdsList[$leader_uid] : '';
+
+			$data[] = $arr;
+		}
+
+		$this->assign('data',    $data);
+        $this->assign('show',    $show);
+        $this->assign('pagenum', $Page->totalPages);
+        $this->assign('index',   $Page->firstRow+1);
+		$this->display();
 	}
 }

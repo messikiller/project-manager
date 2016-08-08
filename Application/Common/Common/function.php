@@ -24,6 +24,18 @@ function alert_back($info)
 	exit();
 }
 
+function text_store($str)
+{
+	$r = htmlspecialchars($str);
+	return $r;
+}
+
+function text_display()
+{
+	$r = htmlspecialchars_decode($str);
+	return $r;
+}
+
 function makeIndex(&$arr, $key)
 {
 	if ($arr == false) return array();
