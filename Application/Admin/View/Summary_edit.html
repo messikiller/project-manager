@@ -1,0 +1,53 @@
+<extend name="Content/layout" />
+<block name="module-name">管理</block>
+<block name="page-name">总结编辑</block>
+
+<block name="content">
+
+<div style="width:500px;">
+
+<form class="form-horizontal" action="{:U('admin/summary/editHandle')}" method="post" id="form-id">
+<table class="table table-bordered">
+    <tr>
+        <td style="text-align:center;vertical-align:middle;">项目名称</td>
+        <td>{$project.project_name}</td>
+    </tr>
+    <tr>
+        <td style="text-align:center;vertical-align:middle;">计划时间</td>
+        <td>{$project.s_time|date="Y-m-d",###}&nbsp;~&nbsp;{$project.e_time|date="Y-m-d",###}</td>
+    </tr>
+    <tr>
+        <td style="text-align:center;vertical-align:middle;">完成时间</td>
+        <td>{$project.f_time|date="Y-m-d",###}</td>
+    </tr>
+    <tr>
+        <td style="text-align:center;vertical-align:middle;">总结内容</td>
+        <td>
+            <textarea class="form-control" name="content" rows="10" cols="40" style="resize:vertical;" id="text">{$summary.content}</textarea>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="text-align:center;vertical-align:middle;">
+            <a href="javascript:void(0);" class="btn btn-primary" id="submit-btn"><i class="fa fa-floppy-o"></i>&nbsp;提交</a>
+            <a href="javascript:window.location=document.referrer;" class="btn btn-success"><i class="fa fa-reply"></i>&nbsp;返回列表</a>
+        </td>
+    </tr>
+</table>
+</form>
+
+</div>
+
+</block>
+
+<block name="own-js">
+<script type="text/javascript">
+$('#submit-btn').click(function(){
+    var content = $('#text').val();
+    if (! content) {
+        alert('总结内容不能为空！');
+        return false;
+    }
+    $('#form-id').submit();
+});
+</script>
+</block>
