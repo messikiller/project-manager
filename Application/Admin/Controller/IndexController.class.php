@@ -25,4 +25,10 @@ class IndexController extends CommonController
 
 		$this->display();
     }
+
+	public function welcome()
+	{
+		echo 'welcome';
+		// $this->display();
+	}
 }
