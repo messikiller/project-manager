@@ -7,7 +7,6 @@ class SummaryController extends CommonController
     public function _initialize()
     {
         parent::_initialize();
-
     }
 
     /**
@@ -15,7 +14,63 @@ class SummaryController extends CommonController
      */
     public function index()
     {
+        if (! $this->is_admin) {
+            $this->redirect('admin/error/deny');
+        }
 
+        $where = array();
+
+        $pageno   = I('get.p', 1, 'intval');
+        $pagesize = C('pagesize');
+        $limit    = $pageno . ',' . $pagesize;
+
+        $summaryModel = M('summary');
+        $summaryArr   = $summaryModel
+            ->where($where)
+            ->field('id, member_uid, project_id, c_time')
+            ->order('c_time desc, id asc')
+            ->page($limit)
+            ->select();
+
+        $total = $summaryModel->where($where)->count();
+        $Page  = new \Think\Page($total, $pagesize);
+        $Page->setConfig('prev', '&laquo;上一页');
+        $Page->setConfig('next', '下一页&raquo;');
+        $show  = $Page->show();
+
+        $project_ids = makeImplode($summaryArr, 'project_id');
+        $member_uids = makeImplode($summaryArr, 'member_uid');
+        $projectModel = M('project');
+        $projectIdsList = $projectModel
+            ->where(array('id' => array('IN', "$project_ids")))
+            ->getField('id, project_name');
+
+        $leader_uids = makeImplode($projectIdsList, 'leader_uid');
+        $user_ids = $leader_uids . ', ' . $member_uids;
+
+        $userModel = M('user');
+        $userIdsList = $userModel
+            ->where(array('id' => array('IN', "$user_ids")))
+            ->getField('id, truename');
+
+        $data = array();
+        foreach ($summaryArr as $summary) {
+            $project_id = $summary['project_id'];
+            $member_uid = $summary['member_uid'];
+
+            $summary['project_name'] = isset($projectIdsList[$project_id])
+                ? $projectIdsList[$project_id] : '';
+            $summary['member_truename'] = isset($userIdsList[$member_uid])
+                ? $userIdsList[$member_uid] : '';
+
+            $data[] = $summary;
+        }
+
+        $this->assign('data',    $data);
+        $this->assign('show',    $show);
+        $this->assign('pagenum', $Page->totalPages);
+        $this->assign('index',   $Page->firstRow+1);
+		$this->display();
     }
 
     /**
@@ -23,7 +78,33 @@ class SummaryController extends CommonController
      */
     public function indexSearch()
     {
+        if (! $this->is_admin) {
+            $this->redirect('admin/error/deny');
+        }
 
+    }
+
+    /**
+     * @access admin
+     */
+    public function delete()
+    {
+        if (! $this->is_admin) {
+            $this->redirect('admin/error/deny');
+        }
+
+        $id = I('get.id', 0, 'intval');
+        if ($id === 0) {
+            alert_back('参数错误！');
+        }
+
+        $summaryModel = M('summary');
+        $res = $summaryModel->where(array('id' => $id))->delete();
+        if ($res === false) {
+            alert_back('删除记录失败！');
+        }
+
+        alert_back('删除记录成功！');
     }
 
     /**
@@ -50,6 +131,7 @@ class SummaryController extends CommonController
 
         $summaryArr = $summaryModel
             ->where($where)
+            ->field('id, member_uid, project_id, c_time')
             ->order('c_time desc, id asc')
             ->page($limit)
             ->select();
@@ -172,7 +254,6 @@ class SummaryController extends CommonController
 
         $summaryModel = M('summary');
         $summaryArr = $summaryModel->where(array('id' => $id))->find();
-        $summaryArr['content'] = text_display($summaryArr['content']);
 
         $project_id = $summaryArr['project_id'];
 

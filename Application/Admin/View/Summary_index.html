@@ -1,6 +1,6 @@
 <extend name="Content/layout" />
-<block name="module-name">个人中心</block>
-<block name="page-name">我的总结</block>
+<block name="module-name">管理</block>
+<block name="page-name">总结管理</block>
 
 <block name="content">
 
@@ -8,6 +8,8 @@
     <tr class="active">
         <th>序号</th>
         <th>项目名称</th>
+        <th>项目组长</th>
+        <th>组员</th>
         <th>提交时间</th>
         <th>操作</th>
     </tr>
@@ -16,10 +18,12 @@
         <tr>
             <td>{$index++}</td>
             <td>{$summary.project_name}</td>
+            <td>{$summary.leader_truename}</td>
+            <td>{$summary.member_truename}</td>
             <td>{$summary.c_time|date="Y-m-d",###}</td>
             <td>
                 <a class="btn btn-sm btn-info" href="{:U('admin/summary/view', array('id' => $summary['id']))}"><i class="fa fa-eye"></i>&nbsp;详情</a>
-                <a class="btn btn-sm btn-success" href="{:U('admin/summary/edit', array('id' => $summary['id']))}"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
+                <a class="btn btn-sm btn-danger btn-delete" href="javascript:void(0);" data-url="{:U('admin/summary/delete', array('id' => $summary['id']))}"><i class="fa fa-times"></i>&nbsp;删除</a>
             </td>
         </tr>
     </volist>
@@ -31,4 +35,17 @@
 </div>
 </if>
 
+</block>
+
+<block name="own-js">
+<script type="text/javascript">
+$(function(){
+    $('.btn-delete').click(function(){
+        if (confirm('确定要删除这条记录？')) {
+            var url = $(this).attr('data-url');
+            window.location.href = url;
+        }
+    });
+});
+</script>
 </block>
