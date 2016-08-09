@@ -18,7 +18,7 @@
             <td>{$summary.project_name}</td>
             <td>{$summary.c_time|date="Y-m-d",###}</td>
             <td>
-                <a class="btn btn-sm btn-info" href="{:U('admin/summary/view')}"><i class="fa fa-eye"></i>&nbsp;详情</a>
+                <a class="btn btn-sm btn-info" href="{:U('admin/summary/view', array('id' => $summary['id']))}"><i class="fa fa-eye"></i>&nbsp;详情</a>
                 <a class="btn btn-sm btn-success" href="{:U('admin/summary/edit', array('id' => $summary['id']))}"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
             </td>
         </tr>

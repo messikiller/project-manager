@@ -30,7 +30,7 @@ function text_store($str)
 	return $r;
 }
 
-function text_display()
+function text_display($str)
 {
 	$r = htmlspecialchars_decode($str);
 	return $r;

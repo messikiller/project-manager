@@ -108,13 +108,13 @@ class SummaryController extends CommonController
         );
         $summaryTotal = $summaryModel->where($where)->count();
         if ($summaryTotal > 0) {
-            $this->redirect('admin/summary/edit', array('project_id'));
+            $summary_id = $summaryModel->where($where)->getField('id');
+            $this->redirect('admin/summary/edit', array('id' => $summary_id));
         }
 
         $projectModel = M('project');
         $projectArr = $projectModel
             ->where(array('id' => $project_id))
-            ->field('id, project_name, s_time, e_time, f_time')
             ->find();
 
         $this->assign('project',    $projectArr);
@@ -165,7 +165,25 @@ class SummaryController extends CommonController
      */
     public function edit()
     {
+        $id = I('get.id', 0, 'intval');
+        if ($id === 0) {
+            alert_go('参数错误！', 'admin/summary/home');
+        }
 
+        $summaryModel = M('summary');
+        $summaryArr = $summaryModel->where(array('id' => $id))->find();
+        $summaryArr['content'] = text_display($summaryArr['content']);
+
+        $project_id = $summaryArr['project_id'];
+
+        $projectModel = M('project');
+        $projectArr = $projectModel
+            ->where(array('id' => $project_id))
+            ->find();
+
+        $this->assign('project',    $projectArr);
+        $this->assign('summary',    $summaryArr);
+        $this->display();
     }
 
     /**
@@ -177,6 +195,24 @@ class SummaryController extends CommonController
             $this->redirect('admin/error/deny');
         }
 
+        $id = I('post.id', 0, 'intval');
+        if ($id === 0) {
+            alert_back('参数错误！');
+        }
+
+        $content = I('post.content', false, 'text_store');
+        if (! $content) {
+            alert_back('表单数据错误！');
+        }
+
+        $data = array('content' => $content);
+        $summaryModel = M('summary');
+        $res = $summaryModel->where(array('id' => $id))->setField('content', $content);
+        if ($res === false) {
+            alert_back('更新总结失败！');
+        }
+
+        alert_back('更新总结成功！');
     }
 
     /**
@@ -184,6 +220,23 @@ class SummaryController extends CommonController
      */
     public function view()
     {
+        $id = I('id', 0, 'intval');
+        if ($id === 0) {
+            alert_go('参数错误！', 'admin/summary/home');
+        }
 
+        $summaryModel = M('summary');
+        $summaryArr = $summaryModel->where(array('id' => $id))->find();
+
+        $project_id = $summaryArr['project_id'];
+
+        $projectModel = M('project');
+        $projectArr = $projectModel
+            ->where(array('id' => $project_id))
+            ->find();
+
+        $this->assign('project',    $projectArr);
+        $this->assign('summary',    $summaryArr);
+        $this->display();
     }
 }
