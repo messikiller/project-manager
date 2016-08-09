@@ -203,7 +203,12 @@ class WorkController extends CommonController
 			$this->redirect('admin/error/deny');
 		}
 
-		// code
+		$id = I('id', 0, 'intval');
+		if ($id === 0) {
+			alert_back('参数错误！');
+		}
+
+		
 	}
 
 	/**

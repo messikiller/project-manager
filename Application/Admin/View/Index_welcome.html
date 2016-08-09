@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>
+    <block name="title">welcome</title>
+</title>
+
+<link rel="stylesheet" href="__PUBLIC__/lib/sui3/sui.min.css">
+<link href="__PUBLIC__/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+<link href="__PUBLIC__/css/layout.css" rel="stylesheet">
+</head>
+<body>
+
+<strong>欢迎登录系统：{$username}</strong>&emsp;<span class="text-muted">以下是你最近的打卡记录：</span>
+<div style="height:20px;"></div>
+<table class="table table-bordered">
+    <tr class="active">
+        <th>序号</th>
+        <th>打卡时间</th>
+        <th>IP</th>
+    </tr>
+    <volist name="data" id="sign">
+        <tr>
+            <td>{$index++}</td>
+            <td>{$sign.c_time|date="Y-m-d H:i:s",###}</td>
+            <td>{$sign.ip|long2ip}</td>
+        </tr>
+    </volist>
+</table>
+
+<script type="text/javascript" src="__PUBLIC__/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/lib/sui3/sui.min.js"></script>
+</body>
+</html>
