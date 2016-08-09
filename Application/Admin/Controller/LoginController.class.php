@@ -6,7 +6,7 @@ class LoginController extends Controller
 {
 	public function index()
 	{
-        if (session('?username')) {
+        if (session('?user')) {
             $this->redirect('admin/index/index');
         }
 
