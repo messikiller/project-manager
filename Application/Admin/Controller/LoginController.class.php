@@ -61,10 +61,6 @@ class LoginController extends Controller
     public function logout()
     {
 		session('user', NULL);
-    	// session('username',   NULL);
-    	// session('user_id',    NULL);
-		// session('user_level', NULL);
-		// session('truename',   NULL);
 
     	alert_go('注销成功！即将跳转到登录页面……', 'admin/login/index');
     }

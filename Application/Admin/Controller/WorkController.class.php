@@ -208,7 +208,22 @@ class WorkController extends CommonController
 			alert_back('参数错误！');
 		}
 
-		
+		$wordModel = M('work');
+		$workArr = $workModel->where(array('id' => $id))->find();
+
+		$project_id = $workArr['project_id'];
+		$leader_uid = $workArr['leader_uid'];
+
+		$projectModel = M('project');
+		$projectArr = $projectModel->where(array('id' => $project_id))->find();
+
+		$userModel = M('user');
+		$leader_truename = $userModel->where(array('id' => $leader_uid))->getField('truename');
+
+		$project_data = array();
+		foreach ($projectArr as $project) {
+			# code...
+		}
 	}
 
 	/**
