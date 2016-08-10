@@ -1,10 +1,10 @@
 <extend name="Content/layout" />
 <block name="module-name">项目</block>
-<block name="page-name">工作任务划分</block>
+<block name="page-name">工作任务编辑</block>
 <block name="content">
 
 <div>
-	<form class="form-horizontal" method="post" action="{:U('admin/work/startHandle')}" id="form-id">
+	<form class="form-horizontal" method="post" action="{:U('admin/work/editHandle')}" id="form-id">
 
 		<input type="hidden" name='work_id' value="{$data.work_id}">
 		<input type="hidden" name='project_id' value="{$data.project_id}">
@@ -46,23 +46,30 @@
 
 		<div id="task-container">
 
-			<div class="form-group task-sample">
-				<label for="inputEmail3" class="control-label" style="width:100px;padding-right:15px;">任务划分：</label>
-				<div style="width:900px;display:inline-block;padding-left:10px;">
-					<input type="text" autocomplete="off" placeholder="任务名称" name="task[0][task_name]" class="task-name">
-					&nbsp;
-					<input type="text" autocomplete="off" placeholder="任务说明" name="task[0][remark]" class="task-remark" >
-					&nbsp;
-					<span class="input-daterange" data-toggle="datepicker" data-date-start-date='{$data.s_time|date="Y-m-d",###}' data-date-end-date='{$data.e_time|date="Y-m-d",###}'>
-						<input type="text" class="input-date task-s_time" placeholder="任务开始日期" autocomplete="off" readonly="true" name="task[0][s_time]" value="{$data.s_time|date="Y-m-d",###}" />
-						~
-						<input type="text" class="input-date task-e_time" placeholder="工作结束日期" autocomplete="off" readonly="true" name="task[0][e_time]" value="{$data.e_time|date="Y-m-d",###}" />
-					</span>
-					&nbsp;
-					<a href="javascript:void(0);" class="btn btn-info" id="add-task-btn"><i class="fa fa-plus"></i></a>
-					<a href="javascript:void(0);" class="btn btn-danger" id="delete-task-btn"><i class="fa fa-minus"></i></a>
+			<php>$index=0;</php>
+
+			<volist name="task_data" id="task">
+				<div class="form-group task-sample">
+					<label class="control-label" style="width:100px;padding-right:15px;">任务划分：</label>
+					<div style="width:900px;display:inline-block;padding-left:10px;">
+						<input type="text" autocomplete="off" placeholder="任务名称" name="task[{$index}][task_name]" class="task-name" value="{$task.task_name}">
+						&nbsp;
+						<input type="text" autocomplete="off" placeholder="任务说明" name="task[{$index}][remark]" class="task-remark" value="{$task.remark}" >
+						&nbsp;
+						<span class="input-daterange" data-toggle="datepicker" data-date-start-date='{$data.s_time|date="Y-m-d",###}' data-date-end-date='{$data.e_time|date="Y-m-d",###}'>
+							<input type="text" class="input-date task-s_time" placeholder="任务开始日期" autocomplete="off" readonly="true" name="task[{$index}][s_time]" value="{$task.s_time|date="Y-m-d",###}" />
+							~
+							<input type="text" class="input-date task-e_time" placeholder="工作结束日期" autocomplete="off" readonly="true" name="task[{$index}][e_time]" value="{$task.e_time|date="Y-m-d",###}" />
+						</span>
+						<if condition="$index eq 0">
+							&nbsp;
+							<a href="javascript:void(0);" class="btn btn-info" id="add-task-btn"><i class="fa fa-plus"></i></a>
+							<a href="javascript:void(0);" class="btn btn-danger" id="delete-task-btn"><i class="fa fa-minus"></i></a>
+						</if>
+					</div>
 				</div>
-			</div>
+				<php>$index++;</php>
+			</volist>
 
 		</div>
 
@@ -94,7 +101,7 @@
 </block>
 <block name="own-js">
 <script type="text/javascript">
-var index = 0;
+var index = {$index-1};
 $('#add-task-btn').click(function(){
 	index++;
 	var obj = $('#init-task').clone(true);
@@ -106,11 +113,10 @@ $('#add-task-btn').click(function(){
 	$('#task-container').append(obj);
 });
 $('#delete-task-btn').click(function(){
-	if (index === 0) {
+	if (index == 0) {
 		return false;
 	}
 	var obj = $('#task-container').find('.task-sample').last();
-	console.log(obj);
 	obj.remove();
 	index--;
 });

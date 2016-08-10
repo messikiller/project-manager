@@ -511,8 +511,8 @@ class ProjectController extends CommonController
 
 		$datalist = array();
 		foreach ($works as $work) {
-			$work['s_time'] = strtotime($work['s_time']);
-			$work['e_time'] = strtotime($work['e_time']);
+			$work['s_time'] = strtotime($work['s_time'] . ' 00:00:00');
+			$work['e_time'] = strtotime($work['e_time'] . ' 00:00:00');
 			$work['c_time'] = time();
 			$work['status'] = 0;
 

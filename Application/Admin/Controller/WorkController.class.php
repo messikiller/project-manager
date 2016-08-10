@@ -164,8 +164,8 @@ class WorkController extends CommonController
 
 			$tmp['task_name']  = trim($task['task_name']);
 			$tmp['remark']     = trim($task['remark']);
-			$tmp['s_time']     = strtotime($task['s_time']);
-			$tmp['e_time']     = strtotime($task['e_time']);
+			$tmp['s_time']     = strtotime($task['s_time'] . ' 00:00:00');
+			$tmp['e_time']     = strtotime($task['e_time'] . ' 00:00:00');
 
 			$tmp['work_id']    = $work_id;
 			$tmp['project_id'] = $project_id;
@@ -208,22 +208,45 @@ class WorkController extends CommonController
 			alert_back('参数错误！');
 		}
 
-		$wordModel = M('work');
+		$workModel = M('work');
 		$workArr = $workModel->where(array('id' => $id))->find();
 
 		$project_id = $workArr['project_id'];
+		$member_uid = $workArr['member_uid'];
 		$leader_uid = $workArr['leader_uid'];
 
 		$projectModel = M('project');
-		$projectArr = $projectModel->where(array('id' => $project_id))->find();
+		$project_name = $projectModel->where(array('id' => $project_id))->getField('project_name');
 
 		$userModel = M('user');
 		$leader_truename = $userModel->where(array('id' => $leader_uid))->getField('truename');
 
-		$project_data = array();
-		foreach ($projectArr as $project) {
-			# code...
-		}
+		$data = array();
+		$data = array(
+			'work_id'         => $id,
+			'project_id'      => $project_id,
+			'project_name'    => $project_name,
+			'work_name'       => $workArr['work_name'],
+			'member_uid'      => $member_uid,
+			'leader_uid'      => $leader_uid,
+			'leader_truename' => $leader_truename,
+			's_time'          => $workArr['s_time'],
+			'e_time'          => $workArr['e_time']
+		);
+
+		$task_where = array(
+			'member_uid' => $member_uid,
+			'leader_uid' => $leader_uid,
+			'work_id'    => $id,
+			'project_id' => $project_id
+		);
+
+		$taskModel = M('task');
+		$taskArr = $taskModel->where($task_where)->select();
+
+		$this->assign('data', $data);
+		$this->assign('task_data', $taskArr);
+		$this->display();
 	}
 
 	/**
@@ -231,11 +254,65 @@ class WorkController extends CommonController
 	 */
 	public function editHandle()
 	{
+		if (! IS_POST) {
+			$this->redirect('admin/index/index');
+		}
+
 		if (! $this->is_member) {
 			$this->redirect('admin/error/deny');
 		}
+		$work_id 	= I('post.work_id',    0, 'intval');
+		$project_id = I('post.project_id', 0, 'intval');
+		$member_uid = I('post.member_uid', 0, 'intval');
+		$leader_uid = I('post.leader_uid', 0, 'intval');
 
-		// code
+		if ($work_id === 0 || $project_id === 0 || $member_uid === 0
+			|| $leader_uid === 0)
+		{
+			alert_back('表单数据不完整！');
+		}
+
+		$where = array(
+			'member_uid' => $member_uid,
+			'leader_uid' => $leader_uid,
+			'work_id'    => $work_id,
+			'project_id' => $project_id
+		);
+
+		$taskModel = M('task');
+
+		// step 1: clear old task data
+		$delete_res = $taskModel->where($where)->delete();
+		if ($delete_res === false) {
+			alert_back('清空旧数据失败！');
+		}
+
+		// step 2: add new task data
+		$task_data = $_POST['task'];
+		$add_data = array();
+		foreach ($task_data as $task) {
+			$tmp = array();
+
+			$tmp['task_name']  = trim($task['task_name']);
+			$tmp['remark']     = text_display(trim($task['remark']));
+			$tmp['s_time']     = strtotime($task['s_time'] . ' 00:00:00');
+			$tmp['e_time']     = strtotime($task['e_time'] . ' 00:00:00');
+
+			$tmp['work_id']    = $work_id;
+			$tmp['project_id'] = $project_id;
+			$tmp['member_uid'] = $member_uid;
+			$tmp['leader_uid'] = $leader_uid;
+			$tmp['c_time']     = time();
+
+			$add_data[] = $tmp;
+		}
+
+		$add_res = $taskModel->addAll($add_data);
+		if ($add_res === false) {
+			alert_back('添加新任务失败！');
+		}
+
+		alert_back('重新分配工作成功！');
 	}
 
 	/**
