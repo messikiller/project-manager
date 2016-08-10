@@ -3,6 +3,16 @@
 <block name="page-name">工作任务编辑</block>
 <block name="content">
 
+<div style="width:800px;">
+    <div class="alert alert-danger" role="alert">
+      <i class="iconfont icon-warning alert-icon"></i>
+      <div class="alert-content">
+        <h4>注意</h4>
+        <p>修改现有的工作任务，会将原来任务进度重置为0，请谨慎操作！</p>
+      </div>
+    </div>
+</div>
+
 <div>
 	<form class="form-horizontal" method="post" action="{:U('admin/work/editHandle')}" id="form-id">
 
