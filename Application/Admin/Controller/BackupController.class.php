@@ -4,7 +4,9 @@ use Think\Controller;
 
 class BackupController extends CommonController
 {
-    private $backup = NULL;
+    private $dumper  = NULL;
+    private $conf    = NULL;
+    private $connect = NULL;
 
 	public function _initialize()
 	{
@@ -20,10 +22,19 @@ class BackupController extends CommonController
         $password = C('db_pwd');
         $database = C('db_name');
 
-        $class = C('class_path') . 'Backup.class.php';
-        require($class);
+        $this->conf = array(
+            'host'     => $host,
+            'username' => $username,
+            'password' => $password,
+            'db_name'  => $database
+        );
 
-        $this->backup = new \Backup($host, $username, $password, $database);
+        $this->connect = mysqli_connect($host, $username, $password, $database);
+
+        $class = C('class_path') . 'Dumper.class.php';
+        require_once($class);
+
+        $this->dumper = \Shuttle_Dumper::create($this->conf);
     }
 
     public function index()
@@ -81,24 +92,93 @@ class BackupController extends CommonController
 
     public function backup()
     {
+        $obj = $this->dumper;
 
-        $obj = $this->backup;
-
-        $filename = 'test.sql';
+        $filename = time() . '.sql';
         $path = C('backup_path');
 
-        $res2 = $obj->export($filename, $path);
-        if($res2 == false) {
-            echo '导出数据库失败！';
-            return false;
-        }
-        p($res2);
+        $file = $path . $filename;
 
-        echo '数据库导出成功！';
+        try {
+            $obj->dump($file);
+        } catch (Exception $e) {
+            alert_back('错误！'.$e->getMessage());
+        }
+
+        alert_back('数据库导出成功！');
     }
 
+    /**
+     * recover database with specific sql
+     * 1. clear all tables in old databases;
+     * 2. import new sql
+     */
     public function recover()
     {
+        $timestamp = I('get.timestamp', 0, 'intval');
+        if ($timestamp === 0) {
+            alert_back('参数错误！');
+        }
 
+        $filename = $timestamp . '.sql';
+        $path = C('backup_path');
+
+        $file = $path . $filename;
+
+        if (! file_exists($file)) {
+			alert_back('指定的备份文件不存在！');
+		}
+
+        if(! is_writable($file)) {
+			alert_back('指定的备份文件不可写！');
+		}
+
+        if (! $this->clearDatabase()) {
+            alert_back('清空数据库失败！');
+        }
+
+        $sql = file_get_contents($file);
+        $arr = explode(';', $sql);
+
+        try {
+            foreach ($arr as $line) {
+                mysqli_query($this->connect, $line);
+            }
+        } catch (Exception $e) {
+            alert_back('恢复数据库出错！');
+        }
+
+        alert_back('恢复数据库成功！');
+    }
+
+    /**
+     * @access private for admin
+     */
+    private function clearDatabase()
+    {
+        if (! $this->connect) {
+            return false;
+        }
+
+        try {
+            $arr = array();
+            $sql = 'SHOW TABLES';
+            $res = mysqli_query($this->connect, $sql);
+            while ($row = mysqli_fetch_array($res)) {
+                $arr[] = $row[0];
+            }
+        } catch (Exception $e) {
+            return false;
+        }
+
+        $tables = $arr;
+        $tables_str = implode(',', $tables);
+        $sql = 'DROP TABLE IF EXISTS ' . $tables_str;
+        try {
+            $res = mysqli_query($this->connect, $sql);
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 }

@@ -108,14 +108,14 @@ class Backup
             $filename = time() . '.sql';
         }
 
-        $destfile = $path . $filename; 
+        $destfile = $path . $filename;
 
         $username = $this->username;
         $password = $this->password;
         $database = $this->database;
 
         $cmd = "mysqldump -u{$username} -p{$password} --default-character-set=utf8 {$database} > " . $destfile;
-return $cmd;        
+return $cmd;
         try {
             exec($cmd);
             return $this;
