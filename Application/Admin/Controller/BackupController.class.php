@@ -96,7 +96,6 @@ class BackupController extends CommonController
 
         $filename = time() . '.sql';
         $path = C('backup_path');
-
         $file = $path . $filename;
 
         try {
@@ -149,6 +148,29 @@ class BackupController extends CommonController
         }
 
         alert_back('恢复数据库成功！');
+    }
+
+    public function delete()
+    {
+        $timestamp = I('timestamp', 0, 'intval');
+        if ($timestamp === 0) {
+            alert_back('参数错误！');
+        }
+
+        $filename = $timestamp . '.sql';
+        $path = C('backup_path');
+        $file = $path . $filename;
+
+        if (! file_exists($file)) {
+			alert_back('文件不存在！');
+		}
+
+        try {
+            @ unlink($file);
+        } catch (Exception $e) {
+            alert_back('删除文件失败！');
+        }
+        alert_back('删除文件成功！');
     }
 
     /**

@@ -4,7 +4,7 @@
 
 <block name="content">
 
-<a href="{:U('admin/backup/backup')}" class="btn btn-success"><i class="fa fa-user-plus"></i>&nbsp;现在备份</a>
+<a href="javascript:void(0);" data-url="{:U('admin/backup/backup')}" class="btn btn-success" id="btn-backup"><i class="fa fa-user-plus"></i>&nbsp;现在备份</a>
 
 <div style="height:20px;"></div>
 
@@ -64,6 +64,13 @@ $('.recover-btn').click(function(){
     var time = $(this).attr('data-time');
     var url = $(this).attr('data-url');
     if(confirm('这一操作十分危险！你确定要将当前数据库恢复到: ' + time + ' ？')) {
+        window.location.href = url;
+    }
+});
+
+$('#btn-backup').click(function(){
+    if (confirm('备份行为会占用大量的服务器资源，建议在夜间进行，你确定要立即执行备份吗？')) {
+        var url = $(this).attr('data-url');
         window.location.href = url;
     }
 });
