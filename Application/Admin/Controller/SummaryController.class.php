@@ -177,8 +177,8 @@ class SummaryController extends CommonController
             $this->redirect('admin/error/deny');
         }
 
-        $project_id = I('get.project_id', 0, 'intval');
-        if ($project_id === 0) {
+        $work_id = I('get.work_id', 0, 'intval');
+        if ($work_id === 0) {
             alert_back('参数错误！');
         }
 
@@ -186,20 +186,24 @@ class SummaryController extends CommonController
         $summaryModel = M('summary');
         $summaryWhere = array(
             'member_uid' => array('EQ', $this->uid),
-            'project_id' => array('EQ', $project_id)
+            'work_id'    => array('EQ', $work_id)
         );
         $summaryTotal = $summaryModel->where($where)->count();
         if ($summaryTotal > 0) {
-            $summary_id = $summaryModel->where($where)->getField('id');
-            $this->redirect('admin/summary/edit', array('id' => $summary_id));
+            alert_back('这项工作已经总结过了！');
         }
 
-        $projectModel = M('project');
-        $projectArr = $projectModel
-            ->where(array('id' => $project_id))
+        $workModel = M('work');
+        $workArr = $workModel
+            ->where(array('id' => $work_id))
             ->find();
 
-        $this->assign('project',    $projectArr);
+        $project_id = $workArr['project_id'];
+        $projectModel = M('project');
+        $project_name = $projectModel->where(array('id' => $project_id))->getField('project_name');
+        $workArr['project_name'] = $project_name;
+
+        $this->assign('work',       $workArr);
         $this->assign('member_uid', $this->uid);
         $this->display();
     }
@@ -218,17 +222,17 @@ class SummaryController extends CommonController
         }
 
         $member_uid = I('member_uid', 0, 'intval');
-        $project_id = I('project_id', 0, 'intval');
+        $work_id    = I('work_id', 0, 'intval');
         $content    = I('content', false, 'text_store');
         $c_time     = time();
 
-        if ($member_uid === 0 || $project_id === 0 || $content === false) {
+        if ($member_uid === 0 || $work_id === 0 || $content === false) {
             alert_back('表单数据错误！');
         }
 
         $add_data = array(
             'member_uid' => $member_uid,
-            'project_id' => $project_id,
+            'work_id'    => $work_id,
             'content'    => $content,
             'c_time'     => $c_time
         );
@@ -239,7 +243,14 @@ class SummaryController extends CommonController
             alert_back('添加总结失败！');
         }
 
-        alert_go('添加总结成功！', 'admin/project/home');
+        $update_data = array('status' => 3);
+        $workModel   = M('work');
+        $update_res  = $workModel->where(array('id' => $work_id))->save($update_data);
+        if ($update_res === false) {
+            alert_back('更新工作状态失败！');
+        }
+
+        alert_go('添加总结成功！', 'admin/work/schedule');
     }
 
     /**

@@ -58,8 +58,11 @@
 			        <case value="1">
 			        	<label class="label label-started">进行中</label>
 			        </case>
-			        <case value="2">
+					<case value="2">
 			        	<label class="label label-finished">已完成</label>
+			        </case>
+					<case value="3">
+			        	<label class="label label-summaried">已总结</label>
 			        </case>
 			        <default />
 			        	-
@@ -75,8 +78,12 @@
 			        	<a href="{:U('admin/work/edit', array('id' => $work['id']))}" class="btn btn-success btn-sm"><i class="fa fa-pencil"></i>&nbsp;修改</a>
 			        </case>
 			        <case value="2">
-			        	<a href="{:U('admin/work/view', array('id' => $work['id']))}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i>&nbsp;查看</a>
+						<a href="{:U('admin/work/view', array('id' => $work['id']))}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i>&nbsp;查看</a>
+			        	<a href="{:U('admin/summary/add', array('work_id' => $work['id']))}" class="btn btn-success btn-sm"><i class="fa fa-commenting-o"></i>&nbsp;总结</a>
 			        </case>
+					<case value="3">
+						<a href="{:U('admin/work/view', array('id' => $work['id']))}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i>&nbsp;查看</a>
+					</case>
 			        <default />
 			    </switch>
 			</td>
