@@ -1,4 +1,5 @@
 .idea
 index.php
 config.php
+Backup/*
 Application/Runtime/*
