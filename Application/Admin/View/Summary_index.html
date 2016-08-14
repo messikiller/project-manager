@@ -7,9 +7,8 @@
 <table class="table table-bordered table-hover">
     <tr class="active">
         <th>序号</th>
-        <th>项目名称</th>
-        <th>项目组长</th>
-        <th>组员</th>
+        <th>工作名称</th>
+        <th>提交人</th>
         <th>提交时间</th>
         <th>操作</th>
     </tr>
@@ -17,8 +16,7 @@
     <volist name="data" id="summary">
         <tr>
             <td>{$index++}</td>
-            <td>{$summary.project_name}</td>
-            <td>{$summary.leader_truename}</td>
+            <td>{$summary.work_name}</td>
             <td>{$summary.member_truename}</td>
             <td>{$summary.c_time|date="Y-m-d",###}</td>
             <td>
