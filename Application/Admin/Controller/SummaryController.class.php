@@ -56,7 +56,7 @@ class SummaryController extends CommonController
             $member_uid = $summary['member_uid'];
 
             $summary['work_name'] = isset($workIdsList[$work_id])
-                ? $projectIdsList[$project_id] : '';
+                ? $workIdsList[$work_id] : '';
             $summary['member_truename'] = isset($userIdsList[$member_uid])
                 ? $userIdsList[$member_uid] : '';
 
