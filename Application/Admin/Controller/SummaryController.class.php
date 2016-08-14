@@ -27,7 +27,7 @@ class SummaryController extends CommonController
         $summaryModel = M('summary');
         $summaryArr   = $summaryModel
             ->where($where)
-            ->field('id, member_uid, project_id, c_time')
+            ->field('id, member_uid, work_id, c_time')
             ->order('c_time desc, id asc')
             ->page($limit)
             ->select();
@@ -38,19 +38,16 @@ class SummaryController extends CommonController
         $Page->setConfig('next', '下一页&raquo;');
         $show  = $Page->show();
 
-        $project_ids = makeImplode($summaryArr, 'project_id');
+        $work_ids    = makeImplode($summaryArr, 'work_id');
         $member_uids = makeImplode($summaryArr, 'member_uid');
-        $projectModel = M('project');
-        $projectIdsList = $projectModel
-            ->where(array('id' => array('IN', "$project_ids")))
-            ->getField('id, project_name');
-
-        $leader_uids = makeImplode($projectIdsList, 'leader_uid');
-        $user_ids = $leader_uids . ', ' . $member_uids;
+        $workModel = M('work');
+        $workIdsList = $workModel
+            ->where(array('id' => array('IN', "$work_ids")))
+            ->getField('id, work_name');
 
         $userModel = M('user');
         $userIdsList = $userModel
-            ->where(array('id' => array('IN', "$user_ids")))
+            ->where(array('id' => array('IN', "$member_uids")))
             ->getField('id, truename');
 
         $data = array();
@@ -58,7 +55,7 @@ class SummaryController extends CommonController
             $project_id = $summary['project_id'];
             $member_uid = $summary['member_uid'];
 
-            $summary['project_name'] = isset($projectIdsList[$project_id])
+            $summary['work_name'] = isset($workIdsList[$work_id])
                 ? $projectIdsList[$project_id] : '';
             $summary['member_truename'] = isset($userIdsList[$member_uid])
                 ? $userIdsList[$member_uid] : '';
@@ -82,6 +79,7 @@ class SummaryController extends CommonController
             $this->redirect('admin/error/deny');
         }
 
+        // @TODO
     }
 
     /**
@@ -99,12 +97,24 @@ class SummaryController extends CommonController
         }
 
         $summaryModel = M('summary');
-        $res = $summaryModel->where(array('id' => $id))->delete();
-        if ($res === false) {
-            alert_back('删除记录失败！');
+
+        $work_id = $summaryModel->where(array('id' => $id))->getField('work_id');
+        if (empty($work_id)) {
+            alert_back('获取工作ID失败！');
         }
 
-        alert_back('删除记录成功！');
+        $del_res = $summaryModel->where(array('id' => $id))->delete();
+        if ($del_res === false) {
+            alert_back('删除总结记录失败！');
+        }
+
+        $workModel = M('work');
+        $up_res = $workModel->where(array('id' => $work_id))->setField('status', 2);
+        if ($up_res === false) {
+            alert_back('更新工作状态失败');
+        }
+
+        alert_back('删除总结成功！');
     }
 
     /**
@@ -131,7 +141,7 @@ class SummaryController extends CommonController
 
         $summaryArr = $summaryModel
             ->where($where)
-            ->field('id, member_uid, project_id, c_time')
+            ->field('id, member_uid, work_id, c_time')
             ->order('c_time desc, id asc')
             ->page($limit)
             ->select();
@@ -142,14 +152,14 @@ class SummaryController extends CommonController
         $Page->setConfig('next', '下一页&raquo;');
         $show  = $Page->show();
 
-        $projectModel = M('project');
-        $project_ids = makeImplode($summaryArr, 'project_id');
-        $projectIdsList = $projectModel->where(array('id' => array('IN', "$project_ids")))->getField('id, project_name');
+        $workModel = M('work');
+        $work_ids = makeImplode($summaryArr, 'work_id');
+        $workIdsList = $workModel->where(array('id' => array('IN', "$work_ids")))->getField('id, work_name');
 
         $data = array();
         foreach ($summaryArr as $summary) {
-            $project_id = $summary['project_id'];
-            $summary['project_name'] = isset($projectIdsList[$project_id]) ? $projectIdsList[$project_id] : '';
+            $work_id = $summary['work_id'];
+            $summary['work_name'] = isset($workIdsList[$work_id]) ? $workIdsList[$work_id] : '';
             $data[] = $summary;
         }
 
@@ -165,7 +175,11 @@ class SummaryController extends CommonController
      */
     public function homeSearch()
     {
+        if (! $this->is_member) {
+            $this->redirect('admin/error/deny');
+        }
 
+        // @TODO
     }
 
     /**
@@ -177,8 +191,8 @@ class SummaryController extends CommonController
             $this->redirect('admin/error/deny');
         }
 
-        $project_id = I('get.project_id', 0, 'intval');
-        if ($project_id === 0) {
+        $work_id = I('get.work_id', 0, 'intval');
+        if ($work_id === 0) {
             alert_back('参数错误！');
         }
 
@@ -186,20 +200,24 @@ class SummaryController extends CommonController
         $summaryModel = M('summary');
         $summaryWhere = array(
             'member_uid' => array('EQ', $this->uid),
-            'project_id' => array('EQ', $project_id)
+            'work_id'    => array('EQ', $work_id)
         );
         $summaryTotal = $summaryModel->where($where)->count();
         if ($summaryTotal > 0) {
-            $summary_id = $summaryModel->where($where)->getField('id');
-            $this->redirect('admin/summary/edit', array('id' => $summary_id));
+            alert_back('这项工作已经总结过了！');
         }
 
-        $projectModel = M('project');
-        $projectArr = $projectModel
-            ->where(array('id' => $project_id))
+        $workModel = M('work');
+        $workArr = $workModel
+            ->where(array('id' => $work_id))
             ->find();
 
-        $this->assign('project',    $projectArr);
+        $project_id = $workArr['project_id'];
+        $projectModel = M('project');
+        $project_name = $projectModel->where(array('id' => $project_id))->getField('project_name');
+        $workArr['project_name'] = $project_name;
+
+        $this->assign('work',       $workArr);
         $this->assign('member_uid', $this->uid);
         $this->display();
     }
@@ -218,17 +236,17 @@ class SummaryController extends CommonController
         }
 
         $member_uid = I('member_uid', 0, 'intval');
-        $project_id = I('project_id', 0, 'intval');
+        $work_id    = I('work_id', 0, 'intval');
         $content    = I('content', false, 'text_store');
         $c_time     = time();
 
-        if ($member_uid === 0 || $project_id === 0 || $content === false) {
+        if ($member_uid === 0 || $work_id === 0 || $content === false) {
             alert_back('表单数据错误！');
         }
 
         $add_data = array(
             'member_uid' => $member_uid,
-            'project_id' => $project_id,
+            'work_id'    => $work_id,
             'content'    => $content,
             'c_time'     => $c_time
         );
@@ -239,7 +257,14 @@ class SummaryController extends CommonController
             alert_back('添加总结失败！');
         }
 
-        alert_go('添加总结成功！', 'admin/project/home');
+        $update_data = array('status' => 3);
+        $workModel   = M('work');
+        $update_res  = $workModel->where(array('id' => $work_id))->save($update_data);
+        if ($update_res === false) {
+            alert_back('更新工作状态失败！');
+        }
+
+        alert_go('添加总结成功！', 'admin/work/schedule');
     }
 
     /**
@@ -255,15 +280,15 @@ class SummaryController extends CommonController
         $summaryModel = M('summary');
         $summaryArr = $summaryModel->where(array('id' => $id))->find();
 
-        $project_id = $summaryArr['project_id'];
+        $work_id = $summaryArr['work_id'];
 
-        $projectModel = M('project');
-        $projectArr = $projectModel
-            ->where(array('id' => $project_id))
+        $workModel = M('work');
+        $workArr = $workModel
+            ->where(array('id' => $work_id))
             ->find();
 
-        $this->assign('project',    $projectArr);
-        $this->assign('summary',    $summaryArr);
+        $this->assign('work',    $workArr);
+        $this->assign('summary', $summaryArr);
         $this->display();
     }
 
@@ -309,15 +334,15 @@ class SummaryController extends CommonController
         $summaryModel = M('summary');
         $summaryArr = $summaryModel->where(array('id' => $id))->find();
 
-        $project_id = $summaryArr['project_id'];
+        $work_id = $summaryArr['work_id'];
 
-        $projectModel = M('project');
-        $projectArr = $projectModel
-            ->where(array('id' => $project_id))
+        $workModel = M('work');
+        $workArr = $workModel
+            ->where(array('id' => $work_id))
             ->find();
 
-        $this->assign('project',    $projectArr);
-        $this->assign('summary',    $summaryArr);
+        $this->assign('work',    $workArr);
+        $this->assign('summary', $summaryArr);
         $this->display();
     }
 }

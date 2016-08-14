@@ -8,16 +8,16 @@
 
 <table class="table table-bordered">
     <tr>
-        <td style="text-align:center;vertical-align:middle;width:100px;">项目名称</td>
-        <td>{$project.project_name}</td>
+        <td style="text-align:center;vertical-align:middle;width:100px;">工作名称</td>
+        <td>{$work.work_name}</td>
     </tr>
     <tr>
         <td style="text-align:center;vertical-align:middle;">计划时间</td>
-        <td>{$project.s_time|date="Y-m-d",###}&nbsp;~&nbsp;{$project.e_time|date="Y-m-d",###}</td>
+        <td>{$work.s_time|date="Y-m-d",###}&nbsp;~&nbsp;{$work.e_time|date="Y-m-d",###}</td>
     </tr>
     <tr>
         <td style="text-align:center;vertical-align:middle;">完成时间</td>
-        <td>{$project.f_time|date="Y-m-d",###}</td>
+        <td>{$work.f_time|date="Y-m-d",###}</td>
     </tr>
     <tr>
         <td style="text-align:center;vertical-align:middle;">总结内容</td>
