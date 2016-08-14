@@ -52,7 +52,7 @@ class SummaryController extends CommonController
 
         $data = array();
         foreach ($summaryArr as $summary) {
-            $project_id = $summary['project_id'];
+            $work_id    = $summary['work_id'];
             $member_uid = $summary['member_uid'];
 
             $summary['work_name'] = isset($workIdsList[$work_id])
