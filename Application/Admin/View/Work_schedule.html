@@ -1,6 +1,6 @@
 <extend name="Content/layout" />
 <block name="module-name">项目</block>
-<block name="page-name">项目管理</block>
+<block name="page-name">工作日程</block>
 
 <block name="content">
 
@@ -9,6 +9,14 @@
 	  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
 	  <i class="iconfont icon-warning"></i>
 	  有新的工作任务可以启动，注意检查！
+	</div>
+</if>
+
+<if condition="$summariable_num gt 0">
+	<div class="alert alert-warning alert-dismissible" role="alert">
+	  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+	  <i class="iconfont icon-warning"></i>
+	  有新的工作任务可以总结，注意检查！
 	</div>
 </if>
 
@@ -28,8 +36,10 @@
 	</tr>
 
 	<volist name="data" id="work">
-
-		<tr {$work['status']==0?'class=\"info\"':''}>
+<php>
+$isHighlight = ($work['status']==0||$work['status']==2) ? true : false;
+</php>
+		<tr {$isHighlight?'class=\"info\"':''}>
 			<td>{$index++}</td>
 			<td>{$work.work_name}</td>
 			<td>{$work.remark}</td>
