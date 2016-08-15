@@ -8,9 +8,10 @@ class IndexController extends Controller
     public function index()
     {
 
-        $this->displayProject();
-        $this->displayWork();
-        $this->displayTask();
+        $this->displayProjectPie();
+        $this->displayWorkPie();
+        $this->displayTaskPie();
+        $this->displayTasksBar();
         $this->display();
     }
 
@@ -105,6 +106,19 @@ class IndexController extends Controller
         $task_pie_name = array('进行中', '已结束', '禁用');
         $this->assign('task_pie_data', json_encode($task_pie_data));
         $this->assign('task_pie_name', json_encode($task_pie_name));
-        // p($task_pie_data);
+    }
+
+    private function displayTasksBar()
+    {
+        $taskModel = M('task');
+        $taskArr = $taskModel->where(array('status' => 0))->field('task_name, completion')->select();
+        $name = $data = array();
+        foreach ($taskArr as $task) {
+            $name[] = $task['task_name'];
+            // $data[] = array('name' => $task['task_name'], 'value' => $task['completion']);
+            $data[] = intval($task['completion']);
+        }
+        $this->assign('task_name',       json_encode($name));
+        $this->assign('task_completion', json_encode($data));
     }
 }
