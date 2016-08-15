@@ -51,6 +51,7 @@ class WorkController extends CommonController
         $show  = $Page->show();
 
         $startable_num = get_startable_works_num($uid);
+		$summariable_num = get_finished_works_num($uid);
 
 		$leaderIdsList = get_level_uids_list(array('truename'), 1);
 
@@ -83,7 +84,8 @@ class WorkController extends CommonController
         $this->assign('show',    $show);
         $this->assign('pagenum', $Page->totalPages);
         $this->assign('index',   $Page->firstRow+1);
-        $this->assign('startable_num', $startable_num);
+		$this->assign('startable_num', $startable_num);
+        $this->assign('summariable_num', $summariable_num);
 		$this->display();
 	}
 

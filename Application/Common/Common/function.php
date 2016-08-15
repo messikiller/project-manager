@@ -206,12 +206,11 @@ function get_startable_works_num($uid)
 function get_finished_works_num($uid)
 {
 	$workModel = M('work');
-	$count = $workModel
-		->where(array(
-			array('member_uid' => array('EQ', $uid)),
-			array('status'     => array('EQ', 2))
-		))->count();
-
+	$where = array(
+		array('member_uid' => array('EQ', $uid)),
+		array('status'     => array('EQ', 2))
+	);
+	$count = $workModel->where($where)->count();
 	if ($count === false) {
 		return 0;
 	}
