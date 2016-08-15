@@ -319,3 +319,16 @@ function filesize_format($bytesize)
 	$r = round($bytesize, 2).$units[$i];
 	return $r;
 }
+
+function array_group($arr, $key)
+{
+	$r = array();
+	foreach ($arr as $val) {
+		if (isset($val[$key])) {
+			$v = $val[$key];
+			$r[$v][] = $val;
+		}
+	}
+
+	return $r;
+}

@@ -1,0 +1,125 @@
+<extend name="Home/base" />
+<block name="content">
+
+<div style="width:600px;height:400px;" id="project-pie"></div>
+<div style="width:600px;height:400px;" id="work-pie"></div>
+<div style="width:600px;height:400px;" id="task-pie"></div>
+
+</block>
+<block name="own-js">
+<script type="text/javascript">
+var project_pie = echarts.init(document.getElementById('project-pie'), 'shine');
+var project_pie_option = {
+    title : {
+        text: '项目状态',
+        x:'center'
+    },
+    tooltip : {
+        trigger: 'item',
+        formatter: "{b} : {c} ({d}%)"
+    },
+    legend: {
+        orient: 'vertical',
+        left: 'left',
+        data: {$project_pie_name}
+    },
+    series : [
+        {
+            name: '项目状态',
+            type: 'pie',
+            data: {$project_pie_data},
+            itemStyle: {
+                emphasis: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            },
+            label: {
+                normal: {
+                    position: 'outside',
+                    formatter: '{b}({c})'
+                }
+            }
+        }
+    ]
+};
+project_pie.setOption(project_pie_option);
+
+var work_pie = echarts.init(document.getElementById('work-pie'), 'shine');
+var work_pie_option = {
+    title : {
+        text: '工作状态',
+        x:'center'
+    },
+    tooltip : {
+        trigger: 'item',
+        formatter: "{b} : {c} ({d}%)"
+    },
+    legend: {
+        orient: 'vertical',
+        left: 'left',
+        data: {$work_pie_name}
+    },
+    series : [
+        {
+            name: '工作状态',
+            type: 'pie',
+            data: {$work_pie_data},
+            itemStyle: {
+                emphasis: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            },
+            label: {
+                normal: {
+                    position: 'outside',
+                    formatter: '{b}({c})'
+                }
+            }
+        }
+    ]
+};
+work_pie.setOption(work_pie_option);
+
+var task_pie = echarts.init(document.getElementById('task-pie'), 'shine');
+var task_pie_option = {
+    title : {
+        text: '任务状态',
+        x:'center'
+    },
+    tooltip : {
+        trigger: 'item',
+        formatter: "{b} : {c} ({d}%)"
+    },
+    legend: {
+        orient: 'vertical',
+        left: 'left',
+        data: {$task_pie_name}
+    },
+    series : [
+        {
+            name: '任务状态',
+            type: 'pie',
+            data: {$task_pie_data},
+            itemStyle: {
+                emphasis: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            },
+            label: {
+                normal: {
+                    position: 'outside',
+                    formatter: '{b}({c})'
+                }
+            }
+        }
+    ]
+};
+task_pie.setOption(task_pie_option);
+</script>
+</block>
