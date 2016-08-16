@@ -1,0 +1,21 @@
+body{
+    background-color: #ecf0f5;
+}
+
+.tab-wraped > li.active > a,
+.tab-wraped > li.active > a:hover,
+.tab-wraped > li.active > a:focus
+{
+    background-color: #ecf0f5;
+    border-bottom-color: #ecf0f5;
+}
+
+.tab-content.tab-wraped,
+.tab-wraped{
+    border-width: 0px;
+}
+
+.pie-container{
+     width: 600px;
+     height:400px;
+}
