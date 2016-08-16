@@ -19,3 +19,11 @@ body{
      width: 600px;
      height:400px;
 }
+
+#owl-demo .item{
+    background: #3fbf79;
+    padding: 10px 0px;
+    margin: 5px;
+    color: #FFF;
+    text-align: center;
+}
