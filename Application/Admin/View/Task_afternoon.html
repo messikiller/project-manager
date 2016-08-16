@@ -59,43 +59,24 @@
 <script type="text/javascript">
 $('#submit-btn').click(function(){
     var finish = false;
-    var error  = false;
 
+    var error  = true;
     $('.completion').each(function(){
         var val   = parseInt($.trim($(this).val()));
         var init  = parseInt($(this).attr('data-init'));
-        console.log(init);
         var index = parseInt($(this).attr('data-index'));
-        if (val == '') {
-            window.alert('序号为'+index+'的任务进度不能为空，请检查！');
-            error = true;
-            return false;
-        }
-
-        if (val == init) {
-            window.alert('序号为'+index+'的任务进度没有更新，请更新后提交！');
-            error = true;
-            return false;
-        }
-
-        if (val < init) {
-            window.alert('序号为'+index+'的任务进度更新错误，更新后进度值必须大于'+init+'！');
-            error = true;
-            return false;
-        }
-
-        if (parseInt(val) != val || val < 0 || val > 100) {
-            window.alert('序号为'+index+'的任务进度更新错误，进度值必须是介于0~100之间的整数！');
-            error = true;
-            return false;
-        }
 
         if (val == 100) {
             finish = true;
         }
+
+        if (val != init) {
+            error = false;
+        }
     });
 
     if (error) {
+        window.alert('请至少更新一项任务进度以后再提交！');
         return false;
     }
 

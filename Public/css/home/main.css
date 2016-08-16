@@ -16,6 +16,17 @@ body{
 }
 
 .pie-container{
-     width: 600px;
-     height:400px;
+     width: 450px;
+     height: 200px;
+}
+
+.bar-container{
+    width: 1000px;
+    height: 400px;
+}
+
+#owl-demo .item{
+    background: #FFF;
+    border: 1px solid #DBDBDB;
+    margin: 5px;
 }
