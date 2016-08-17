@@ -7,7 +7,12 @@ class IndexController extends Controller
 {
     public function index()
     {
+        $this->displayCarousel();
+        $this->display();
+    }
 
+    public function boss()
+    {
         $this->displayProjectPie();
         $this->displayWorkPie();
         $this->displayTaskPie();
@@ -120,5 +125,10 @@ class IndexController extends Controller
         }
         $this->assign('task_name',       json_encode($name));
         $this->assign('task_completion', json_encode($data));
+    }
+
+    private function displayCarousel()
+    {
+
     }
 }

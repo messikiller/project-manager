@@ -13,7 +13,7 @@ class IndexController extends CommonController
 	{
 		$project_schedule_nums = get_startable_projects_num($this->uid) + get_markable_projects_num($this->uid);
 		$work_schedule_nums = get_startable_works_num($this->uid) + get_finished_works_num($this->uid);
-		
+
 		$this->assign('project_schedule_nums', $project_schedule_nums);
 		$this->assign('work_schedule_nums', $work_schedule_nums);
 
@@ -26,6 +26,10 @@ class IndexController extends CommonController
 
 	public function welcome()
 	{
+		if ($this->user_level == 0) {
+			$this->redirect('home/index/boss');
+		}
+
 		$uid = $this->uid;
 		$e_time = time();
 		$s_time = $e_time - (7*24*60*60);
