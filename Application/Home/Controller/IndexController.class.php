@@ -129,6 +129,53 @@ class IndexController extends Controller
 
     private function displayCarousel()
     {
+        $authModel = M('auth');
+        $userIdArr = $authModel->where(array('level' => array('NEQ', 0)))->getField('user_id', true);
 
+        $userModel      = M('user');
+        $stationModel   = M('station');
+        $positionModel  = M('position');
+        $workPlaceModel = M('work_place');
+        $projectModel   = M('project');
+        $workModel      = M('work');
+        $taskModel      = M('task');
+
+        $stationIdsList = $stationModel->getField('id, station');
+
+        $data = array();
+        foreach ($userIdArr as $user_id) {
+            $userArr = $userModel->where(array('id' => $user_id))->find();
+
+            $truename = $userArr['truename'];
+
+            $position_id   = $userArr['position_id'];
+            $station_id    = $userArr['station_id'];
+            $work_place_id = $userArr['work_place_id'];
+
+            $position   = $positionModel->where(array('id' => $position_id))->getField('position');
+            $station    = $stationModel->where(array('id' => $station_id))->getField('station');
+            $work_place = $workPlaceModel->where(array('id' => $work_place_id))->getField('work_place');
+
+            $project_num = $projectModel->where(array('leader_uid' => $user_id, 'status' => 1))->count();
+            $work_num    = $workModel->where(array('member_uid' => $user_id, 'status' => 1))->count();
+            $task_num    = $taskModel->where(array('member_uid' => $user_id, 'status' => 1))->count();
+
+            $progress = $taskModel->field('task_name, completion')->where(array('member_uid' => $user_id, 'status' => 1))->select();
+
+            $arr = array(
+                'truename'    => $truename,
+                'position'    => $position,
+                'station'     => $station,
+                'work_place'  => $work_place,
+                'project_num' => $project_num,
+                'work_num'    => $work_num,
+                'task_num'    => $task_num,
+                'progress'    => $progress
+            );
+
+            $data[] = $arr;
+        }
+
+        $this->assign('data', $data);
     }
 }
