@@ -5,7 +5,7 @@
     background-image: -moz-linear-gradient(top, #fff, #eee);
     background-image: -ms-linear-gradient(top, #fff, #eee);
     background-image: -o-linear-gradient(top, #fff, #eee);
-    background-image: linear-gradient(top, #fff, #eee);  
+    background-image: linear-gradient(top, #fff, #eee);
     height: 260px;
     width: 400px;
     margin: -150px 0 0 -230px;
@@ -16,27 +16,27 @@
     z-index: 0;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
-    border-radius: 3px;  
+    border-radius: 3px;
     -webkit-box-shadow:
           0 0 2px rgba(0, 0, 0, 0.2),
           0 1px 1px rgba(0, 0, 0, .2),
           0 3px 0 #fff,
           0 4px 0 rgba(0, 0, 0, .2),
-          0 6px 0 #fff,  
+          0 6px 0 #fff,
           0 7px 0 rgba(0, 0, 0, .2);
     -moz-box-shadow:
-          0 0 2px rgba(0, 0, 0, 0.2),  
+          0 0 2px rgba(0, 0, 0, 0.2),
           1px 1px   0 rgba(0,   0,   0,   .1),
           3px 3px   0 rgba(255, 255, 255, 1),
           4px 4px   0 rgba(0,   0,   0,   .1),
-          6px 6px   0 rgba(255, 255, 255, 1),  
+          6px 6px   0 rgba(255, 255, 255, 1),
           7px 7px   0 rgba(0,   0,   0,   .1);
     box-shadow:
-          0 0 2px rgba(0, 0, 0, 0.2),  
+          0 0 2px rgba(0, 0, 0, 0.2),
           0 1px 1px rgba(0, 0, 0, .2),
           0 3px 0 #fff,
           0 4px 0 rgba(0, 0, 0, .2),
-          0 6px 0 #fff,  
+          0 6px 0 #fff,
           0 7px 0 rgba(0, 0, 0, .2);
 }
 
@@ -74,17 +74,17 @@
     height: 1px;
     position: absolute;
     top: 15px;
-    width: 100px;   
+    width: 100px;
 }
 
 #form-title-id:after
-{ 
+{
     background-image: -webkit-gradient(linear, left top, right top, from(#777), to(#fff));
     background-image: -webkit-linear-gradient(left, #777, #fff);
     background-image: -moz-linear-gradient(left, #777, #fff);
     background-image: -ms-linear-gradient(left, #777, #fff);
     background-image: -o-linear-gradient(left, #777, #fff);
-    background-image: linear-gradient(left, #777, #fff);      
+    background-image: linear-gradient(left, #777, #fff);
     right: 0;
 }
 
