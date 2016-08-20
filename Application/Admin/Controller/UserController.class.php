@@ -53,7 +53,7 @@ class UserController extends CommonController
 		$userIdsList = makeImplode($userArr, 'id');
 
 		$authArr   = $authModel->field('user_id, level')
-			->where(array('user_id' => array('in', $userIdsList)))
+			->where(array('user_id' => array('in', "$userIdsList")))
 			->select();
 
 		$authIdsArr = makeIndex($authArr, 'user_id');
