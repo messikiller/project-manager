@@ -202,7 +202,7 @@ class SummaryController extends CommonController
             'member_uid' => array('EQ', $this->uid),
             'work_id'    => array('EQ', $work_id)
         );
-        $summaryTotal = $summaryModel->where($where)->count();
+        $summaryTotal = $summaryModel->where($summaryWhere)->count();
         if ($summaryTotal > 0) {
             alert_back('这项工作已经总结过了！');
         }
