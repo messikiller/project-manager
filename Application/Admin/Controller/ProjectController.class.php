@@ -246,6 +246,9 @@ class ProjectController extends CommonController
 			alert_back('表单数据错误！');
 		}
 
+		//@ADD at 8-26, fix end time
+		$e_time = $e_time . ' 23:59:59';
+
 		$data = array(
 			'project_name' => $project_name,
 			'leader_uid'   => $leader_uid,
@@ -329,6 +332,9 @@ class ProjectController extends CommonController
 		{
 			alert_back('表单数据错误！');
 		}
+
+		//@ADD at 8-26, fix end time
+		$e_time = $e_time . ' 23:59:59';
 
 		$data = array(
 			'project_name' => $project_name,
@@ -512,7 +518,7 @@ class ProjectController extends CommonController
 		$datalist = array();
 		foreach ($works as $work) {
 			$work['s_time'] = strtotime($work['s_time'] . ' 00:00:00');
-			$work['e_time'] = strtotime($work['e_time'] . ' 00:00:00');
+			$work['e_time'] = strtotime($work['e_time'] . ' 23:59:59');
 			$work['c_time'] = time();
 			$work['status'] = 0;
 

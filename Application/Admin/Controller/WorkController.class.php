@@ -167,7 +167,7 @@ class WorkController extends CommonController
 			$tmp['task_name']  = trim($task['task_name']);
 			$tmp['remark']     = trim($task['remark']);
 			$tmp['s_time']     = strtotime($task['s_time'] . ' 00:00:00');
-			$tmp['e_time']     = strtotime($task['e_time'] . ' 00:00:00');
+			$tmp['e_time']     = strtotime($task['e_time'] . ' 23:59:59');
 
 			$tmp['work_id']    = $work_id;
 			$tmp['project_id'] = $project_id;
@@ -298,7 +298,7 @@ class WorkController extends CommonController
 			$tmp['task_name']  = trim($task['task_name']);
 			$tmp['remark']     = text_display(trim($task['remark']));
 			$tmp['s_time']     = strtotime($task['s_time'] . ' 00:00:00');
-			$tmp['e_time']     = strtotime($task['e_time'] . ' 00:00:00');
+			$tmp['e_time']     = strtotime($task['e_time'] . ' 23:59:59');
 
 			$tmp['work_id']    = $work_id;
 			$tmp['project_id'] = $project_id;
