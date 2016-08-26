@@ -58,23 +58,29 @@ class WorkController extends CommonController
 		$projIds = makeImplode($workArr, 'project_id');
 		$projectModel = M('project');
 		$projectArr   = $projectModel
-			->field('id, project_name')
+			->field('id, project_name, status')
 			->where(array('id' => array('IN', "$projIds")))
 			->select();
 		$projectIdsList = makeIndex($projectArr, 'id');
 
 		$data = array();
 		foreach ($workArr as $work) {
+			$project_id = $work['project_id'];
+
+			$project_status = isset($projectIdsList[$project_id]) ? $projectIdsList[$project_id]['status'] : 3;
+			if (intval($project_status) == 3) {
+				continue;
+			}
+
+			$work['project_name'] = '';
+			if (isset($projectIdsList[$project_id])) {
+				$work['project_name'] = $projectIdsList[$project_id]['project_name'];
+			}
+
 			$leader_uid = $work['leader_uid'];
 			$work['leader_truename'] = '';
 			if (isset($leaderIdsList[$leader_uid])) {
 				$work['leader_truename'] = $leaderIdsList[$leader_uid]['truename'];
-			}
-
-			$project_id = $work['project_id'];
-			$work['project_name'] = '';
-			if (isset($projectIdsList[$project_id])) {
-				$work['project_name'] = $projectIdsList[$project_id]['project_name'];
 			}
 
 			$data[] = $work;
