@@ -106,6 +106,12 @@
 			</td>
 		</tr>
 		<tr>
+			<td class="active" style="font-weight:bold;text-align:right;width:100px;vertical-align:middle;">任务进度：</td>
+			<td>
+				<div style="height:400px;" id="tasks-bar"></div>
+			</td>
+		</tr>
+		<tr>
 			<td colspan="2">
 				<a href="javascript:window.location=document.referrer" class="btn btn-success"><i class="fa fa-reply"></i>&nbsp;返回列表</a>
 			</td>
@@ -113,4 +119,72 @@
 	</table>
 </div>
 
+</block>
+
+<block name="own-js">
+<script src="__PUBLIC__/lib/echarts3/{:C('echarts_file')}.js"></script>
+<script src="__PUBLIC__/lib/echarts3/shine.js"></script>
+<script src="__PUBLIC__/lib/echarts3/infographic.js"></script>
+<script src="__PUBLIC__/lib/echarts3/macarons.js"></script>
+<script src="__PUBLIC__/lib/echarts3/roma.js"></script>
+<script src="__PUBLIC__/lib/echarts3/vintage.js"></script>
+<script type="text/javascript">
+var tasks_bar = echarts.init(document.getElementById('tasks-bar'), 'shine');
+var tasks_bar_option = {
+    tooltip : {
+        trigger: 'axis',
+        axisPointer : {
+            type : 'shadow'
+        },
+        backgroundColor: '#1b1b1b',
+        formatter: '任务名称：{b}<br />当前进度：{c}%'
+    },
+    legend: {
+        data:{$project_task_name}
+    },
+    animationDurationUpdate: 1000,
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    yAxis : [
+        {
+            type : 'value',
+            axisLabel: {
+                formatter: '{value}%'
+            },
+            max: 100
+        }
+    ],
+    xAxis : [
+        {
+            type : 'category',
+            axisTick : {show: false},
+            data : {$project_task_name}
+        }
+    ],
+    series : [
+        {
+            name:'任务进度',
+            type:'bar',
+            label: {
+                normal: {
+                    show: true,
+                    position: 'inside',
+                    formatter: '{c}%'
+                }
+            },
+            data: {$project_task_completion},
+            itemStyle: {
+                normal: {
+                    color: '#660033'
+                }
+            }
+        }
+    ]
+};
+tasks_bar.setOption(tasks_bar_option);
+</script>
 </block>

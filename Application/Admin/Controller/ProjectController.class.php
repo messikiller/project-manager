@@ -404,8 +404,26 @@ class ProjectController extends CommonController
 			$work_data[] = $arr;
 		}
 
+		$task_where = array(
+			'project_id' => array('EQ', $id),
+			'status' => array('NEQ', 3)
+		);
+
+		$taskModel = M('task');
+		$taskArr = $taskModel
+			->field('task_name, completion')
+			->where($task_where)
+			->select();
+		$project_task_name = $project_task_completion = array();
+		foreach ($taskArr as $task) {
+			$project_task_name[]       = $task['task_name'];
+			$project_task_completion[] = $task['completion'];
+		}
+
 		$this->assign('data', 	   $data);
 		$this->assign('work_data', $work_data);
+		$this->assign('project_task_name',       json_encode($project_task_name));
+		$this->assign('project_task_completion', json_encode($project_task_completion));
 		$this->display();
 	}
 
