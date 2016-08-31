@@ -182,14 +182,23 @@ class ProjectController extends CommonController
 		$projectModel = M('project');
 		$update_res = $projectModel->where(array('id' => $id))->save($data);
 
-		if ($update_res === false) {
+		$clear_work = $clear_task = true;
+		if ($act == 'off') {
+			$workModel = M('work');
+			$clear_work = $workModel->where(array('project_id' => $id))->delete();
+
+			$taskModel = M('task');
+			$clear_task = $taskModel->where(array('project_id' => $id))->delete();
+		}
+
+		if ($update_res === false || $clear_work === false || $clear_task === false) {
 			alert_back('状态更改失败！');
 		}
 
 		if ($act === 'on') {
-			alert_back('激活成功！');
+			alert_back('重新激活项目成功！');
 		} elseif ($act === 'off') {
-			alert_back('禁用成功！');
+			alert_back('禁用项目信息成功！');
 		}
 	}
 
@@ -354,6 +363,35 @@ class ProjectController extends CommonController
 		}
 
 		alert_back('更新信息成功！');
+	}
+
+	/**
+	 * @access admin
+	 */
+	public function delete()
+	{
+		if (! $this->is_admin) {
+			$this->redirect('admin/error/deny');
+		}
+
+		$id = I('get.id', 0, 'intval');
+		if ($id === 0) {
+			alert_back('参数错误！');
+		}
+
+		$projectModel = M('project');
+		$workModel    = M('work');
+		$taskModel    = M('task');
+
+		$del_project = $projectModel->where(array('id' => $id))->delete();
+		$del_work    = $workModel->where(array('project_id' => $id))->delete();
+		$del_task    = $taskModel->where(array('project_id' => $id))->delete();
+
+		if ($del_project === false || $del_work === false || $del_task === false) {
+			alert_back('删除项目信息失败！');
+		} else {
+			alert_back('删除项目信息成功！');
+		}
 	}
 
 	/**

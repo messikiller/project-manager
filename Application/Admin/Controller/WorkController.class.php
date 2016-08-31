@@ -14,6 +14,7 @@ class WorkController extends CommonController
 	 *
 	 * 1. s_time <= today
 	 * 2. member_uid = user_id
+	 * 3. status != 4
 	 *
 	 * @access member
 	 */
@@ -34,7 +35,8 @@ class WorkController extends CommonController
 		$where = array();
 		$where = array(
 			'member_uid' => array('EQ', $uid),
-			's_time'	 => array('ELT', $time)
+			's_time'	 => array('ELT', $time),
+			'status'     => array('NEQ', 4)
 		);
 
 		$workModel = M('work');

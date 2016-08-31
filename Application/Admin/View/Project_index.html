@@ -114,22 +114,24 @@
                 <switch name="project.status">
                     <case value="0">
                         <a href="{:U('admin/project/edit', array('id' => $project['id']))}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
-                        <a href="javascript:void(0);" data-url="{:U('admin/project/status', array('id' => $project['id'], 'act' => 'off'))}" class="btn btn-danger btn-sm status-btn"><i class="fa fa-power-off"></i>&nbsp;禁用</a>
+                        <a data-url="{:U('admin/project/delete', array('id' => $project['id']))}" class="btn btn-danger btn-sm btn-delete"><i class="fa fa-times"></i>&nbsp;删除</a>
                     </case>
                     <case value="1">
                         <a href="{:U('admin/project/view', array('id' => $project['id']))}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i>&nbsp;详情</a>
+                        <a data-url="{:U('admin/project/delete', array('id' => $project['id']))}" class="btn btn-danger btn-sm btn-delete"><i class="fa fa-times"></i>&nbsp;删除</a>
                         <a href="{:U('admin/project/edit', array('id' => $project['id']))}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
-                        <a href="javascript:void(0);" data-url="{:U('admin/project/status', array('id' => $project['id'], 'act' => 'off'))}" class="btn btn-danger btn-sm status-btn"><i class="fa fa-power-off"></i>&nbsp;禁用</a>
                     </case>
                     <case value="2">
                         <a href="{:U('admin/project/view', array('id' => $project['id']))}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i>&nbsp;详情</a>
+                        <a data-url="{:U('admin/project/delete', array('id' => $project['id']))}" class="btn btn-danger btn-sm btn-delete"><i class="fa fa-times"></i>&nbsp;删除</a>
                     </case>
                     <case value="3">
                         <a href="{:U('admin/project/edit', array('id' => $project['id']))}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
-                        <a href="javascript:void(0);" data-url="{:U('admin/project/status', array('id' => $project['id'], 'act' => 'on'))}" class="btn btn-success btn-sm status-btn"><i class="fa fa-check-square"></i>&nbsp;激活</a>
+                        <a data-url="{:U('admin/project/delete', array('id' => $project['id']))}" class="btn btn-danger btn-sm btn-delete"><i class="fa fa-times"></i>&nbsp;删除</a>
                     </case>
                     <case value="4">
                         <a href="{:U('admin/project/view', array('id' => $project['id']))}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i>&nbsp;详情</a>
+                        <a data-url="{:U('admin/project/delete', array('id' => $project['id']))}" class="btn btn-danger btn-sm btn-delete"><i class="fa fa-times"></i>&nbsp;删除</a>
                     </case>
                     <default />
                         -
@@ -156,9 +158,9 @@
 
 <block name="own-js">
 <script type="text/javascript">
-$('.status-btn').click(function(){
-    var url = $(this).attr('data-url');
-    if(confirm('禁用或启用可能会导致正在进行中的项目失效，确定要执行吗？')) {
+$('.btn-delete').click(function(){
+    if(confirm('删除项目会同时删除项目中的所有工作任务，确定要执行这一操作吗？')) {
+        var url = $(this).attr('data-url');
         window.location.href = url;
     }
 });
