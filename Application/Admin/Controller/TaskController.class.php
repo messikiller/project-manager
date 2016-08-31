@@ -27,8 +27,7 @@ class TaskController extends CommonController
         $where = array(
             array('member_uid' => array('EQ', $uid)),
             array('status'     => array('EQ', 0)),
-            array('s_time'     => array('ELT', $time)),
-            array('e_time'     => array('EGT', $time))
+            array('s_time'     => array('ELT', $time))
         );
 
         $taskModel = M('task');
