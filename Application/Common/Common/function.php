@@ -295,7 +295,7 @@ function is_project_finished($project_id)
 
 	$is_finished = true;
 	foreach ($statusArr as $status) {
-		if ($status != 2) {
+		if ($status != 2 && $status != 3) {
 			$is_finished = false;
 			break;
 		}
